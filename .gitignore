@@ -21,3 +21,5 @@ instance/
 
 # Log files
 *.log
+
+*.db

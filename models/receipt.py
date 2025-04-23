@@ -1,4 +1,4 @@
-from app import db
+from extensions import db
 
 class Receipt(db.Model):
     id = db.Column(db.Integer, primary_key=True)

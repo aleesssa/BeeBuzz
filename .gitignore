@@ -1,0 +1,25 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+venv/
+.env
+*.env
+
+# Flask/Misc
+instance/
+*.sqlite3
+
+# VSCode / IDE stuff
+.vscode/
+.idea/
+
+# macOS system files
+.DS_Store
+
+# Log files
+*.log
+
+*.db

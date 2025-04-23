@@ -20,6 +20,7 @@ user2 = User(
 )
 
 with app.app_context():
+    db.session.add(user1)
     db.session.add(user2)
     db.session.commit()
     print("✅ User added:", user2.username)

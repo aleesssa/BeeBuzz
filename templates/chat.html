@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Chatbox</h1>
+
+<div class="chatbox">
+    <ul class="messages" style="list-style: none;">
+        {% for message in messages %}
+        <!-- Get sender's name and message -->
+        <li>{{ users.filter_by(id=message.sender_id).first().username}} : {{ message.message }}</li> 
+        {% endfor %}
+    </ul>
+    <div class="input">
+        <input type="text" id="chat_input" placeholder="Send a text">
+        <button id="send" tabindex="en">Send</button>
+    </div>  
+</div>
+
+
+
+<script>
+    var input = document.getElementById('chat_input')
+    var sendButton = document.getElementById('send')
+    var chat = ''
+
+
+    // Click button when user presses enter
+    input.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger sendButton with a click
+            sendButton.click();
+        }
+    }); 
+
+    // Get value for textbox when user clicks button
+    sendButton.addEventListener('click', () => {
+        chat = input.value.trim()
+
+        const jsonData = {
+            message : chat
+        }
+
+
+        if(!(chat === "")){
+        fetch('{{ url_for("chat.send_message") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(chat)
+        })
+            .then(response => console.log(response))
+            .then(data => {
+                console.log('Success:', data)
+                location.reload()
+            }
+                
+            )
+            .catch((error) => {
+                console.error('Error:', error)
+            })
+        }
+
+        input.value = ''
+        console.log(chat)
+    })
+
+
+
+</script>
+
+
+{% endblock %}

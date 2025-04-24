@@ -1,0 +1,80 @@
+.column {
+    flex: 50%;
+    margin-top: -8px;
+    margin-right: -8px;
+    margin-bottom: -8px;
+    padding-left: 90px;
+    padding-bottom: 186px;
+}
+
+.row {
+    display: flex;
+}
+
+.bs {
+    background-color: #5d3d00;
+    margin-left: -300px;
+}
+
+img {
+    margin-top: 160px;
+    margin-right: 390px;
+}
+
+h1 {
+    color:#fefbd2;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 50px;
+    text-transform: uppercase;
+    margin-left: 9%;
+    margin-bottom: 20px;
+
+}
+
+form {
+    margin-left: 20%;
+}
+
+input {
+    width: 60%;
+    height: 8%;
+    margin: 10px;
+    border-radius: 30px;
+    border-style: none;
+    padding-left: 20px;
+}
+
+input[type=submit] {
+    border-radius: 30px;
+    border-style: none;
+    width: 100px;
+    margin-left: 23%;
+    padding-left: 5px;
+    color:#5d3d00;
+    background-color:#ffb935;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+}
+
+label {
+    font-family: "DM Sans", sans-serif;
+    font-size: 20px;
+    color: #ffb935;
+    padding-left: 10px;
+}
+
+.check {
+    margin-top: -10px;
+}
+
+label.remember {
+    margin-left: -170px;
+}
+
+input[type=checkbox] {
+    margin-left: -140px;
+    transform: scale(0.5);
+}

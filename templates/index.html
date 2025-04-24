@@ -16,8 +16,8 @@
                 <h1>Welcome To BeeBuzz!!</h1>
                 <p>Need something delivered fast on campus? BeeBuzz connects MMU students with trusted student runners. Whether it’s food, documents, or items from nearby stores.We’ve got you covered !!</p>
                 <p class="bold">Request. Buzz. Delivered.</p>
-                <a class="signup" href="signup.html" >get started</a>
-                <p class="login"><a class="login" href="login.html">Already have an account? Log in</a></p>
+                <a class="signup" href="{{ url_for('auth.signup') }}" >get started</a>
+                <p class="login"><a class="login" href="{{ url_for('auth.login') }}">Already have an account? Log in</a></p>
             </div>
             <div>
                 

@@ -51,14 +51,18 @@
             body: JSON.stringify(chat)
         })
             .then(response => console.log(response))
-            .then(data => console.log('Success:', data))
+            .then(data => {
+                console.log('Success:', data)
+                location.reload()
+            }
+                
+            )
             .catch((error) => {
                 console.error('Error:', error)
             })
         }
 
         input.value = ''
-
         console.log(chat)
     })
 

@@ -39,6 +39,9 @@ request = Request(
 )
 
 with app.app_context():
+    db.session.add(user1)
+    db.session.add(user2)
+    db.session.add(user3)
     db.session.add(request)
     db.session.commit()
-    print("✅ User added:", user2.username)
+    print("Entries succesfully added!")

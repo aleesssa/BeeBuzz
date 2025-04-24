@@ -6,7 +6,8 @@
 <div class="chatbox">
     <ul class="messages" style="list-style: none;">
         {% for message in messages %}
-        <li>{{ users.filter_by(id=message.sender_id).first().username}} : {{ message.message }}</li>
+        <!-- Get sender's name and message -->
+        <li>{{ users.filter_by(id=message.sender_id).first().username}} : {{ message.message }}</li> 
         {% endfor %}
     </ul>
     <div class="input">

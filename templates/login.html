@@ -16,18 +16,19 @@
                 <img src="/img/Logo.jpg">
             </div>
             <div class="column bs">
-                <form id="loginForm" action="">
                 <h1>log in</h1>
-                <label for="username">USERNAME</label><br>
-                <input type="text" id="username" name="username" required><br>
-                <label for="email">EMAIL</label><br>
-                <input type="email" id="email" name="email" required><br>
+                <form id="loginForm" action="{{ url_for('auth.login') }}" method="POST">
+                <label for="userInput">USERNAME/EMAIL</label><br>
+                <input type="text" id="userInput" name="userInput" required><br>
                 <label for="pwd">PASSWORD</label><br>
                 <input type="password" id="pwd" name="pwd" required><br>
                 <div class="check">
-                    <input type="checkbox" checked="checked" name="remember">
-                    <label class="remember">Remember Me</label>
-                </div>
+                    <div class="remember-section">
+                        <input type="checkbox" id="rememberme">
+                        <label for="rememberme">Remember Me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>                
                 <input type="submit" value="SUBMIT">
                 
                 </form>

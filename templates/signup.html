@@ -1,5 +1,6 @@
-<html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
         <link rel="stylesheet" href="/css/signup.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,19 +12,36 @@
     <body>
         <div class="row">
             <div class="column bs">
-                <form id="signupForm" action="" onsubmit="return validateForm()">
+                <form method="POST" id="signupForm" action="{{url_for('auth.signup')}}" onsubmit="return validateForm()">
                     <h1>Sign Up</h1>
                     <label for="username">USERNAME</label><br>
                     <input type="text" id="username" name="username" required><br>
+
                     <label for="email">EMAIL</label><br>
                     <input type="email" id="email" name="email" required><br>
-                    <label for="pwd">PASSWORD</label><br>
-                    <input type="password" id="pwd" name="pwd" required><br>
+                 
+                    <label for="password">PASSWORD</label><br>
+                    <input type="password" id="pwd" name="password" required><br>
+
                     <label for="confirm_password">CONFIRM PASSWORD</label><br>
                     <input type="password" id="confirm_password" name="confirm_password" required><br>
+
                     <div id="error-message" style="color: red;"></div>
+
                     <label for="phone">PHONE NUMBER</label><br>
                     <input type="tel" id="phone" name="phone" placeholder="012-345-6789" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required><br>
+
+                    <div class="error-message">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                          {% if messages %}
+                            {% for category, message in messages %}
+                              <p class="{{ category }}">{{ message }}</p>
+                            {% endfor %}
+                          {% endif %}
+                        {% endwith %}
+                      </div>
+                      
+
                     <input type="submit" value="SUBMIT">
                 </form>
             </div>

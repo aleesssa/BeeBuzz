@@ -1,24 +1,29 @@
 {% extends 'base.html' %}
 
+{% block style %}
+<link rel="stylesheet" href="/css/chatmessage.css">
+{% endblock %}
+
 {% block content %}
 <h1>Chatbox</h1>
 
 <div class="chatbox">
     <ul class="messages" style="list-style: none;">
         {% for message in messages %}
-        <!-- Get sender's name and message -->
-        <li class="message">
-            {% if message.media_url %} 
-            <img src="{{ message.media_url }}" width="200px">
-            {% endif %}
-            <div class="text">{{ users.filter_by(id=message.sender_id).first().username}} : {{ message.message }}</div>
-        </li> 
+            <!-- Get sender's name and message -->
+           
+            <li class="message  {% if message.sender_id == user_id %}me{% else %}them{% endif %}">
+                {% if message.media_url %} 
+                <img src="{{ message.media_url }}" width="200px">
+                {% endif %}
+                <div class="text">{{ users.filter_by(id=message.sender_id).first().username }} : {{ message.message }}</div>
+            </li> 
         {% endfor %}
     </ul>
     <form id="chat_form" enctype="multipart/form-data">
         <input type="text" name="message" id="chat_input" placeholder="Send a text">
         <input type="file" name="media" id="media" accept="image/*,video/*">
-        <input type="button" id="submit">Send</button>
+        <button id="submit">send</button>
     </form>  
 </div>
 

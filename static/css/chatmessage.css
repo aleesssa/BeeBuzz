@@ -1,0 +1,40 @@
+
+.chatbox{
+    margin: auto;
+    padding: 10px 20px;
+    border: 1px solid black;
+    vertical-align: auto;
+    width: 50%;
+}
+
+.messages{
+    display: flex;
+    flex-direction: column;
+}
+
+.message{
+    color: white;
+    padding: 10px;
+    margin: 10px;
+    width: 50%;
+    border-radius: 10px;
+
+    img{
+        border-radius: 4px;
+    }
+}
+
+.me{
+    background-color:#6E4E25;
+}
+
+.them{
+    background-color: #e8cb6b;
+}
+
+#submit{
+    color: white;
+    border: none;
+    background-color: #F9D96C;
+    padding: 30px;
+}

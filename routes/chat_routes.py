@@ -12,10 +12,11 @@ chat_bp = Blueprint('chat', __name__) # Equivalent to app = Flask(__name__)
 
 @chat_bp.route('/')
 def chat():
+    user_id = session['user_id']
     messages = ChatMessage.query.all()
     users = User.query
     # Return list of messages from database
-    return render_template('chat.html', messages=messages, users=users)
+    return render_template('chat.html', messages=messages, users=users, user_id=user_id)
 
 
 # /chat_list --> shows lists of recent messages

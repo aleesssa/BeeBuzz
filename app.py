@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, session
 from extensions import db
 
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
+app.secret_key = 'your_secret_key'
 
 # Connect to SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///beebuzz.db'
@@ -14,6 +15,10 @@ db.init_app(app)
 from routes.chat_routes import chat_bp
 
 app.register_blueprint(chat_bp, url_prefix='/chat')
+
+@app.route('/')
+def index():
+    session['name'] = 'aleessa'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

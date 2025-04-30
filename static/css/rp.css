@@ -4,7 +4,7 @@
     margin-right: -8px;
     margin-bottom: -8px;
     padding-left: 90px;
-    padding-bottom: 180px;
+    padding-bottom: 186px;
 }
 
 .row {
@@ -30,12 +30,11 @@ h1 {
     text-transform: uppercase;
     margin-left: 32%;
     margin-bottom: 20px;
-
 }
 
 form {
     margin-left: 20%;
-    margin-top: 17%;
+    margin-top: 25%;
 }
 
 input {
@@ -67,50 +66,8 @@ label {
     padding-left: 10px;
 }
 
-.check {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 60%; /* match input width */
-    margin: 5px;
-}
-
-.remember-section {
-    display: flex;
-    align-items: center;
-}
-
-.remember-section input[type=checkbox] {
-    transform: scale(1.5);
-    margin-right: -3px;
-}
-
-.remember-section label {
-    white-space: nowrap;
-    font-size: 17px;
-    color: #ffb935;
-    font-family: "DM Sans", sans-serif;
-    margin: 0;
-}
-
-.forgot-password {
-    font-size: 17px;
-    color: #ffb935;
-    text-decoration: underline;
-    font-family: "DM Sans", sans-serif;
-}
-
-.signup-link {
-    font-family: Arial, Helvetica, sans-serif;
-    color: #5d3d00;
-    font-weight: bold;
-    text-decoration: underline;
-    margin-left: 3%;
-}
-
 .flash-container {
     margin-top: 10px;
-    margin-left: -37%;
     text-align: center;
 }
 
@@ -148,16 +105,8 @@ label {
 
     .column {
         width: 100%;
-        margin: 0;              
-        padding: 20px;         
+        padding: 20px;
         text-align: center;
-    }
-
-    img {
-        margin-right: 0;
-        margin-top: 0;
-        width: 80%;
-        height: auto;
     }
 
     form {
@@ -171,7 +120,22 @@ label {
         text-align: center;
     }
 
+    .checkbox-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        max-width: 200px;
+        margin-top: 15px;
+    }
+
     h1 {
         font-size: 32px;
     }
 }
+

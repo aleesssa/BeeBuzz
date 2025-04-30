@@ -7,93 +7,69 @@
     <ul class="messages" style="list-style: none;">
         {% for message in messages %}
         <!-- Get sender's name and message -->
-        <li>{{ users.filter_by(id=message.sender_id).first().username}} : {{ message.message }}</li> 
+        <li class="message">
+            {% if message.media_url %} 
+            <img src="{{ message.media_url }}" width="200px">
+            {% endif %}
+            <div class="text">{{ users.filter_by(id=message.sender_id).first().username}} : {{ message.message }}</div>
+        </li> 
         {% endfor %}
     </ul>
     <form id="chat_form" enctype="multipart/form-data">
         <input type="text" name="message" id="chat_input" placeholder="Send a text">
-        <input type="file" name="message" id="media" accept="image/*,video/*">
-        <input type="submit" id="submit">Send</button>
+        <input type="file" name="media" id="media" accept="image/*,video/*">
+        <input type="button" id="submit">Send</button>
     </form>  
 </div>
 
 
 
 <script>
-    var form = document.getElementById('chat_form')
-    var input = document.getElementById('chat_input')
-    var media = document.getElementById('media')
-    var submitButton = document.getElementById('submit')
-    var chat = ''
+    const form = document.getElementById('chat_form')
+    const input = document.getElementById('chat_input') // Needed to track Enter key presses
+    const submitButton = document.getElementById('submit')
 
 
-    // Submit form when user presses enter
+    // Click submit button when user presses enter
     input.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
             // Cancel the default action, if needed
             event.preventDefault();
             // Trigger sendButton with a click
-            submitButton.submit();
+            submitButton.click();
         }
     }); 
 
+
     // send post request through fetch when form is submitted 
-    form.addEventListener('submit', () => {
+    submitButton.addEventListener('click', (e) => {
+        e.preventDefault();
         const formData = new FormData(form); 
 
-        chat = input.value.trim() // get text input value
+        const message = formData.get('message')?.trim() // get text input value
+        const media = formData.get('media')
 
-        if(!(chat === "") || (media.files.length > 0)){ // make sure text input is not empty or file is uploaded
-        fetch('{{ url_for("chat.send_message") }}', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data.message)
-                location.reload()
-            }
-                
-            )
-            .catch((error) => {
-                console.error('Error:', error)
+        if(!(message === "") || (media.size > 0)){ // make sure text input is not empty or file is uploaded
+            fetch('{{ url_for("chat.send_message") }}', {
+                method: 'POST',
+                body: formData
             })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data.message)
+                    location.reload()
+                }
+                    
+                )
+                .catch((error) => {
+                    console.error('Error:', error)
+                })
         }
+
+        form.reset() // Clear form after request is sent
 
     })
         
-    // Get value for textbox when user clicks button
-    submitButton.addEventListener('click', () => {
-        chat = input.value.trim()
-
-        const jsonData = {
-            message : chat
-        }
-
-
-        if(!(chat === "")){
-        fetch('{{ url_for("chat.send_message") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(chat)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data.message)
-                location.reload()
-            }
-                
-            )
-            .catch((error) => {
-                console.error('Error:', error)
-            })
-        }
-
-        input.value = ''
-        console.log(chat)
-    })
 
 
 

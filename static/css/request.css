@@ -1,0 +1,19 @@
+body{
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center; 
+        align-items: center;     
+      }
+
+.box{
+    border: 2px solid #f6f6f6;
+    padding: 15px;
+    width: fit-content;
+    background-color: #53361C;
+    border-radius: 15px;
+}
+
+h1{
+    color: #FEB301;
+}

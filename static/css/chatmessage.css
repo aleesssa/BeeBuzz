@@ -2,8 +2,7 @@
 .chatbox{
     margin: auto;
     padding: 10px 20px;
-    vertical-align: auto;
-    /* width: 50%;    */
+    height: 80vh;
     display: flex;
     flex-direction: column;
 
@@ -47,6 +46,8 @@
     align-items: center;
     background-color: #FDF4D5;
     border-radius: 10px;
+
+    margin-top: auto;
 
     #chat_input{ 
         background-color: #FDF4D5;

@@ -3,10 +3,10 @@ from extensions import db
 
 request_bp = Blueprint('request', __name__) # Equivalent to app = Flask(__name__)
 
-@request_bp.route('/', methods=['GET', 'POST'])
+@request_bp.route('/')
 def handle_request():
     if request.method == 'GET':
-      return render_template("index.html")
+      return render_template("request.html")
     elif request.method == 'POST':
       form_data = {
         "need": request.form.get("need"),
@@ -16,5 +16,4 @@ def handle_request():
         "dropoff": request.form.get("dropoff"),
         "notes": request.form.get("notes"),
       }
-
       return render_template("summaryreq.html", data=form_data)

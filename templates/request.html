@@ -8,7 +8,8 @@
     <body> 
         <div class ="box">
         <h1>Buzz buzz~ what can we get for you?</h1>
-        <form>
+
+        <form method="POST" action="{{ url_for('request.handle_request')}}">
         <label>What do you need?</label><br>
         <input type="text"><br><br>
         <label>Offered payment</label><br>
@@ -21,6 +22,7 @@
         <input type="text"><br><br>
         <label>Notes</label><br>
         <input type="text"><br><br>
+    
         <input type="submit" value="POST REQUEST" class="submit_button">
         </form>
         </div>

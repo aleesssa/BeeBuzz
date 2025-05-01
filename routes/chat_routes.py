@@ -12,7 +12,10 @@ chat_bp = Blueprint('chat', __name__) # Equivalent to app = Flask(__name__)
 
 @chat_bp.route('/')
 def chat():
-    user_id = session['user_id']
+    if session.get('user_id'):
+        user_id = session['user_id']
+    else:
+        return 'Please log in'
     messages = ChatMessage.query.all()
     users = User.query
     # Return list of messages from database

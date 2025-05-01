@@ -2,17 +2,8 @@
 .chatbox{
     margin: auto;
     padding: 10px 20px;
-    border: 1px solid black;
     vertical-align: auto;
-    width: 50%;
-}
-
-.messages{
-    display: flex;
-    flex-direction: column;
-}
-
-.chatbox{
+    /* width: 50%;    */
     display: flex;
     flex-direction: column;
 
@@ -20,6 +11,12 @@
         align-self: center;
     }
 }
+
+.messages{
+    display: flex;
+    flex-direction: column;
+}
+
 
 .message{
     color: white;
@@ -40,19 +37,21 @@
 }
 
 .them{
-    background-color: #e8cb6b;
+    background-color: #ddc577;
     align-self: flex-start;
 }
 
 
 #chat_form{
+    display: flex;
+    align-items: center;
     background-color: #FDF4D5;
     border-radius: 10px;
 
     #chat_input{ 
         background-color: #FDF4D5;
         border: none;
-        padding: 20px;
+        padding: 0 20px ;
     }
     #chat_input:focus{
         outline: none;
@@ -66,7 +65,7 @@
         cursor: pointer;
         border: none;
         background-color: #FDF4D5;
-        padding: 30px;
+        padding: 20px;
     }
     #submit:hover{
         background-color: #cd913d;

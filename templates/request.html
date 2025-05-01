@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {%block content%}
-    <body>
+    <head>
+        <link rel="stylesheet" href="/css/request.css">
+    </head>
+    
+    <body> 
+        <div class ="box">
         <h1>Buzz buzz~ what can we get for you?</h1>
         <form>
         <label>What do you need?</label><br>
@@ -18,6 +23,7 @@
         <input type="text"><br><br>
         <input type="submit" value="POST REQUEST">
         </form>
+        </div>
     </body>
-</html>
+
 {% endblock %}

@@ -12,6 +12,15 @@
     flex-direction: column;
 }
 
+.chatbox{
+    display: flex;
+    flex-direction: column;
+
+    form{
+        align-self: center;
+    }
+}
+
 .message{
     color: white;
     padding: 10px;
@@ -22,14 +31,17 @@
     img{
         border-radius: 4px;
     }
+
 }
 
 .me{
     background-color:#6E4E25;
+    align-self: flex-end;
 }
 
 .them{
     background-color: #e8cb6b;
+    align-self: flex-start;
 }
 
 #submit{

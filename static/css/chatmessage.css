@@ -44,9 +44,32 @@
     align-self: flex-start;
 }
 
-#submit{
-    color: white;
-    border: none;
-    background-color: #F9D96C;
-    padding: 30px;
+
+#chat_form{
+    background-color: #FDF4D5;
+    border-radius: 10px;
+
+    #chat_input{ 
+        background-color: #FDF4D5;
+        border: none;
+        padding: 20px;
+    }
+    #chat_input:focus{
+        outline: none;
+    }
+
+    #media{
+
+    }
+
+    #submit{
+        cursor: pointer;
+        border: none;
+        background-color: #FDF4D5;
+        padding: 30px;
+    }
+    #submit:hover{
+        background-color: #cd913d;
+    }
+
 }

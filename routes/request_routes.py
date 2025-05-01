@@ -17,3 +17,4 @@ def handle_request():
         "notes": request.form.get("notes"),
       }
       return render_template("summaryreq.html", data=form_data)
+    

@@ -3,17 +3,28 @@ body{
         margin: 0;
         display: flex;
         justify-content: center; 
-        align-items: center;     
-      }
+        align-items: center;   
+        color: white;  
+    }
 
 .box{
-    border: 2px solid #f6f6f6;
-    padding: 15px;
+    border: none;
+    padding: 20px 40px;
     width: fit-content;
     background-color: #53361C;
-    border-radius: 15px;
-}
+    border-radius: 12px;
+    }
 
 h1{
     color: #FEB301;
-}
+  }
+
+.submit_button{
+    padding: 10px 20px;
+    border: none;
+    background-color: #FEB301;
+    color:#53361C;
+    border-radius: 10px;
+    font-weight: bolder;
+    cursor: pointer;
+            }

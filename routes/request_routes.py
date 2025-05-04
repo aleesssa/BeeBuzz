@@ -7,11 +7,9 @@ request_bp = Blueprint('request', __name__) # Equivalent to app = Flask(__name__
 def request():
    return render_template ("request.html")
 
-@request_bp.route('/')
+@request_bp.route('/request', methods=['POST','GET'])
 def handle_request():
-    if request.method == 'GET':
-      return render_template("request.html")
-    elif request.method == 'POST':
+    if request.method == 'POST':
       form_data = {
         "need": request.form.get("need"),
         "payment": request.form.get("payment"),

@@ -148,7 +148,26 @@ def reset_password(token):
 @auth_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
+    if request.method == 'POST':
+        # Handle profile update
+        username = request.form.get('username')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+
+        # Update the current user information
+        current_user.username = username
+        current_user.email = email
+        current_user.phone = phone
+
+        # Commit changes to the database
+        db.session.commit()
+
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('auth.profile'))
+
+    # Handle the GET request: display the profile page
     return render_template('profile.html')
+
 
 UPLOAD_FOLDER = 'static/profile_pics'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -167,4 +186,14 @@ def upload_profile_pic():
         flash('Profile picture updated!', 'success')
     else:
         flash('Invalid file type.', 'danger')
+    return redirect(url_for('auth.profile'))
+
+@auth_bp.route('/toggle_role', methods=['POST'])
+@login_required
+def toggle_role():
+    if request.form.get('role') == 'runner':
+        current_user.role = 'runner'
+    else:
+        current_user.role = 'shopper'
+    db.session.commit()
     return redirect(url_for('auth.profile'))

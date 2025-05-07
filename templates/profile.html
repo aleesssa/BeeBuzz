@@ -9,8 +9,6 @@
         <title>BeeBuzz</title>
     </head>
 
-    <script src="script.js"></script>
-
     <body>
         <div class="navbar">
             <ul class="top-nav">
@@ -63,14 +61,56 @@
             </ul>              
             </div>
         </div>
-
-        <form method="POST" action="{{ url_for('auth.upload_profile_pic') }}" enctype="multipart/form-data">
-            <label for="profile-pic">
-              <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}"
-                   alt="Profile Picture" class="profile-pic" />
-            </label>
-            <input type="file" name="profile_pic" id="profile-pic" accept="image/*" onchange="this.form.submit()" hidden>
-        </form>
+        <div class="profile-pic-container">
+            <form method="POST" action="{{ url_for('auth.upload_profile_pic') }}" enctype="multipart/form-data">
+              <label for="profile-pic">
+                <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}"
+                     alt="Profile Picture" class="profile-pic"/>
+              </label>
+              <input type="file" name="profile_pic" id="profile-pic" accept="image/*" onchange="this.form.submit()" hidden>
+            </form>
+          </div>   
+        <div class="profile-info">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" id="edit-btn" style="padding: 6px 12px; cursor: pointer;">Edit</button>
+            </div>
+            <form method="POST" action="{{ url_for('auth.profile') }}" id="profile-form">
+                <label>Username</label>
+                <input type="text" name="username" value="{{ current_user.username }}" id="username" disabled>
+                <hr>
         
+                <label>Email</label>
+                <input type="email" name="email" value="{{ current_user.email }}" id="email" disabled>
+                <hr>
+        
+                <label>Phone Number</label>
+                <input type="tel" name="phone" value="{{ current_user.phone }}" id="phone" disabled>
+                <hr>
+                <button type="submit" id="submit-btn" style="padding: 6px 12px; cursor: pointer; display: none;">Save</button>
+            </form>
+            <div class="role-toggle-container">
+                <form method="POST" action="{{ url_for('auth.toggle_role') }}">
+                  <div class="switch-row">
+                    <span class="switch-label">Runner</span>
+                    <label class="switch">
+                      <input type="checkbox" name="role" value="runner" {% if current_user.role == 'runner' %}checked{% endif %} onchange="this.form.submit()">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </form>
+              </div>
+                   
+        </div> 
+        <script>
+            const editBtn = document.getElementById("edit-btn");
+            const submitBtn = document.getElementById("submit-btn");
+            const fields = ["username", "email", "phone"].map(id => document.getElementById(id));
+          
+            editBtn.addEventListener("click", function () {
+              fields.forEach(field => field.disabled = false);
+              editBtn.style.display = "none";
+              submitBtn.style.display = "inline-block";
+            });
+          </script>
     </body>
 </html>

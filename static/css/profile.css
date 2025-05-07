@@ -59,11 +59,128 @@ ul.top-nav {
     text-transform: uppercase;
 }
 
+.profile-pic-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 0;
+    background-color: #5d3d00;
+  }
+
 .profile-pic {
     width: 120px;
     height: 120px;
     object-fit: cover;
     border-radius: 50%;
     cursor: pointer;
+    padding-top: 15px;
 }
+
+.profile-info {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
+    width: 60%;
+    height: 8%;
+    margin: 10px;
+    border-radius: 30px;
+    border-style: none;
+    padding-left: 20px;
+    
+}
+
+label {
+    color:#ffb935;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 25px;
+    text-transform: uppercase;
+}
+
+hr {
+    border: none;
+    height: 2px;
+    background-color: #53361c;
+    margin-left: -20px;
+}
+
+#edit-btn {
+    position: absolute;
+    top: 170px;
+    right: 20px;
+}
+
+#submit-btn {
+    position: absolute;
+    top: 170px;
+    right: 20px;
+    display: none;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin-right: 20px;
+  }
+  .switch input { display: none; }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #d8d6ba;
+    transition: .4s;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px; width: 26px;
+    left: 4px; bottom: 4px;
+    background-color: #feb301;
+    transition: .4s;
+  }
+  input:checked + .slider {
+    background-color: #5d3d00;
+  }
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  .slider.round {
+    border-radius: 34px;
+  }
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .role-toggle-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 0;
+  }
+  
+  .role-toggle-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 0;
+  }
+  
+  .switch-row {
+    display: flex;
+    align-items: center;
+    gap: 1075px;
+  }
+  
+  .switch-label {
+    color:#ffb935;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 25px;
+    text-transform: uppercase;
+  }
   

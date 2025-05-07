@@ -2,7 +2,6 @@
 .chatbox{
     margin: auto;
     padding: 10px 20px;
-    height: 80vh;
     display: flex;
     flex-direction: column;
 

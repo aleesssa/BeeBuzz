@@ -2,7 +2,8 @@ import os
 import uuid
 from werkzeug.utils import secure_filename
 from flask import Blueprint, request, render_template, jsonify, session, current_app
-from extensions import db
+from flask_socketio import emit
+from extensions import db, socketio
 from models.chat_message import ChatMessage
 from models.user import User
 from models.request import Request
@@ -26,21 +27,20 @@ def chat():
 
 # /<request_id> --> show message for that request
 
-@chat_bp.route('/send', methods=['POST'])
-def send_message():
-    sender_id = session['user_id']
-    message = request.form['message']
-    
-    media_file = request.files['media']
-    media_url = save_file(media_file)
-    
-    
-    chatMessage = ChatMessage(sender_id=sender_id, request_id=1, message=message, media_url=media_url)
-    db.session.add(chatMessage)
-    db.session.commit()
+@socketio.on('send_message')
+def send_message(data):
+    # sender_id = session['user_id']
+    # message = request.form['message']
+
+    # media_file = request.files['media']
+    # media_url = save_file(media_file)
     
     
-    return jsonify({ "message": "Message sent" })
+    # chatMessage = ChatMessage(sender_id=sender_id, request_id=1, message=message, media_url=media_url)
+    # db.session.add(chatMessage)
+    # db.session.commit()
+    print(data)
+    emit('received', data, broadcast=True)
     
     
 def save_file(media_file):

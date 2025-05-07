@@ -15,11 +15,12 @@
             <img src="/img/Logo.jpg">
         </div>
     <div class="column bs">
-        <h1>Reset Password</h1>
-        <form method="POST" action="{{ url_for('auth.send_reset_code') }}">
-            <label>Email</label><br>
-            <input type="email" name="email" required><br>
-            <input type="submit" value="Send Verification Code">
+        <h1>Verify</h1>
+        <form method="POST" action="{{ url_for('auth.verify_code') }}">
+            <input type="hidden" name="email" value="{{ email }}">
+            <label>Enter the code sent to your email</label><br>
+            <input type="text" name="code" required><br>
+            <input type="submit" value="Verify">
         </form>
     </div>
 </body>

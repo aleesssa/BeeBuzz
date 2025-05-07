@@ -1,4 +1,4 @@
-import re, os
+import re, os, random, datetime
 from flask import Blueprint, request, render_template, redirect, url_for, flash, session, current_app
 from extensions import db, mail
 from models.user import User
@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user, login_user
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
+from utils.email_utils import send_email  
 
 auth_bp = Blueprint('auth', __name__) # Equivalent to app = Flask(__name__)
 
@@ -100,50 +101,69 @@ def verify_reset_token(token, expiration=3600):
 
 @auth_bp.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        confirm = request.form['confirm']
-
-        if password != confirm:
-            flash("Passwords do not match", 'danger')
-            return redirect(request.url)
-
-        user = User.query.filter_by(email=email).first()
-        if not user:
-            flash("No user found with that email.", 'danger')
-            return redirect(request.url)
-
-        user.password_hash = generate_password_hash(password)
-        db.session.commit()
-        flash("Password updated. You can now log in.", 'success')
-        return redirect(url_for('auth.login'))
-
     return render_template('forgot_password.html')
 
-@auth_bp.route('/reset-password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
-    email = verify_reset_token(token)
-    if not email:
-        flash('Invalid or expired token.', 'danger')
+@auth_bp.route('/send-reset-code', methods=['POST'])
+def send_reset_code():
+    email = request.form['email']
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        flash('Email not found', 'error')
         return redirect(url_for('auth.forgot_password'))
 
-    if request.method == 'POST':
-        new_password = request.form['password']
-        confirm_password = request.form['confirm']
+    code = str(random.randint(100000, 999999))
+    expiry = datetime.datetime.utcnow() + datetime.timedelta(minutes=10)
 
-        if new_password != confirm_password:
-            flash("Passwords don't match", 'danger')
-            return redirect(request.url)
+    user.reset_code = code
+    user.reset_code_expiry = expiry
+    db.session.commit()
 
-        user = User.query.filter_by(email=email).first()
-        if user:
-            user.password_hash = generate_password_hash(new_password)
-            db.session.commit()
-            flash('Your password has been updated. You can now log in.', 'success')
-            return redirect(url_for('auth.login'))
+    send_email(
+        to_email=user.email,
+        subject="Reset Code",
+        body="Here is your code..."
+    )
 
-    return render_template('reset_password.html')
+    flash('Verification code sent to your email', 'info')
+    return render_template('verify_code.html', email=email)
+
+
+# Step 3: Verify code page
+@auth_bp.route('/verify-code', methods=['POST'])
+def verify_code():
+    email = request.form['email']
+    code = request.form['code']
+    user = User.query.filter_by(email=email).first()
+
+    if not user or user.reset_code != code or user.reset_code_expiry < datetime.datetime.utcnow():
+        flash('Invalid or expired code', 'error')
+        return redirect(url_for('auth.forgot_password'))
+
+    return render_template('reset_password.html', email=email)
+
+@auth_bp.route('/reset-password', methods=['POST'])
+def reset_password():
+    email = request.form['email']
+    password = request.form['password']
+    confirm = request.form['confirm']
+
+    if password != confirm:
+        flash('Passwords do not match', 'error')
+        return redirect(url_for('auth.forgot_password'))
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        flash('User not found', 'error')
+        return redirect(url_for('auth.forgot_password'))
+
+    user.password_hash = generate_password_hash(password)
+    user.reset_code = None
+    user.reset_code_expiry = None
+    db.session.commit()
+
+    flash('Password successfully reset. You may now log in.', 'success')
+    return redirect(url_for('auth.login'))
 
 @auth_bp.route('/profile', methods=['GET', 'POST'])
 @login_required

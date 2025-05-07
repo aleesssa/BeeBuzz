@@ -9,3 +9,5 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.String(20), nullable=True)
     profile_pic = db.Column(db.String(120), nullable=False, default='default.jpg')
     role = db.Column(db.String(20), default='shopper')
+    reset_code = db.Column(db.String(6), nullable=True)
+    reset_code_expiry = db.Column(db.DateTime, nullable=True)

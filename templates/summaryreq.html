@@ -26,15 +26,15 @@
         <p>{{ data.notes }}</p>
 
         <form method="POST" action="{{ url_for('request_bp.handle_request') }}">
-        <input type="hidden" name="need" value="{{ data.need }}">
-        <input type="hidden" name="payment" value="{{ data.payment }}">
-        <input type="hidden" name="time" value="{{ data.time }}">
-        <input type="hidden" name="pickup" value="{{ data.pickup }}">
-        <input type="hidden" name="dropoff" value="{{ data.dropoff }}">
-        <input type="hidden" name="notes" value="{{ data.notes }}">
+         <input type="hidden" name="need" value="{{ data.need }}">
+         <input type="hidden" name="payment" value="{{ data.payment }}">
+         <input type="hidden" name="time" value="{{ data.time }}">
+         <input type="hidden" name="pickup" value="{{ data.pickup }}">
+         <input type="hidden" name="dropoff" value="{{ data.dropoff }}">
+         <input type="hidden" name="notes" value="{{ data.notes }}">
         
-        <input type="submit" value="EDIT REQUEST" class="submit_button">
-        <input type="submit" value="CANCEL REQUEST" class="cancel_button">
+         <input type="submit" value="EDIT REQUEST" class="submit_button">
+         <input type="submit" value="CANCEL REQUEST" class="cancel_button">
         </form>
 
     </body>

@@ -10,7 +10,7 @@
     }
 }
 
-.messages{
+#messages{
     display: flex;
     flex-direction: column;
 }

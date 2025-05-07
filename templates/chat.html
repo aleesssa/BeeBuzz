@@ -2,13 +2,14 @@
 
 {% block style %}
 <link rel="stylesheet" href="/css/chatmessage.css">
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 {% endblock %}
 
 {% block content %}
 <h1>Chatbox</h1>
 
 <div class="chatbox">
-    <div class="messages" style="list-style: none;">
+    <div id="messages" style="list-style: none;">
         {% for message in messages %}
             <!-- Get sender's name and message -->
            
@@ -33,10 +34,28 @@
 
 <script>
     const socket = io()
+    const user_id = {{ session['user_id'] }}
     const form = document.getElementById('chat_form')
     const input = document.getElementById('chat_input') // Needed to track Enter key presses
     const submitButton = document.getElementById('submit')
 
+    // Listen to receive_message event by server
+    socket.on("receive_message", function(data) {
+        console.log('hello')
+      const div = document.createElement("div");
+      div.className = "message";
+      
+      // check who's the sender
+      if (data.sender_id != user_id){
+        div.classList.add('them');
+      }else{
+        div.classList.add('me');
+      }
+
+
+      div.innerText = data.sender_name + ": " + data.message;
+      document.getElementById("messages").appendChild(div);
+    });
 
     // Click submit button when user presses enter
     input.addEventListener("keypress", (event) => {
@@ -57,6 +76,7 @@
         const message = formData.get('message')?.trim() // get text input value
         const media = formData.get('media')
 
+        // Send a POST request via fetch
         if(!(message === "") || (media.size > 0)){ // make sure text input is not empty or file is uploaded
             fetch('{{ url_for("chat.send_message") }}', {
                 method: 'POST',
@@ -64,8 +84,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Success:', data.message)
-                    location.reload()
+                    socket.emit('send_message', data)
                 }
                     
                 )

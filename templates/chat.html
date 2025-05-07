@@ -41,7 +41,6 @@
 
     // Listen to receive_message event by server
     socket.on("receive_message", function(data) {
-        console.log('hello')
       const div = document.createElement("div");
       div.className = "message";
       
@@ -50,6 +49,11 @@
         div.classList.add('them');
       }else{
         div.classList.add('me');
+      }
+
+
+      if (data.media_url){
+        
       }
 
 

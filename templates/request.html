@@ -9,9 +9,9 @@
         <div class ="box">
         <h1>Buzz buzz~ what can we get for you?</h1>
 
-        <form method="POST" action="{{ url_for('request.handle_request')}}">
+        <form method="POST" action="{{ url_for('request_bp.handle_request')}}">
         <label>What do you need?</label><br>
-        <input type="text" name='need'><br><br>
+        <input type="text" name="need"><br><br>
         <label>Offered payment</label><br>
         <input type="text" name="payment" placeholder="e.g.RM 5.00"><br><br>
         <label>Time</label><br>

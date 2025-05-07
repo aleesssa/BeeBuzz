@@ -25,7 +25,7 @@
         <div class="label">Notes</div>
         <p>{{ data.notes }}</p>
 
-        <form method="POST" action="{{ url_for('request.handle_request') }}">
+        <form method="POST" action="{{ url_for('request_bp.handle_request') }}">
         <input type="hidden" name="need" value="{{ data.need }}">
         <input type="hidden" name="payment" value="{{ data.payment }}">
         <input type="hidden" name="time" value="{{ data.time }}">

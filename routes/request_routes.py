@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, url_for, redirect
+from flask import Blueprint, request, render_template, url_for, redirect, session
 from extensions import db
 from models.request import Request
 from datetime import datetime
@@ -19,7 +19,8 @@ def handle_request():
             pickup_location=request.form.get("pickup"),
             dropoff_location=request.form.get("dropoff"),
             notes=request.form.get("notes"),
-            created_at = datetime.utcnow()
+            created_at=datetime.utcnow(),
+            client_id=session.get
               )
         
         db.session.add(new_request)

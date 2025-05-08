@@ -1,7 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, session
 from extensions import db
 
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
+
+app.config['SECRET_KEY'] = 'Beebuzz'
 
 # Connect to SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///beebuzz.db'

@@ -7,6 +7,7 @@ class Request(db.Model):
     pickup_location = db.Column(db.String(100), nullable=False)
     dropoff_location = db.Column(db.String(100), nullable=False)
     price_offer = db.Column(db.Float, nullable=False)
+    Time = db.Column(db.String(20), nullable=False)
     notes = db.Column(db.String(100), nullable=True)
     status = db.Column(db.String(20), default='requested')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

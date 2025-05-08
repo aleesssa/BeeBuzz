@@ -5,22 +5,24 @@ from models.request import Request
 request_bp = Blueprint('request_bp', __name__) # Equivalent to app = Flask(__name__)
 
 @request_bp.route('/')
-def request():
+def request_job():
    return render_template ("request.html")
 
 @request_bp.route('/request', methods=['GET','POST'])
 def handle_request():
     if request.method == 'POST':
-        form_data ={
-            "need": request.form.get("need"),
-            "payment": request.form.get("payment"),
-            "time": request.form.get("time"),
-            "pickup": request.form.get("pickup"),
-            "dropoff": request.form.get("dropoff"),
-            "notes": request.form.get('notes'),
-        }
+        new_request = Request(
+            item_name=request.form.get("need"),
+            price_offer=request.form.get("payment"),
+            Time=request.form.get("time"),
+            pickup_location=request.form.get("pickup"),
+            dropoff_location=request.form.get("dropoff"),
+            notes=request.form.get("notes")
+        )
+        db.session.add(new_request)
         db.session.commit()
-        return render_template ("summaryreq.html", data=form_data)
+
+        return render_template("summaryreq.html", data=request.form)
     return render_template("request.html")
         
 

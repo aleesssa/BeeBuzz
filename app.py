@@ -20,7 +20,7 @@ app.register_blueprint(chat_bp, url_prefix='/chat')
 
 @app.route('/')
 def index():
-    session['name'] = 'aleessa'
+    return 'Main page'
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

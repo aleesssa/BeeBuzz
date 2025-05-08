@@ -35,7 +35,10 @@ h1{
 }
 
 .cancel_button{
+    padding: 10px 20px;
     background-color: transparent;
     border: 2px solid red;
+    border-radius: 10px;
     color: red;
+    cursor: pointer;
 }

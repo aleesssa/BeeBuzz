@@ -12,6 +12,8 @@ def request_job():
 @request_bp.route('/req', methods=['GET','POST'])
 def handle_request():
     if request.method == 'POST':
+        status=request.form.get("request")
+
         new_request = Request(
             item_name=request.form.get("need"),
             price_offer=request.form.get("payment"),

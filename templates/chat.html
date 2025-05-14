@@ -50,8 +50,13 @@
     const typing = document.getElementById('typing')
     let read = false;
 
+    // Join room for requestID
+    socket.emit("join_room", {
+        request_id: requestID
+    });
+
     // Read receipt
-    windows.addEventListener('focus', ()=>{
+    window.addEventListener('focus', ()=>{
         if (!read){
             socket.emit('seen_message', {
                 'user_id' : user_id,
@@ -65,15 +70,15 @@
     // Listen to receive_message event by server
     socket.on("receive_message", function(data) {
         console.log('hello')
-      const div = document.createElement("div");
-      div.className = "message";
-      
-      // check who's the sender
-      if (data.sender_id != user_id){
-        div.classList.add('them');
-      }else{
-        div.classList.add('me');
-      }
+        const div = document.createElement("div");
+        div.className = "message";
+        
+        // check who's the sender
+        if (data.sender_id != user_id){
+            div.classList.add('them');
+        }else{
+            div.classList.add('me');
+        }
 
 
       div.innerText = data.sender_name + ": " + data.message;
@@ -109,7 +114,7 @@
             return;
         
         }
-        socket.emit('is_typing_frontend', {'user_id' : user_id})
+        socket.emit('is_typing_frontend', {'user_id' : user_id, 'request_id':requestID})
 
         typing_timeout = setTimeout(()=>{
             typing_timeout = null
@@ -123,7 +128,7 @@
         console.log('hello')
         e.preventDefault();
         const formData = new FormData(form); 
-        formData.append('request_id', request_id)
+        formData.append('request_id', requestID)
 
         const message = formData.get('message')?.trim() // get text input value
         const media = formData.get('media')
@@ -137,6 +142,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data)
                     socket.emit('send_message', data)
                 }
                     

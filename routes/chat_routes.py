@@ -2,7 +2,7 @@ import os
 import uuid
 from werkzeug.utils import secure_filename
 from flask import Blueprint, request, render_template, jsonify, session, current_app
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room
 from extensions import db, socketio
 from models.chat_message import ChatMessage
 from models.user import User
@@ -20,10 +20,12 @@ def chatList():
 
 @chat_bp.route('/<int:request_id>')
 def chat(request_id):
+    client_id = Request.query.filter_by(id = request_id).first().client_id
+    runner_id = Request.query.filter_by(id = request_id).first().runner_id
     if session.get('user_id'):
         user_id = session['user_id']
-        if ((Request.query.filter_by(id = request_id).first().client_id != user_id) or Request.query.filter_by(id = request_id).first().runner_id != user_id):
-            return 'Invalid request id'
+        if (user_id != client_id and user_id != runner_id):
+            return f'Invalid request id\nUserID = {user_id} \n ClientID : {client_id}\nRunnerID : {runner_id}'
     else:
         return 'Please log in'
     
@@ -42,13 +44,17 @@ def send_message():
     media_file = request.files['media']
     media_url = save_file(media_file)
     
-    if sender_id == Request.query.filter_by(id = request_id).first().client_id:
-        recipient_id = Request.query.filter(id = request_id).first().runner_id
-    else:
-        recipient_id = Request.query.filter(id = request_id).first().client_id
+    req = Request.query.get(request_id)
+    if not req:
+        return "Invalid request", 400
+
+    # Check if sender is part of the request
+    if sender_id not in [req.client_id, req.runner_id]:
+        return "Unauthorized", 403
+
+    recipient_id = req.runner_id if sender_id == req.client_id else req.client_id
         
-    
-    chatMessage = ChatMessage(sender_id=sender_id, recipient_id=recipient_id,request_id=request_id, message=message, media_url=media_url)
+    chatMessage = ChatMessage(sender_id=sender_id, recipient_id=recipient_id, request_id=request_id, message=message, media_url=media_url)
     db.session.add(chatMessage)
     db.session.commit()
     
@@ -56,22 +62,41 @@ def send_message():
     return jsonify({ 
                     'sender_id': sender_id,
                     'sender_name' : sender_name,
+                    'request_id':request_id,
                     'message' : message,
                     'media_url' : media_url
                     })
     
     
+@socketio.on('join_room')    
+def handle_join_room(data):
+    room = data['request_id']
+    join_room(room)
+    print(f'User joined room {room}')
+    
 @socketio.on('send_message')
 def broadcast_message(data):
-    emit('receive_message', data, broadcast=True)
+    emit('receive_message', data, room=data['request_id'])
         
 @socketio.on('seen_message')
 def seen_message(data):
-    emit('user_seen_message', data, broadcast=True)        
+    user_id = data['user_id']
+    request_id = data['request_id']
+    
+    # Update database
+    ChatMessage.query.filter_by(
+        recipient_id = user_id,
+        request_id = request_id,
+        is_seen = False
+    ).update({'seen' : True})
+    
+    db.session.commit()
+    
+    emit('user_seen_message', data, room=request_id)        
         
 @socketio.on('is_typing_frontend')
 def is_typing(data):
-    emit('is_typing_backend', data, broadcast=True)        
+    emit('is_typing_backend', data, room=data['request_id'])        
 
 
 def save_file(media_file):

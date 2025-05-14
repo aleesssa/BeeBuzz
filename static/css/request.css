@@ -42,3 +42,8 @@ h1{
     color: red;
     cursor: pointer;
 }
+
+.button_row{
+    display: flex;
+    gap: 10px;
+}

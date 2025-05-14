@@ -36,12 +36,14 @@
         
         </form>
 
+        <div class="button_row">
         <form method="GET" action="{{ url_for('request_bp.edit_request', request_id=request_id) }}">
             <input type="submit" value="EDIT REQUEST" class="submit_button">
         </form>
         <form method="POST" action="{{ url_for('request_bp.cancel_request', request_id=request_id) }}">
          <input type="submit" value="CANCEL REQUEST" class="cancel_button">
         </form>
+        </div>
 
         </div>
 

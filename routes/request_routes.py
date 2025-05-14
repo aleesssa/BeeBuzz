@@ -12,8 +12,6 @@ def request_job():
 @request_bp.route('/req', methods=['GET','POST'])
 def handle_request():
     if request.method == 'POST':
-       status = 'cancelled' if 'cancel' in request.form else 'requested'
-
        new_request = Request(
            item_name=request.form.get("need"),
             price_offer=request.form.get("payment"),
@@ -29,17 +27,53 @@ def handle_request():
        db.session.add(new_request)
        db.session.commit()
 
-       if status == 'cancelled':
-            return redirect(url_for('request_bp.cancelled'))
+    return render_template("summaryreq.html", data=request.form, request_id=new_request.id)
 
-    return render_template("summaryreq.html", data=request.form)
-    return render_template("request.html")
+@request_bp.route('/edit/<int:request_id>')
+def edit_request(request_id):
+    req = Request.query.get_or_404(request_id)
+    return render_template("update.html",request=req)
+
+@request_bp.route('/update/<int:request_id>', methods=['POST'])
+def update_request(request_id):
+    req = Request.query.get_or_404(request_id)
+    
+    if req.client_id != session.get('user_id'):
+      return "Unauthorized", 403
+
+    if request.form.get('_method') == 'PUT':
+       item_name = request.form.get("need")
+       if item_name: req.item_name = item_name
+       price_offer = request.form.get("payment")
+       if price_offer: req.price_offer = price_offer
+       time = request.form.get("time")
+       if time: req.time = time
+       pickup = request.form.get("pickup")
+       if pickup: req.pickup_location = pickup
+       dropoff = request.form.get("dropoff")
+       if dropoff: req.dropoff_location = dropoff
+       notes = request.form.get("notes")
+       if notes: req.notes = notes
+
+       req.updated_at = datetime.utcnow()
+        
+    
+    db.session.commit()
+    return redirect(url_for('request_bp.summary_request', request_id=req.id))
+
+@request_bp.route('/summary/<int:request_id>')
+def summary_request(request_id):
+    req = Request.query.get_or_404(request_id)
+    return render_template("summaryreq.html", data=req, request_id=req.id)
+
+@request_bp.route('/cancelled/<int:request_id>', methods=['POST'])
+def cancel_request(request_id):
+    request_cancel = Request.query.get_or_404(request_id)
+    request_cancel_status = "cancelled"
+    db.session.commit()
+    return "Your order has been cancelled."
         
 @request_bp.route('/login/<user_id>')
 def log_in(user_id):
     session['user_id'] = user_id
     return f'Logged in as {user_id}'
-
-@request_bp.route('/cancelled')
-def cancelled():
-    return "<h2>Your request has been cancelled.</h2>"

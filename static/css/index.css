@@ -118,3 +118,57 @@ a.login:hover, a.login:active {
         font-size: 32px;
     }
 }
+
+@media screen and (max-width: 1024px) {
+    h1 {
+        font-size: 45px;
+        margin-left: 0;
+        text-align: center;
+    }
+
+    p {
+        margin-left: 10px;
+        margin-right: 10px;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    p.bold {
+        margin-top: 30px;
+    }
+
+    p.login {
+        font-size: 18px;
+        margin-top: 8px;
+    }
+
+    img {
+        width: 300px;
+        margin: 40px auto;
+        display: block;
+    }
+
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .column {
+        flex: 100%;
+        padding: 10px 20px;
+        text-align: center;
+    }
+
+    a.signup:link, a.signup:visited {
+        font-size: 28px;
+        margin-left: 0;
+        width: 90%;
+        padding: 10px 20px;
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    body {
+        margin-top: 10%;
+    }
+}

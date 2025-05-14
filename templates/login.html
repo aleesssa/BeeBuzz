@@ -18,8 +18,8 @@
                 <a href="{{ url_for('auth.signup') }}" class="signup-link">Don't have an account? Sign up</a>
             </div>
             <div class="column bs">
-                <h1>log in</h1>
                 <form id="loginForm" action="{{ url_for('auth.login') }}" method="POST">
+                <h1>log in</h1>
                 <label for="userInput">USERNAME/EMAIL</label><br>
                 <input type="text" id="userInput" name="userInput" required><br>
                 <label for="pwd">PASSWORD</label><br>

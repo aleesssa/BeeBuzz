@@ -163,16 +163,10 @@ hr {
     padding: 1rem 0;
   }
   
-  .role-toggle-container {
-    display: flex;
-    justify-content: flex-end;
-    padding: 1rem 0;
-  }
-  
   .switch-row {
     display: flex;
     align-items: center;
-    gap: 1075px;
+    gap: 1400px;
   }
   
   .switch-label {

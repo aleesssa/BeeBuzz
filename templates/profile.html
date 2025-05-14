@@ -75,12 +75,16 @@
                 <button type="button" id="edit-btn" style="padding: 6px 12px; cursor: pointer;">Edit</button>
             </div>
             <form method="POST" action="{{ url_for('auth.profile') }}" id="profile-form">
+                <label>Nickname</label>
+                <input type="text" name="nickname" value="{{ current_user.nickname }}" id="nickname" disabled>
+                <hr>
+
                 <label>Username</label>
-                <input type="text" name="username" value="{{ current_user.username }}" id="username" disabled>
+                <input type="text" value="{{ current_user.username }}" id="username" disabled>
                 <hr>
         
                 <label>Email</label>
-                <input type="email" name="email" value="{{ current_user.email }}" id="email" disabled>
+                <input type="email" value="{{ current_user.email }}" id="email" disabled>
                 <hr>
         
                 <label>Phone Number</label>
@@ -104,7 +108,7 @@
         <script>
             const editBtn = document.getElementById("edit-btn");
             const submitBtn = document.getElementById("submit-btn");
-            const fields = ["username", "email", "phone"].map(id => document.getElementById(id));
+            const fields = ["nickname", "phone"].map(id => document.getElementById(id));
           
             editBtn.addEventListener("click", function () {
               fields.forEach(field => field.disabled = false);

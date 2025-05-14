@@ -120,6 +120,39 @@ label {
     margin-left: 60%;
 }
 
+.flash-container {
+    margin-top: 10px;
+    margin-left: -37%;
+    text-align: center;
+}
+
+.flash {
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 10px auto;
+    display: inline-block;
+}
+
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash.danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.flash.warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+
 @media (max-width: 768px) {
     .row {
         flex-direction: column;
@@ -159,5 +192,118 @@ label {
 
     h1 {
         font-size: 32px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .column {
+        flex: 100%; 
+        margin-top: -4px;
+        margin-left: -4px;
+        margin-bottom: -4px;
+        padding-right: 40px;
+        padding-left: 10px;
+        padding-bottom: 80px;
+    }
+
+    .row {
+        flex-direction: column;
+    }
+
+    img {
+        margin-top: 80px;
+        margin-left: 100px; 
+        max-width: 80%;     
+        height: auto;
+    }
+
+    h1 {
+        font-size: 36px; 
+        margin-left: 10%; 
+        text-align: center;
+    }
+
+    form {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+
+    input, .input-field {
+        width: 90%; 
+    }
+
+    input[type=submit] {
+        margin-left: 0; 
+        width: 90%; 
+        display: block;
+        margin: 10px auto;
+    }
+
+    .login-link {
+        margin-left: 0;
+        text-align: center;
+        display: block;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .column {
+        flex: 50%;
+        margin-top: -12px;
+        margin-left: -12px;
+        margin-bottom: -12px;
+        padding-right: 120px;
+        padding-left: 60px;
+        padding-bottom: 160px;
+    }
+
+    .row {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+    }
+
+    .bs {
+        margin-right: -350px;
+    }
+
+    img {
+        width: 300px;
+        height: auto;
+    }
+
+    h1 {
+        font-size: 64px;
+        margin-left: 20%;
+        margin-bottom: 30
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    img {
+        width: 400px;
+        height: auto;
+        margin-left: 65%;
+        margin-top: 30%;
+    }
+
+    .bs {
+        margin-right: -500px;
+        margin-left: -200px;
+        margin-bottom: -85px;
+    }    
+    
+    .login-link{
+        margin-left: 75%;
+        text-align: center;
+        display: block;
+    }
+
+    form {
+        margin-top: 14%;
+    }
+
+    h1 {
+        margin-left: 15%;
     }
 }

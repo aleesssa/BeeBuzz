@@ -10,34 +10,40 @@ from models.request import Request
 
 chat_bp = Blueprint('chat', __name__) # Equivalent to app = Flask(__name__)
 
-
+# Show list of recent chats
 @chat_bp.route('/')
-def chat():
+def chatList():
     if session.get('user_id'):
         user_id = session['user_id']
+    chatList = ChatMessage.query.filter_by(sender_id = user_id)
+    return render_template('chat.html')
+
+@chat_bp.route('/<int:request_id>')
+def chat(request_id):
+    if session.get('user_id'):
+        user_id = session['user_id']
+        if ((Request.query.filter_by(id = request_id).first().client_id != user_id) or Request.query.filter_by(id = request_id).first().runner_id != user_id):
+            return 'Invalid request id'
     else:
         return 'Please log in'
-    messages = ChatMessage.query.all()
+    
+    messages = ChatMessage.query.filter_by(request_id=request_id)
     users = User.query
     # Return list of messages from database
-    return render_template('chat.html', messages=messages, users=users, user_id=user_id)
-
-
-# /chat_list --> shows lists of recent messages
-
-# /<request_id> --> show message for that request
+    return render_template('chat.html', messages=messages, users=users, user_id=user_id, request_id=request_id)
 
 @chat_bp.route('/send', methods=['POST'])
 def send_message():
     sender_id = session['user_id']
     sender_name = User.query.filter_by(id=sender_id).first().username
     message = request.form['message']
+    request_id = request.form['request_id']
     
     media_file = request.files['media']
     media_url = save_file(media_file)
     
     
-    chatMessage = ChatMessage(sender_id=sender_id, request_id=1, message=message, media_url=media_url)
+    chatMessage = ChatMessage(sender_id=sender_id, request_id=request_id, message=message, media_url=media_url)
     db.session.add(chatMessage)
     db.session.commit()
     
@@ -54,6 +60,15 @@ def send_message():
 def broadcast_message(data):
     emit('receive_message', data, broadcast=True)
         
+@socketio.on('seen_message')
+def seen_message(data):
+    emit('user_seen_message', data, broadcast=True)        
+        
+@socketio.on('is_typing_frontend')
+def is_typing(data):
+    emit('is_typing_backend', data, broadcast=True)        
+
+
 def save_file(media_file):
     # Check if media_file exists
     if not media_file:

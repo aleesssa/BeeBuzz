@@ -22,7 +22,15 @@
             </div> 
 
         {% endfor %}
+    </div>
+    <div id="typing" class="chat-bubble hide">
+        <div class="typing">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
         </div>
+    </div>
+    <!-- <div id="typing" class="hide">user is typing..</div> -->
     <form id="chat_form" enctype="multipart/form-data">
         <input type="text" name="message" id="chat_input" placeholder="Send a text">
         <input type="file" name="media" id="media">
@@ -35,9 +43,25 @@
 <script>
     const socket = io()
     const user_id = {{ session['user_id'] }}
+    const requestID = {{ request_id }}
     const form = document.getElementById('chat_form')
     const input = document.getElementById('chat_input') // Needed to track Enter key presses
     const submitButton = document.getElementById('submit')
+    const typing = document.getElementById('typing')
+    let read = false;
+
+    // Read receipt
+    windows.addEventListener('focus', ()=>{
+        if (!read){
+            socket.emit('seen_message', {
+                'user_id' : user_id,
+                'request_id' : requestID
+            })
+            read = true
+        }
+        socket.on()
+    })
+
 
     // Listen to receive_message event by server
     socket.on("receive_message", function(data) {
@@ -57,6 +81,22 @@
       document.getElementById("messages").appendChild(div);
     });
 
+    // Shows typing indicator when the other user is typing
+    socket.on('is_typing_backend', (data)=>{
+        if (data.user_id != user_id){
+            typing.classList.remove('hide')
+        }    
+        // Clear any previous timeout to restart the countdown
+        clearTimeout(window.typingIndicatorTimeout);
+
+        // Start a new timeout to hide after 1.5s
+        window.typingIndicatorTimeout = setTimeout(() => {
+            typing.classList.add('hide')
+        }, 1500);
+    })
+
+
+    let typing_timeout;
     // Click submit button when user presses enter
     input.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
@@ -64,17 +104,31 @@
             event.preventDefault();
             // Trigger sendButton with a click
             submitButton.click();
+            return;
         }
+        if (typing_timeout){
+            return;
+        
+        }
+        socket.emit('is_typing_frontend', {'user_id' : user_id})
+
+        typing_timeout = setTimeout(()=>{
+            typing_timeout = null
+        }, 1000)
+
     }); 
 
 
     // send post request through fetch when form is submitted 
     submitButton.addEventListener('click', (e) => {
+        console.log('hello')
         e.preventDefault();
         const formData = new FormData(form); 
+        formData.append('request_id', request_id)
 
         const message = formData.get('message')?.trim() // get text input value
         const media = formData.get('media')
+
 
         // Send a POST request via fetch
         if(!(message === "") || (media.size > 0)){ // make sure text input is not empty or file is uploaded

@@ -77,7 +77,12 @@ def cancel_request(request_id):
     db.session.commit()
 
     return "Your order has been cancelled."
-        
+
+@request_bp.route('/jobs')
+def show_jobs():
+    jobs = Request.query.filter_by(status="requested").all()
+    return render_template("job.html", jobs=jobs)
+
 @request_bp.route('/login/<user_id>')
 def log_in(user_id):
     session['user_id'] = user_id

@@ -5,7 +5,7 @@ body{
         justify-content: center; 
         align-items: center;   
         color: white;  
-    }
+}
 
 .box{
     border: none;
@@ -13,11 +13,11 @@ body{
     width: fit-content;
     background-color: #53361C;
     border-radius: 12px;
-    }
+}
 
 h1{
     color: #FEB301;
-  }
+}
 
 .submit_button{
     padding: 10px 20px;
@@ -27,7 +27,7 @@ h1{
     border-radius: 10px;
     font-weight: bolder;
     cursor: pointer;
-            }
+}
 
 .label{
     font-weight: bold;
@@ -46,4 +46,29 @@ h1{
 .button_row{
     display: flex;
     gap: 10px;
+}
+
+.vdetails_button{
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 2px solid #FEB301;
+    border-radius: 10px;
+    color: #FEB301;
+    cursor: pointer;
+}
+
+.right{
+    text-align: right;
+}
+
+.job_card{
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid #53361C;
+    border-radius: 10px;
+}
+
+.h3{
+    font-weight: bold;
+    color:#53361C;
 }

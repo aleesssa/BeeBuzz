@@ -17,6 +17,8 @@ body{
 
 h1{
     color: #FEB301;
+    text-align: center;
+    margin-top: 20px;
 }
 
 .submit_button{
@@ -55,20 +57,47 @@ h1{
     border-radius: 10px;
     color: #FEB301;
     cursor: pointer;
+    font-weight: bolder;
 }
 
 .right{
     text-align: right;
 }
 
+.job_container{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .job_card{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border: 2px solid #53361C;
     border-radius: 10px;
+    padding: 20px;
 }
 
-.h3{
+.job_info{
+    max-width: 70%;
+    font-family: bold;
+}
+
+.job_info h3{
     font-weight: bold;
     color:#53361C;
+}
+
+.job_info p{
+    color:#53361C;
+}
+
+.price {
+    color: #53361C; 
+    font-weight: bold;
+    font-size: 18px;
 }

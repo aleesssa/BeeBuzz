@@ -13,7 +13,7 @@ def request_job():
 def handle_request():
     if request.method == 'POST':
        new_request = Request(
-           item_name=request.form.get("need"),
+            item_name=request.form.get("need"),
             price_offer=request.form.get("payment"),
             time=request.form.get("time"),
             pickup_location=request.form.get("pickup"),
@@ -27,7 +27,7 @@ def handle_request():
        db.session.add(new_request)
        db.session.commit()
 
-    return render_template("summaryreq.html", data=request.form, request_id=new_request.id)
+    return render_template("summaryreq.html", data=new_request, request_id=new_request.id)
 
 @request_bp.route('/edit/<int:request_id>')
 def edit_request(request_id):
@@ -68,9 +68,14 @@ def summary_request(request_id):
 
 @request_bp.route('/cancelled/<int:request_id>', methods=['POST'])
 def cancel_request(request_id):
-    request_cancel = Request.query.get_or_404(request_id)
-    request_cancel_status = "cancelled"
+    req = Request.query.get_or_404(request_id)
+    if req.client_id != session.get('user_id'):
+        return "Unauthorized", 403
+
+    req.status = "cancelled"
+    req.updated_at = datetime.utcnow()
     db.session.commit()
+
     return "Your order has been cancelled."
         
 @request_bp.route('/login/<user_id>')

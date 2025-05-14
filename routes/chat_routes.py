@@ -42,8 +42,13 @@ def send_message():
     media_file = request.files['media']
     media_url = save_file(media_file)
     
+    if sender_id == Request.query.filter_by(id = request_id).first().client_id:
+        recipient_id = Request.query.filter(id = request_id).first().runner_id
+    else:
+        recipient_id = Request.query.filter(id = request_id).first().client_id
+        
     
-    chatMessage = ChatMessage(sender_id=sender_id, request_id=request_id, message=message, media_url=media_url)
+    chatMessage = ChatMessage(sender_id=sender_id, recipient_id=recipient_id,request_id=request_id, message=message, media_url=media_url)
     db.session.add(chatMessage)
     db.session.commit()
     

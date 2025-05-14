@@ -57,6 +57,8 @@
 
     // Read receipt
     window.addEventListener('focus', ()=>{
+        console.log('focused')
+        console.log(read)
         if (!read){
             socket.emit('seen_message', {
                 'user_id' : user_id,
@@ -67,8 +69,23 @@
     })
 
 
+    // Listen for user_seen_message event from server
+    socket.on('user_seen_message', (data)=>{
+        console.log('seen')
+        if (data.user_id !== user_id){
+            const lastMessage = document.querySelector('.messages.me:last-child')
+            if(lastMessage){
+                const seenLabel = document.createElement('span')
+                seenLabel.innerText = "✓ Seen";
+                seenLabel.classList.add("seen-label");
+                lastMessage.appendChild(seenLabel);
+            }
+        }
+        read = false
+    })
+
     // Listen to receive_message event by server
-    socket.on("receive_message", function(data) {
+    socket.on("receive_message", (data) => {
         console.log('hello')
         const div = document.createElement("div");
         div.className = "message";
@@ -81,7 +98,7 @@
         }
 
 
-      div.innerText = data.sender_name + ": " + data.message;
+      div.innerText = data.sender_name + " : " + data.message;
       document.getElementById("messages").appendChild(div);
     });
 

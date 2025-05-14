@@ -39,7 +39,7 @@ def send_message():
     sender_id = session['user_id']
     sender_name = User.query.filter_by(id=sender_id).first().username
     message = request.form['message']
-    request_id = request.form['request_id']
+    request_id = int(request.form['request_id'])
     
     media_file = request.files['media']
     media_url = save_file(media_file)
@@ -62,7 +62,7 @@ def send_message():
     return jsonify({ 
                     'sender_id': sender_id,
                     'sender_name' : sender_name,
-                    'request_id':request_id,
+                    'request_id': request_id,
                     'message' : message,
                     'media_url' : media_url
                     })
@@ -88,7 +88,7 @@ def seen_message(data):
         recipient_id = user_id,
         request_id = request_id,
         is_seen = False
-    ).update({'seen' : True})
+    ).update({'is_seen' : True})
     
     db.session.commit()
     

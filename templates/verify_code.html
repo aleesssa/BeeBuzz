@@ -15,8 +15,8 @@
             <img src="/img/Logo.jpg">
         </div>
     <div class="column bs">
-        <h1>Verify</h1>
         <form method="POST" action="{{ url_for('auth.verify_code') }}">
+            <h1 style="margin-left: 5%;">Verify</h1>
             <input type="hidden" name="email" value="{{ email }}">
             <label>Enter the code sent to your email</label><br>
             <input type="text" name="code" required><br>

@@ -76,7 +76,7 @@ label {
     font-size: 16px;
     padding: 8px 12px;
     border-radius: 8px;
-    margin: 10px auto;
+    margin-left: -40%;
     display: inline-block;
 }
 
@@ -137,5 +137,30 @@ label {
 
     h1 {
         font-size: 32px;
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    img {
+        width: 400px;
+        height: auto;
+        margin-top: 30%;
+    }
+
+    .bs {
+        margin-left: -500px;
+        margin-right: -200px;
+        margin-bottom: -105px;
+    }  
+
+    form {
+        margin-left: 15%;
+        margin-right: 10%;
+        margin-top: 30%;
+        width: 80%;
+    }
+
+    h1 {
+        margin-left: 5%;
     }
 }

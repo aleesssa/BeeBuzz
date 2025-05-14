@@ -178,17 +178,6 @@ def send_reset_code():
     # Display code directly (easy testing/dev)
     flash(f"Your reset code is: {reset_code}", "info")
 
-    # Send by email (production)
-    try:
-        msg = Message("Your BeeBuzz Verification Code",
-                      sender="your-email@gmail.com",
-                      recipients=[user.email])
-        msg.body = f"Your verification code is: {reset_code}"
-        mail.send(msg)
-        flash("Verification code sent to your email.", "success")
-    except Exception as e:
-        flash(f"Email sending failed: {e}", "danger")
-
     return render_template("verify_code.html", email=email)
 
 @auth_bp.route('/verify-code', methods=['POST'])

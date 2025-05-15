@@ -15,8 +15,18 @@ chat_bp = Blueprint('chat', __name__) # Equivalent to app = Flask(__name__)
 def chatList():
     if session.get('user_id'):
         user_id = session['user_id']
-    chatList = ChatMessage.query.filter_by(sender_id = user_id)
-    return render_template('chat.html')
+        
+    request_ids = [
+    r[0] for r in db.session.query(ChatMessage.request_id)
+    .filter(
+        (ChatMessage.sender_id == user_id) |
+        (ChatMessage.recipient_id == user_id)
+    )
+    .distinct()
+    .all()
+]
+    
+    return render_template('chatList.html', request_ids = request_ids)
 
 @chat_bp.route('/<int:request_id>')
 def chat(request_id):

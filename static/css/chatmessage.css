@@ -132,3 +132,7 @@
       background-color: rgba(110, 78, 37,.2);
     }
   }
+
+#seen{
+    font-size: 0.8em;
+}

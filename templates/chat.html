@@ -19,6 +19,7 @@
                     {% if message.media_url.split('.')[1] in 'jpg jpeg gif png' %} <img src="{{ message.media_url }}" id="media" width="200px"> {% endif %}
                 {% endif %}
                 <div class="text">{{ users.filter_by(id=message.sender_id).first().username }} : {{ message.message }}</div>
+                <!-- <div id="seen" class="{% if not(message.is_seen) %}hide{% endif %}">seen</div> -->
             </div> 
 
         {% endfor %}
@@ -48,6 +49,9 @@
     const input = document.getElementById('chat_input') // Needed to track Enter key presses
     const submitButton = document.getElementById('submit')
     const typing = document.getElementById('typing')
+    const seen = document.getElementById('seen')
+    const seenDiv = document.createElement('div');
+
     let read = false;
 
     // Join room for requestID
@@ -73,13 +77,7 @@
     socket.on('user_seen_message', (data)=>{
         console.log('seen')
         if (data.user_id !== user_id){
-            const lastMessage = document.querySelector('.messages.me:last-child')
-            if(lastMessage){
-                const seenLabel = document.createElement('span')
-                seenLabel.innerText = "✓ Seen";
-                seenLabel.classList.add("seen-label");
-                lastMessage.appendChild(seenLabel);
-            }
+            seenDiv.classList.remove('hide')
         }
         read = false
     })
@@ -89,6 +87,8 @@
         console.log('hello')
         const div = document.createElement("div");
         div.className = "message";
+        seenDiv.className = 'hide'
+        seenDiv.id = 'seen'
         
         // check who's the sender
         if (data.sender_id != user_id){
@@ -99,6 +99,9 @@
 
 
       div.innerText = data.sender_name + " : " + data.message;
+      seenDiv.innerText = 'seen'
+
+      div.appendChild(seenDiv)
       document.getElementById("messages").appendChild(div);
     });
 

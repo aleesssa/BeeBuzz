@@ -83,6 +83,11 @@ def show_jobs():
     jobs = Request.query.filter_by(status="requested").all()
     return render_template("job.html", jobs=jobs)
 
+@request_bp.route('/jobs/details/<int:request_id')
+def view_details(request_id):
+    req = Request.query.get_or_404(request_id)
+    return render_template("request_details.html", request=req)
+
 @request_bp.route('/login/<int:user_id>')
 def log_in(user_id):
     session['user_id'] = user_id

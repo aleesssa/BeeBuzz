@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="/css/request.css">
+</head>
+
+<body>
+    <div class="box">
+     <h1>REQUEST DETAILS</h1>
+
+     <div class="label">ITEM</div>
+     <p>{{ request.item_name }}</p>
+
+     <div class="label">NOTES</div>
+     <p>{{ request.notes }}</p>
+
+     <div class="label">TIME</div>
+     <p>{{ request.time }}</p>
+
+    </div>
+</body>
+
+{% endblock %}

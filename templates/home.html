@@ -1,6 +1,6 @@
 <html>
     <head>
-        <link rel="stylesheet" href="/css/profile.css">
+        <link rel="stylesheet" href="/css/home.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Anton&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
                 </div>
                 <div class="nav-right">
                     <li class="nav-item">
-                        <a href="{{ url_for('auth.home') }}" class="nav-icon">
+                        <a href="{{ url_for('auth.home') }}" class="nav-icon active">
                             <svg class="nav-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor">
                               <path d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"/>
                             </svg>
@@ -51,7 +51,7 @@
                             <span class="nav-label">Messages</span>
                         </a>
                     <li class="nav-item">
-                        <a href="{{ url_for('auth.profile') }}" class="nav-icon active">
+                        <a href="{{ url_for('auth.profile') }}" class="nav-icon">
                             <svg class="nav-img" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M15 8.5C15 10.433 13.433 12 11.5 12C9.567 12 8 10.433 8 8.5C8 6.567 9.567 5 11.5 5C13.433 5 15 6.567 15 8.5Z" fill="currentColor"/>
                                 <path d="M17.6305 20H5.94623C5.54449 20 5.31716 19.559 5.56788 19.2451C6.68379 17.8479 9.29072 15 12 15C14.7275 15 17.0627 17.8864 18.0272 19.2731C18.2474 19.5897 18.0161 20 17.6305 20Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -60,77 +60,25 @@
                         </a>
                    </li>
                    <li class="nav-item">
-                    <a href="{{ url_for('auth.login') }}" class="nav-icon">
-                        <svg class="nav-img" width="800px" height="800px" viewBox="0 0 12 12" enable-background="new 0 0 12 12" id="Слой_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon fill="currentColor" points="9,2 9,0 1,0 1,12 9,12 9,10 8,10 8,11 2,11 2,1 8,1 8,2 "/><polygon fill="currentColor" points="8.2929688,3.2929688 7.5859375,4 9.0859375,5.5 5,5.5 5,6.5 9.0859375,6.5 7.5859375,8   8.2929688,8.7070313 11,6 "/></svg>
-                        <span class="nav-label">Logout</span>
-                    </a>
-               </li>
-            </div>
+                        <a href="{{ url_for('auth.login') }}" class="nav-icon">
+                           <svg class="nav-img" width="800px" height="800px" viewBox="0 0 12 12" enable-background="new 0 0 12 12" id="Слой_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon fill="currentColor" points="9,2 9,0 1,0 1,12 9,12 9,10 8,10 8,11 2,11 2,1 8,1 8,2 "/><polygon fill="currentColor" points="8.2929688,3.2929688 7.5859375,4 9.0859375,5.5 5,5.5 5,6.5 9.0859375,6.5 7.5859375,8   8.2929688,8.7070313 11,6 "/></svg>
+                           <span class="nav-label">Logout</span>
+                        </a>
+                    </li>
+                </div>
             </ul>              
-            </div>
         </div>
-        <div class="profile-pic-container">
-            <form method="POST" action="{{ url_for('auth.upload_profile_pic') }}" enctype="multipart/form-data">
-              <label for="profile-pic">
-                <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}"
-                     alt="Profile Picture" class="profile-pic"/>
-              </label>
-              <input type="file" name="profile_pic" id="profile-pic" accept="image/*" onchange="this.form.submit()" hidden>
-            </form>
-          </div>   
-        <div class="profile-info">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <button type="button" id="edit-btn" style="padding: 6px 12px; cursor: pointer;">Edit</button>
-            </div>
-            <form method="POST" action="{{ url_for('auth.profile') }}" id="profile-form">
-                <label>Nickname</label>
-                <input type="text" name="nickname" value="{{ current_user.nickname }}" id="nickname" disabled>
-                <hr>
 
-                <label>Username</label>
-                <input type="text" value="{{ current_user.username }}" id="username" disabled>
-                <hr>
-        
-                <label>Email</label>
-                <input type="email" value="{{ current_user.email }}" id="email" disabled>
-                <hr>
-        
-                <label>Phone Number</label>
-                <input type="tel" name="phone" value="{{ current_user.phone }}" id="phone" disabled>
-                <hr>
-                <button type="submit" id="submit-btn" style="padding: 6px 12px; cursor: pointer; display: none;">Save</button>
-            </form>
-            <div class="role-toggle-container">
-                <form method="POST" action="{{ url_for('auth.toggle_role') }}">
-                  <div class="switch-row">
-                    <span class="switch-label">Runner</span>
-                    <label class="switch">
-                      <input type="checkbox" name="role" value="runner" {% if current_user.role == 'runner' %}checked{% endif %} onchange="this.form.submit()">
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </form>
-              </div>
-              <hr>
-              <div class="history-container">
-               
-                <h1>History</h1>
-                <p>1</p>
-
-
-              </div>
-                   
-        </div> 
-        <script>
-            const editBtn = document.getElementById("edit-btn");
-            const submitBtn = document.getElementById("submit-btn");
-            const fields = ["nickname", "phone"].map(id => document.getElementById(id));
-          
-            editBtn.addEventListener("click", function () {
-              fields.forEach(field => field.disabled = false);
-              editBtn.style.display = "none";
-              submitBtn.style.display = "inline-block";
-            });
-          </script>
+        <div class="container">
+                <div class="row">
+                    <div class="column bs">
+                        <p>Don’t move. We’ll bring it to you.  Just tell us what you need!</p>
+                        <a href="{{ url_for('chat.chat') }}"><button class="btn">Post a request</button></a>
+                    </div>
+                    <div class="column">
+                        <img src="/img/beebox.png" alt="Beebox">
+                    </div>    
+                </div>
+        </div>    
     </body>
 </html>

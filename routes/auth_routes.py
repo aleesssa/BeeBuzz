@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user, login_user, logout_user
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
+from models.request import Request
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -141,6 +142,15 @@ def toggle_role():
     db.session.commit()
     return redirect(url_for('auth.profile'))
 
+#----------History Request ----------
+@auth_bp.route('/history-profile', methods=['GET'])
+def history():
+    items_name = Request.query.filter_by(user_id=current_user.id).all()
+    time = Request.query.filter_by(user_id=current_user.id).all()
+    status = Request.query.filter_by(user_id=current_user.id).all()
+    created_at = Request.query.filter_by(user_id=current_user.id).all()
+
+    return render_template('profile.html', request=request)
 
 # ---------- Password Reset ----------
 
@@ -222,3 +232,8 @@ def reset_password():
 
     flash("Password reset successfully! Please log in.", "success")
     return redirect(url_for('auth.login'))
+
+@auth_bp.route('/home')
+def home():
+    return render_template('home.html')
+

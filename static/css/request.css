@@ -120,7 +120,8 @@ h1{
 }
 
 .box2{
-    border: #53361C;
+    border: solid #53361C;
+    border-width: 3px;
     padding: 20px 40px;
     width: fit-content;
     background-color: transparent;
@@ -128,6 +129,15 @@ h1{
 }
 
 .label2{
+    color: #53361C;
+    font-weight: bold;
+}
+
+.req_details p{
+    color: #FEB301;
+}
+
+.req_details h1{
     color: #53361C;
     font-weight: bold;
 }

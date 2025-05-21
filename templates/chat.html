@@ -54,6 +54,11 @@
 
     let read = false;
 
+    // Notification
+    Notification.requestPermission().then((result) => {
+        console.log(result);
+    });
+
     // Join room for requestID
     socket.emit("join_room", {
         request_id: requestID
@@ -91,7 +96,16 @@
         seenDiv.id = 'seen'
         
         // check who's the sender
-        if (data.sender_id != user_id){
+        if (data.sender_id != user_id){            
+            // Send notification 
+            if (Notification.permission === "granted") {
+                if (document.visibilityState != "visible"){
+                    new Notification(`${data.sender_name} sent you a message`, {
+                    body: data.message,
+                    icon: "/static/logo.png"
+                    });
+                }   
+            }
             div.classList.add('them');
         }else{
             div.classList.add('me');

@@ -120,9 +120,14 @@ h1{
 }
 
 .box2{
-    border: none;
+    border: #53361C;
     padding: 20px 40px;
     width: fit-content;
     background-color: transparent;
     border-radius: 12px;
+}
+
+.label2{
+    color: #53361C;
+    font-weight: bold;
 }

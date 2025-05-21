@@ -25,7 +25,9 @@
                 <div class="button_row">
                     <a href="{{ url_for('request_bp.view_details', request_id=job.id) }}">
                      <button class="vdetails_button">View Details</button></a>
-                     <button class="submit_button">Accept Job</button>
+                      <form method="POST" action="{{ url_for('request_bp.accept_jobs', request_id=job.id) }}">
+                      <input type="submit" value="ACCEPT JOB" class="submit_button">
+                      </form>
                 </div>
             </div>
         </div>

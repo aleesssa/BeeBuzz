@@ -4,5 +4,5 @@ from extensions import db
 request_bp = Blueprint('request', __name__) # Equivalent to app = Flask(__name__)
 
 @request_bp.route('/')
-def request():
+def request_page():
     return render_template('request.html')

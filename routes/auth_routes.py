@@ -9,8 +9,8 @@ from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
 from models.request import Request
 
-auth_bp = Blueprint('auth', __name__)
 
+auth_bp = Blueprint('auth', __name__)
 
 # ---------- Home ----------
 
@@ -185,7 +185,14 @@ def send_reset_code():
     user.reset_code_expiry = expiry_time
     db.session.commit()
 
-    # Display code directly (easy testing/dev)
+    subject = "Your Password Reset Code"
+    body = f"Hello {user.username},\n\nYour password reset code is: {reset_code}\nIt will expire in 10 minutes.\n\nIf you didn't request this, please ignore this email."
+
+    if current_app.send_email(email, subject, body):
+        flash("Reset code sent to your email.", "success")
+    else:
+        flash("Failed to send reset code email. Please try again.", "danger")
+
     flash(f"Your reset code is: {reset_code}", "info")
 
     return render_template("verify_code.html", email=email)
@@ -237,3 +244,16 @@ def reset_password():
 def home():
     return render_template('home.html')
 
+@auth_bp.route("/test-email")
+def test_email():
+    try:
+        msg = Message(
+            subject="Flask-Mail Test",
+            sender=current_app.config['MAIL_USERNAME'],
+            recipients=["your_receiver_email@example.com"],  # Replace this
+            body="This is a test email sent from Flask-Mail."
+        )
+        mail.send(msg)
+        return "✅ Email sent successfully!"
+    except Exception as e:
+        return f"❌ Failed to send email: {e}"

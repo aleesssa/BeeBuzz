@@ -1,18 +1,16 @@
 import os
-import sendgrid
-from sendgrid.helpers.mail import Mail,Email,To,Content
 from flask import Flask, request, jsonify
 from flask_mail import Mail, Message
 from extensions import db, migrate, login_manager
 from models.user import User
 from dotenv import load_dotenv
+from routes import request_routes
+from routes.request_routes import request_bp
 
 load_dotenv()
 
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
 
-SENDGRID_API_KEY = 'your_sendgrid_api_key'
-sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///beebuzz.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,11 +20,27 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'your_email@gmail.com'
-app.config['MAIL_PASSWORD'] = 'your_app_password'
+app.config['MAIL_PASSWORD'] = 'your_generated_app_password_here'
+
 
 db.init_app(app)
 migrate.init_app(app, db)
+
 mail = Mail(app)
+
+def send_email(to_email, subject, body):
+    msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[to_email])
+    msg.body = body
+    try:
+        mail.send(msg)
+        print(f"Email sent to {to_email}")
+        return True
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        return False
+    
+app.send_email = send_email
+
 login_manager.init_app(app)
 login_manager.login_view = 'auth.login'
 
@@ -42,6 +56,7 @@ from routes.auth_routes import auth_bp
 
 app.register_blueprint(chat_bp, url_prefix='/chat')
 app.register_blueprint(auth_bp, url_prefix='/auth')
+app.register_blueprint(request_bp, url_prefix='/request')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
@@ -59,3 +74,4 @@ def send_email(to_email, subject, body):
     except Exception as e:
         print(f"Error sending email: {e}")
         return False
+    

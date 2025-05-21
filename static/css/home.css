@@ -99,3 +99,48 @@ p {
     font-size: 50px;
     text-align: center;
 }
+
+button {
+    background-color: #feb301;
+    color: #53361c;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-left: 30%;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+h1 {
+    color:#53361c;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 50px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+h2 {
+     color:#53361c;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 20px;
+    text-transform: capitalize;
+}
+
+p.req {
+    color:#53361c;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 20px;
+    text-transform: capitalize;
+}

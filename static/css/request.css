@@ -118,3 +118,11 @@ h1{
     padding-top: 40px;
     overflow-y: auto;
 }
+
+.box2{
+    border: none;
+    padding: 20px 40px;
+    width: fit-content;
+    background-color: transparent;
+    border-radius: 12px;
+}

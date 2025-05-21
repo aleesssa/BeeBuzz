@@ -87,6 +87,13 @@ def view_details(request_id):
     req = Request.query.get_or_404(request_id)
     return render_template("request_details.html", job_request=req)
 
+@request_bp.route('/jobs/accept/<int:request_id>', methods=['POST'])
+def accept_jobs(request_id):
+    req = Request.query.get_or_404(request_id)
+    req.status = "accepted"
+    db.session.commit()
+    return render_template("job.html")
+
 @request_bp.route('/login/<int:user_id>')
 def log_in(user_id):
     session['user_id'] = user_id

@@ -18,6 +18,19 @@
      <div class="label">TIME</div>
      <p>{{ request.time }}</p>
 
+     <div class="label">PICKUP</div>
+     <p>{{ request.pickup_location }}</p>
+
+     <div class="label">DROP OFF</div>
+     <p>{{ request.dropoff_location }}</p>
+
+     <div class="label">PRICE OFFERED</div>
+     <p>{{ request.price_offer }}</p>
+
+      <form method="POST" action="{{ url_for('request_bp.accept_request', request_id=request.id) }}">
+        <input type="submit" value="ACCEPT JOB" class="submit_button">
+    </form>
+
     </div>
 </body>
 

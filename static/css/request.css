@@ -22,6 +22,10 @@ h1{
     margin: 30px 30px;
 }
 
+h2{
+    color:#53361C;
+}
+
 .submit_button{
     padding: 10px 20px;
     border: none;
@@ -140,4 +144,13 @@ h1{
 .req_details h1{
     color: #53361C;
     font-weight: bold;
+}
+
+.job_card2{
+    border: 3px solid #FEB301;
+    background-color: #f0fff0;
+}
+.status_label {
+    font-weight: bold;
+    color: green;
 }

@@ -79,8 +79,14 @@ def cancel_request(request_id):
 
 @request_bp.route('/jobs')
 def show_jobs():
-    jobs = Request.query.filter_by(status="requested").all()
-    return render_template("job.html", jobs=jobs)
+    runner_id = session.get('user_id')
+
+    accepted_jobs = []
+    if runner_id:
+        accepted_jobs = Request.query.filter_by(status="accepted", runner_id=runner_id).all()
+    
+    available_jobs = Request.query.filter_by(status="requested").all()
+    return render_template("job.html", jobs=available_jobs, accepted_jobs=accepted_jobs)
 
 @request_bp.route('/jobs/details/<int:request_id>')
 def view_details(request_id):
@@ -95,8 +101,8 @@ def accept_jobs(request_id):
        req.status = "accepted"
        req.runner_id = session.get('user_id')
     db.session.commit()
-    
-    return render_template("job.html")
+
+    return redirect(url_for('request_bp.show_jobs'))
 
 @request_bp.route('/login/<int:user_id>')
 def log_in(user_id):

@@ -9,6 +9,29 @@
     <div class="top_align">
      <h1>Pick a Job and Get Buzzing!</h1>
 
+     <h2>Your Accepted Jobs</h2>
+     {%if accepted_jobs %}
+     <div class="job_container">
+      {% for job in accepted_jobs %}
+      <div class="job_card2">
+         <div class="job_info">
+            <h3>{{ job.client_id }}</h3>
+            <p>{{ job.item_name }}</p>
+            <p>Pick-up: {{ job.pickup_location }}</p>
+            <p>Drop-off: {{ job.dropoff_location }}</p>
+            <p>Time: {{ job.time }}</p>
+        </div>
+        <div class="right">
+            <p class="price">{{ job.price_offer }}</p>
+            <p class="status_label">ACCEPTED</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>You have no accepted jobs yet.</p>
+{% endif %}
+
        <div class="job_container">
         {% for job in jobs %}
         <div class="job_card">

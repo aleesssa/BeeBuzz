@@ -90,8 +90,12 @@ def view_details(request_id):
 @request_bp.route('/jobs/accept/<int:request_id>', methods=['POST'])
 def accept_jobs(request_id):
     req = Request.query.get_or_404(request_id)
-    req.status = "accepted"
+
+    if req.status == "requested":
+       req.status = "accepted"
+       req.runner_id = session.get('user_id')
     db.session.commit()
+    
     return render_template("job.html")
 
 @request_bp.route('/login/<int:user_id>')

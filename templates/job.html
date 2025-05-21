@@ -11,7 +11,8 @@
 
      <h2>Your Accepted Jobs</h2>
      {%if accepted_jobs %}
-     <div class="job_container">
+     <div class="accepted_scroll_wrapper">
+     <div class="accepted_scroll">
       {% for job in accepted_jobs %}
       <div class="job_card2">
          <div class="job_info">
@@ -28,10 +29,12 @@
     </div>
     {% endfor %}
 </div>
+ </div>
 {% else %}
 <p>You have no accepted jobs yet.</p>
 {% endif %}
 
+       <h2>Available Jobs</h2>
        <div class="job_container">
         {% for job in jobs %}
         <div class="job_card">

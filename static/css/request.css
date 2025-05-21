@@ -147,10 +147,29 @@ h2{
 }
 
 .job_card2{
-    border: 3px solid #FEB301;
-    background-color: #f0fff0;
+    display: inline-block;
+    min-width: 300px;
+    max-width: 320px;
+    flex: 0 0 auto;
+    border: 2px solid #53361C;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: #f9f9f9;
 }
+
 .status_label {
     font-weight: bold;
     color: green;
+}
+
+.accepted_scroll_wrapper {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+}
+
+.accepted_scroll {
+    display: flex;
+    flex-direction: row;
+    gap: 20px; 
 }

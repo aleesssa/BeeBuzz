@@ -23,8 +23,9 @@
             <div class="right">
                 <p class="price">{{ job.price_offer }}</p>
                 <div class="button_row">
-                <button class="vdetails_button">View Details</button>
-                <button class="submit_button">Accept Job</button>
+                    <a href="{{ url_for('request_bp.view_details', request_id=job.id) }}">
+                     <button class="vdetails_button">View Details</button></a>
+                     <button class="submit_button">Accept Job</button>
                 </div>
             </div>
         </div>

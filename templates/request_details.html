@@ -10,26 +10,26 @@
      <h1>REQUEST DETAILS</h1>
 
      <div class="label">ITEM</div>
-     <p>{{ request.item_name }}</p>
+     <p>{{ job_request.item_name }}</p>
 
      <div class="label">NOTES</div>
-     <p>{{ request.notes }}</p>
+     <p>{{ job_request.notes }}</p>
 
      <div class="label">TIME</div>
-     <p>{{ request.time }}</p>
+     <p>{{ job_request.time }}</p>
 
      <div class="label">PICKUP</div>
-     <p>{{ request.pickup_location }}</p>
+     <p>{{ job_request.pickup_location }}</p>
 
      <div class="label">DROP OFF</div>
-     <p>{{ request.dropoff_location }}</p>
+     <p>{{ job_request.dropoff_location }}</p>
 
      <div class="label">PRICE OFFERED</div>
-     <p>{{ request.price_offer }}</p>
+     <p>{{ job_request.price_offer }}</p>
 
-      <form method="POST" action="{{ url_for('request_bp.accept_request', request_id=request.id) }}">
+      <form method="POST" action="{{ url_for('request_bp.accept_request', request_id=job_request.id) }}">
         <input type="submit" value="ACCEPT JOB" class="submit_button">
-    </form>
+      </form>
 
     </div>
 </body>

@@ -1,71 +1,104 @@
 {% extends 'base.html' %}
 
+{% block style %}
+<link rel="stylesheet" href="/css/chatmessage.css">
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <h1>Chatbox</h1>
 
 <div class="chatbox">
-    <ul class="messages" style="list-style: none;">
+    <div id="messages" style="list-style: none;">
         {% for message in messages %}
-        <!-- Get sender's name and message -->
-        <li>{{ users.filter_by(id=message.sender_id).first().username}} : {{ message.message }}</li> 
+            <!-- Get sender's name and message -->
+           
+            <div class="message  {% if message.sender_id == user_id %}me{% else %}them{% endif %}">
+                {% if message.media_url %} 
+                    {% if message.media_url.split('.')[1] in 'mp4' %} <video src="{{message.media_url}}" width="350px" controls> {% endif %}
+                    {% if message.media_url.split('.')[1] in 'jpg jpeg gif png' %} <img src="{{ message.media_url }}" id="media" width="200px"> {% endif %}
+                {% endif %}
+                <div class="text">{{ users.filter_by(id=message.sender_id).first().username }} : {{ message.message }}</div>
+            </div> 
+
         {% endfor %}
-    </ul>
-    <div class="input">
-        <input type="text" id="chat_input" placeholder="Send a text">
-        <button id="send" tabindex="en">Send</button>
-    </div>  
+        </div>
+    <form id="chat_form" enctype="multipart/form-data">
+        <input type="text" name="message" id="chat_input" placeholder="Send a text">
+        <input type="file" name="media" id="media">
+        <button id="submit"><img src="/img/send.png" alt="send" width="20em"></button>
+    </form>  
 </div>
 
 
 
 <script>
-    var input = document.getElementById('chat_input')
-    var sendButton = document.getElementById('send')
-    var chat = ''
+    const socket = io()
+    const user_id = {{ session['user_id'] }}
+    const form = document.getElementById('chat_form')
+    const input = document.getElementById('chat_input') // Needed to track Enter key presses
+    const submitButton = document.getElementById('submit')
+
+    // Listen to receive_message event by server
+    socket.on("receive_message", function(data) {
+        console.log('hello')
+      const div = document.createElement("div");
+      div.className = "message";
+      
+      // check who's the sender
+      if (data.sender_id != user_id){
+        div.classList.add('them');
+      }else{
+        div.classList.add('me');
+      }
 
 
-    // Click button when user presses enter
+      div.innerText = data.sender_name + ": " + data.message;
+      document.getElementById("messages").appendChild(div);
+    });
+
+    // Click submit button when user presses enter
     input.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
             // Cancel the default action, if needed
             event.preventDefault();
             // Trigger sendButton with a click
-            sendButton.click();
+            submitButton.click();
         }
     }); 
 
-    // Get value for textbox when user clicks button
-    sendButton.addEventListener('click', () => {
-        chat = input.value.trim()
 
-        const jsonData = {
-            message : chat
-        }
+    // send post request through fetch when form is submitted 
+    submitButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const formData = new FormData(form); 
 
+        const message = formData.get('message')?.trim() // get text input value
+        const media = formData.get('media')
 
-        if(!(chat === "")){
-        fetch('{{ url_for("chat.send_message") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(chat)
-        })
-            .then(response => console.log(response))
-            .then(data => {
-                console.log('Success:', data)
-                location.reload()
-            }
-                
-            )
-            .catch((error) => {
-                console.error('Error:', error)
+        // Send a POST request via fetch
+        if(!(message === "") || (media.size > 0)){ // make sure text input is not empty or file is uploaded
+            fetch('{{ url_for("chat.send_message") }}', {
+                method: 'POST',
+                body: formData
             })
+                .then(response => response.json())
+                .then(data => {
+                    socket.emit('send_message', data)
+                }
+                    
+                )
+                .catch((error) => {
+                    console.error('Error:', error)
+                })
         }
 
-        input.value = ''
-        console.log(chat)
-    })
+        form.reset() // Clear form after request is sent
+
+    })  
+
+    
+        
 
 
 

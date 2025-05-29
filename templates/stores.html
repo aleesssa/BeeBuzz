@@ -7,11 +7,14 @@
 {% block content %}
 <div id="stores" class="container">
     <h1>STORE STATUS</h1>
-    <a href="{{url_for('stores.add_store')}}">Add store</a>
+    <a href="{{url_for('stores.add_store')}}">(+) Add store</a>
     <div class="stores">
-        <div class="store">
-            
-        </div>
+        {% for store in stores %}
+            <div class="store">
+                <div class="name">{{ store.name.upper() }}</div>
+                <div class="status {% if store.is_open %}open{% else %}close{% endif %}">{% if store.is_open %}OPEN{% else %}CLOSE{% endif %}</div>                
+            </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

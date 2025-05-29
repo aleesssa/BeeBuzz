@@ -10,15 +10,15 @@
     <form action="{{ url_for('stores.add_store') }}" method="POST">
         <div>
             <label for="name">Store's name:</label>
-            <input type="text" name="name" id="name" placeholder="Enter store's name">
+            <input type="text" name="name" id="name" placeholder="Enter store's name" required>
         </div>
         <div>
             <label for="time">Opening time:</label>
-            <input type="time" name="time_open" id="time_open">
+            <input type="time" name="time_open" id="time_open" required>
         </div>
         <div>
             <label for="time">Closing time:</label>
-            <input type="time" name="time_close" id="time_close">
+            <input type="time" name="time_close" id="time_close" required>
         </div>
         <div><button type="submit">Add store</button></div>
     </form>

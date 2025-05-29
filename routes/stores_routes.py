@@ -1,7 +1,7 @@
-from flask import Blueprint, request, render_template, jsonify, session, current_app
+from flask import Blueprint, request, render_template, jsonify, session, current_app, redirect, url_for
 from extensions import db
 from models.store import Store
-from datetime import datetime
+from datetime import datetime, time
 
 
 stores_bp = Blueprint('stores', __name__) # Equivalent to app = Flask(__name__)
@@ -9,7 +9,11 @@ stores_bp = Blueprint('stores', __name__) # Equivalent to app = Flask(__name__)
 
 @stores_bp.route('/')
 def stores():
-    return render_template('stores.html')
+    stores = Store.query.all()
+    
+    update_store_status(stores) # Update store status based on current time
+    
+    return render_template('stores.html', stores=stores)
 
 
 @stores_bp.route('/add', methods = ['GET', 'POST'])
@@ -18,23 +22,45 @@ def add_store():
         return render_template('store_add.html')
 
     if request.method == "POST":
+        # Store's name
         name = request.form.get('name')
-        time_open = request.form.get('time_open')
-        time_close = request.form.get('time_close')
+        
+        # Convert string time to datetime object
+        time_open_str = request.form.get("time_open")
+        time_close_str = request.form.get("time_close")
+
+        time_open = datetime.strptime(time_open_str, "%H:%M").time()
+        time_close = datetime.strptime(time_close_str, "%H:%M").time()
+
         
         
         store = Store(
             name = name,
             time_open = time_open,
-            time_close = time_close
+            time_close = time_close,
+            is_open = is_open(time_open, time_close)
         )
         
         db.session.add(store)
         db.session.commit()
         
-        return 0
+        return redirect(url_for('stores.stores'))
+        
         
 # Check if store is open or close
 def is_open(time_open, time_close):
-    now = datetime.now().time()
+    # now = datetime.now().time()
+    now = time(8, 0)
     return time_open <= now < time_close
+
+# Update store status
+def update_store_status(stores):
+    for store in stores:
+        time_open = store.time_open    
+        time_close = store.time_close
+        store_status = is_open(time_open, time_close)
+        
+        if store.is_open != store_status:
+            store.is_open = store_status
+        
+    db.session.commit()

@@ -107,7 +107,7 @@ def show_jobs():
 
     if sort_by == "time":
         available_jobs_query = available_jobs_query.order_by(Request.time)
-    elif sort_by == "price":
+    elif sort_by == "price_offer":
         available_jobs_query = available_jobs_query.order_by(Request.price_offer)
     elif sort_by == "pickup_location":
         available_jobs_query = available_jobs_query.order_by(Request.pickup_location)

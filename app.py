@@ -15,8 +15,10 @@ socketio.init_app(app)
 
 # Register blueprints
 from routes.chat_routes import chat_bp
+from routes.stores_routes import stores_bp
 
 app.register_blueprint(chat_bp, url_prefix='/chat')
+app.register_blueprint(stores_bp, url_prefix='/stores')
 
 @app.route('/')
 def index():

@@ -41,6 +41,6 @@ request = Request(
 with app.app_context():
     # db.session.add(request)
     # db.session.commit()
-    Request.query.filter_by(id=1).update({'runner_id':2})
+    Request.query.filter_by(id=1).update({'client_id':1})
     db.session.commit()
     print("Entries succesfully added!")

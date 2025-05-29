@@ -38,6 +38,7 @@
        <h2>Available Jobs</h2>
 
        <form method="GET" action="{{ url_for('request_bp.show_jobs')}}">
+        <div class = "filter_row">
         <label for="min_price">Min Price:</label>
         <input type="number" name="min_price" step="0.01" value="{{ request.args.get('min_price', '') }}">
        
@@ -59,11 +60,14 @@
             <option value="pickup_location" {% if request.args.get('sort_by') == 'pickup_location' %}selected{% endif %}>Pickup Location</option>
             <option value="dropoff_location" {% if request.args.get('sort_by') == 'dropoff_location' %}selected{% endif %}>Dropoff Location</option>
         </select>
-        <input type="submit" value="Filter" class="submit_button">
-
+        </div>
+        
+        <div class="button_row">
+        <input type="submit" value="Apply Filters" class="submit_button">
         <a href="{{ url_for('request_bp.show_jobs') }}">
-        <button type="button" class="cancel_button">Clear Filters</button>
+            <button type="button" class="cancel_button">Clear Filters</button>
         </a>
+        </div>
        </form>
 
        <div class="job_container">

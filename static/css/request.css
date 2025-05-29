@@ -193,3 +193,9 @@ h2{
     color: #53361C;
 }
 
+.filter_row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}

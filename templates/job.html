@@ -43,6 +43,13 @@
        
         <label for="max_price">Max Price:</label>
         <input type="number" name="max_price" step="0.01" value="{{ request.args.get('max_price', '') }}">
+
+        <label for="pickup_location">Pickup Location:</label>
+        <input type="text" name="pickup_location" value="{{ request.args.get('pickup_location', '') }}">
+
+        <label for="dropoff_location">Dropoff Location:</label>
+        <input type="text" name="dropoff_location" value="{{ request.args.get('dropoff_location', '') }}">
+
         
         <label for="sort_by">Sort by:</label>
         <select name="sort_by">

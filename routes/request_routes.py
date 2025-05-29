@@ -84,8 +84,36 @@ def show_jobs():
     accepted_jobs = []
     if runner_id:
         accepted_jobs = Request.query.filter_by(status="accepted", runner_id=runner_id).all()
+
+    available_jobs_query = Request.query.filter_by(status="requested")
+
+    min_price = request.args.get('min_price', type=float)
+    max_price = request.args.get('max_price', type=float)
+    sort_by = request.args.get('sort_by')
+    pickup_location = request.args.get('pickup_location')
+    dropoff_location = request.args.get('dropoff_location')
+
+    if min_price is not None:
+        available_jobs_query = available_jobs_query.filter(Request.price_offer >= min_price)
+    if max_price is not None:
+        available_jobs_query = available_jobs_query.filter(Request.price_offer <= max_price)
+
+    if pickup_location:
+        available_jobs_query = available_jobs_query.filter(Request.pickup_location.ilike(f"%{pickup_location}%"))
+    if dropoff_location:
+        available_jobs_query = available_jobs_query.filter(Request.dropoff_location.ilike(f"%{dropoff_location}%"))
+
+    if sort_by == "time":
+        available_jobs_query = available_jobs_query.order_by(Request.time)
+    elif sort_by == "price":
+        available_jobs_query = available_jobs_query.order_by(Request.price_offer)
+    elif sort_by == "pickup_location":
+        available_jobs_query = available_jobs_query.order_by(Request.pickup_location)
+    elif sort_by == "dropoff_location":
+        available_jobs_query = available_jobs_query.order_by(Request.dropoff_location)
+
+    available_jobs = available_jobs_query.all()
     
-    available_jobs = Request.query.filter_by(status="requested").all()
     return render_template("job.html", jobs=available_jobs, accepted_jobs=accepted_jobs)
 
 @request_bp.route('/jobs/details/<int:request_id>')

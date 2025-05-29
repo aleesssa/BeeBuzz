@@ -36,6 +36,29 @@
 {% endif %}
 
        <h2>Available Jobs</h2>
+
+       <form method="GET" action="{{ url_for('request_bp.show_jobs')}}">
+        <label for="min_price">Min Price:</label>
+        <input type="number" name="min_price" step="0.01" value="{{ request.args.get('min_price', '') }}">
+       
+        <label for="max_price">Max Price:</label>
+        <input type="number" name="max_price" step="0.01" value="{{ request.args.get('max_price', '') }}">
+        
+        <label for="sort_by">Sort by:</label>
+        <select name="sort_by">
+            <option value="">-- Select --</option>
+            <option value="time" {% if request.args.get('sort_by') == 'time' %}selected{% endif %}>Time</option>
+            <option value="price_offer" {% if request.args.get('sort_by') == 'price_offer' %}selected{% endif %}>Price</option>
+            <option value="pickup_location" {% if request.args.get('sort_by') == 'pickup_location' %}selected{% endif %}>Pickup Location</option>
+            <option value="dropoff_location" {% if request.args.get('sort_by') == 'dropoff_location' %}selected{% endif %}>Dropoff Location</option>
+        </select>
+        <input type="submit" value="Filter" class="submit_button">
+
+        <a href="{{ url_for('request_bp.show_jobs') }}">
+        <button type="button" class="cancel_button">Clear Filters</button>
+        </a>
+       </form>
+
        <div class="job_container">
         {% for job in jobs %}
         <div class="job_card">

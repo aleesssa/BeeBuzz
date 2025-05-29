@@ -11,10 +11,12 @@ def request_job():
 
 @request_bp.route('/req', methods=['GET','POST'])
 def handle_request():
+    price_offer = float(request.form.get("payment"))
+
     if request.method == 'POST':
        new_request = Request(
             item_name=request.form.get("need"),
-            price_offer=request.form.get("payment"),
+            price_offer=price_offer,
             time=request.form.get("time"),
             pickup_location=request.form.get("pickup"),
             dropoff_location=request.form.get("dropoff"),

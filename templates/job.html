@@ -24,7 +24,7 @@
             <p>Time: {{ job.time }}</p>
         </div>
         <div class="right">
-            <p class="price">{{ job.price_offer }}</p>
+            <p class="price">RM {{ "%.2f"|format(job.price_offer|float) }}</p>
             <p class="status_label">ACCEPTED</p>
         </div>
     </div>
@@ -83,7 +83,7 @@
             </div>
 
             <div class="right">
-                <p class="price">{{ job.price_offer }}</p>
+                <p class="price">RM {{ "%.2f"|format(job.price_offer|float) }}</p>
                 <div class="button_row">
                     <a href="{{ url_for('request_bp.view_details', request_id=job.id) }}">
                      <button class="vdetails_button">View Details</button></a>

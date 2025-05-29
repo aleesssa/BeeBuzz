@@ -7,7 +7,7 @@
 
 <body>
     <div class="box2">
-        
+
     <div class="req_details">
 
      <h1>REQUEST DETAILS</h1>
@@ -28,7 +28,7 @@
      <p>{{ job_request.dropoff_location }}</p>
 
      <div class="label2">PRICE OFFERED</div>
-     <p>{{ job_request.price_offer }}</p>
+     <p>{{ "%.2f"|format(job_request.price_offer|float) }}</p>
 
       <form method="POST" action="{{ url_for('request_bp.accept_jobs', request_id=job_request.id) }}">
         <input type="submit" value="ACCEPT JOB" class="submit_button">

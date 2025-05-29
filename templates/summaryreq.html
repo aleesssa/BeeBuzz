@@ -12,7 +12,7 @@
         <p>{{ data.item_name }}</p>
 
         <div class="label">Offered payment</div>
-        <p>{{ data.price_offer }}</p>
+        <p>RM {{ "%.2f"|format(data.price_offer|float) }}</p>
 
         <div class="label">Time</div>
         <p>{{ data.time }}</p>

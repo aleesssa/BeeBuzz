@@ -1,0 +1,14 @@
+.container{
+    margin: 20px 40px;
+}
+
+#add_store form{
+    display: flex;
+    flex-direction: column;
+    border: solid 1px black;
+    padding: 20px;
+    width: max-content;
+    div{
+        margin-bottom: 5px;
+    }
+}

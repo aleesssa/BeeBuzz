@@ -199,3 +199,34 @@ h2{
     gap: 10px;
     align-items: center;
 }
+
+.sort_row {
+    margin-top: 10px;
+    width: 100%;
+}
+
+select {
+    padding: 10px;
+    border: 2px solid #53361C;
+    border-radius: 10px;
+    background-color: #FCF4D4; 
+    color: #53361C; 
+    font-weight: bold;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: #FEB301; 
+    background-color: #FFF3C4;
+}
+
+.style_input {
+    padding: 10px;
+    border: 2px solid #53361C;
+    border-radius: 10px;
+    background-color: #FCF4D4;
+    color: #53361C;
+    font-weight: bold;
+    width: 150px;
+}

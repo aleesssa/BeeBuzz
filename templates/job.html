@@ -40,20 +40,21 @@
        <form method="GET" action="{{ url_for('request_bp.show_jobs')}}">
         <div class = "filter_row">
         <label for="min_price">Min Price:</label>
-        <input type="number" name="min_price" step="0.01" value="{{ request.args.get('min_price', '') }}">
+        <input type="number" name="min_price" class="style_input" step="0.01" value="{{ request.args.get('min_price', '') }}">
        
         <label for="max_price">Max Price:</label>
-        <input type="number" name="max_price" step="0.01" value="{{ request.args.get('max_price', '') }}">
+        <input type="number" name="max_price" class="style_input" step="0.01" value="{{ request.args.get('max_price', '') }}">
 
         <label for="pickup_location">Pickup Location:</label>
-        <input type="text" name="pickup_location" value="{{ request.args.get('pickup_location', '') }}">
+        <input type="text" name="pickup_location" class="style_input" value="{{ request.args.get('pickup_location', '') }}">
 
         <label for="dropoff_location">Dropoff Location:</label>
-        <input type="text" name="dropoff_location" value="{{ request.args.get('dropoff_location', '') }}">
+        <input type="text" name="dropoff_location" class="style_input" value="{{ request.args.get('dropoff_location', '') }}">
+        </div>
 
-        
+        <div class="sort_row">
         <label for="sort_by">Sort by:</label>
-        <select name="sort_by">
+        <select name="sort_by" class="sort_dropdown">
             <option value="">-- Select --</option>
             <option value="time" {% if request.args.get('sort_by') == 'time' %}selected{% endif %}>Time</option>
             <option value="price_offer" {% if request.args.get('sort_by') == 'price_offer' %}selected{% endif %}>Price</option>
@@ -61,7 +62,7 @@
             <option value="dropoff_location" {% if request.args.get('sort_by') == 'dropoff_location' %}selected{% endif %}>Dropoff Location</option>
         </select>
         </div>
-        
+
         <div class="button_row">
         <input type="submit" value="Apply Filters" class="submit_button">
         <a href="{{ url_for('request_bp.show_jobs') }}">

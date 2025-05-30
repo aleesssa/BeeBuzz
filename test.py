@@ -35,12 +35,13 @@ request = Request(
     pickup_location='tekun',
     dropoff_location='fci',
     price_offer=5,
-    client_id=1
-)
+    client_id=1,
+    runner_id=2
+    )
 
 with app.app_context():
-    # db.session.add(request)
-    # db.session.commit()
+    db.session.add(request)
+    db.session.commit()
     Request.query.filter_by(id=1).update({'client_id':1})
     db.session.commit()
     print("Entries succesfully added!")

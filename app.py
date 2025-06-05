@@ -3,8 +3,7 @@ from flask_socketio import SocketIO
 from extensions import db, socketio
 
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
-
-app.config['SECRET_KEY'] = 'Beebuzz'
+app.secret_key = 'your_secret_key'
 
 # Connect to SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///beebuzz.db'
@@ -16,10 +15,8 @@ socketio.init_app(app)
 
 # Register blueprints
 from routes.chat_routes import chat_bp
-from routes.request_routes import request_bp
 
 app.register_blueprint(chat_bp, url_prefix='/chat')
-app.register_blueprint(request_bp, url_prefix='/request')
 
 @app.route('/')
 def index():

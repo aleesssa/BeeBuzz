@@ -134,6 +134,11 @@ def accept_jobs(request_id):
 
     return redirect(url_for('request_bp.show_jobs'))
 
+@request_bp.route('/track/<int:request_id>')
+def track_status(request_id):
+    req = Request.query.get_or_404(request_id)
+    return render_template("deliverystatus.html", request_data=req)
+
 @request_bp.route('/login/<int:user_id>')
 def log_in(user_id):
     session['user_id'] = user_id

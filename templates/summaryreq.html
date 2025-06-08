@@ -6,6 +6,7 @@
     </head>
 
     <body>
+        <div class="center_wrapper">
         <div class ='box'>
         <h1>YOUR REQUEST</h1>
         <div class="label">What do you need?</div>
@@ -43,8 +44,11 @@
         <form method="POST" action="{{ url_for('request_bp.cancel_request', request_id=request_id) }}">
          <input type="submit" value="CANCEL REQUEST" class="cancel_button">
         </form>
+
+        <a class="vdetails_button" href="{{ url_for('request_bp.track_status', request_id=data.id) }}">TRACK STATUS</a>
         </div>
 
+        </div>
         </div>
 
     </body>

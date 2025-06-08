@@ -1,7 +1,4 @@
 body{
-        height: 100vh;
-        margin: 0;
-        display: flex;
         justify-content: center; 
         align-items: center;   
         color: white;  
@@ -251,4 +248,12 @@ select:focus {
 .step.active {
     color: #FEB301;
     border-color: #FEB301;
+}
+
+.center_wrapper {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px 100px;
 }

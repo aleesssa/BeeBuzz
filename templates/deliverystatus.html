@@ -5,8 +5,11 @@
     <link rel="stylesheet" href="/css/status.css">
 </head>
 <body>
+     <div class="box2">
         <h1>Delivery Status</h1>
-        <p>Item: {{ request_data.item_name }}</p>
+        <p class="label2">Item: {{ request_data.item_name }}</p>
+
+         <div class="progress_bar">
             <div class="step {% if request_data.status in ['requested', 'accepted', 'picked up', 'on the way', 'delivered'] %}active{% endif %}">Requested</div>
             <div class="step {% if request_data.status in ['accepted', 'picked up', 'on the way', 'delivered'] %}active{% endif %}">Accepted</div>
             <div class="step {% if request_data.status in ['picked up', 'on the way', 'delivered'] %}active{% endif %}">Picked Up</div>

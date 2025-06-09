@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *.pyo
 
+
+
 # Virtual environment
 venv/
 .env
@@ -11,6 +13,8 @@ venv/
 # Flask/Misc
 instance/
 *.sqlite3
+
+static/uploads
 
 # VSCode / IDE stuff
 .vscode/

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{%block content%}
+    <head>
+        <link rel="stylesheet" href="/css/request.css">
+    </head>
+
+    <body>
+        <div class ='box'>
+        <h1>YOUR REQUEST</h1>
+        <div class="label">What do you need?</div>
+        <p>{{ data.item_name }}</p>
+
+        <div class="label">Offered payment</div>
+        <p>{{ data.price_offer }}</p>
+
+        <div class="label">Time</div>
+        <p>{{ data.time }}</p>
+
+        <div class="label">Pickup location</div>
+        <p>{{ data.pickup_location }}</p>
+
+        <div class="label">Drop-off location</div>
+        <p>{{ data.dropoff_location }}</p>
+
+        <div class="label">Notes</div>
+        <p>{{ data.notes }}</p>
+
+        <form method="POST" action="{{ url_for('request_bp.handle_request') }}">
+         <input type="hidden" name="need" value="{{ data.item_name }}">
+         <input type="hidden" name="payment" value="{{ data.price_offer }}">
+         <input type="hidden" name="time" value="{{ data.time }}">
+         <input type="hidden" name="pickup" value="{{ data.pickup_location }}">
+         <input type="hidden" name="dropoff" value="{{ data.dropoff_location }}">
+         <input type="hidden" name="notes" value="{{ data.notes }}">
+        
+        </form>
+
+        <div class="button_row">
+        <form method="GET" action="{{ url_for('request_bp.edit_request', request_id=request_id) }}">
+            <input type="submit" value="EDIT REQUEST" class="submit_button">
+        </form>
+        <form method="POST" action="{{ url_for('request_bp.cancel_request', request_id=request_id) }}">
+         <input type="submit" value="CANCEL REQUEST" class="cancel_button">
+        </form>
+        </div>
+
+        </div>
+
+    </body>
+
+
+    {% endblock %}

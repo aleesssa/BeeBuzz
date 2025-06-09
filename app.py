@@ -1,5 +1,6 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
+from flask_login import LoginManager, login_required, current_user  
 from flask_mail import Mail, Message
 from extensions import db, migrate, login_manager
 from models.user import User
@@ -41,8 +42,9 @@ def send_email(to_email, subject, body):
     
 app.send_email = send_email
 
-login_manager.init_app(app)
+login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
 
 with app.app_context():
     db.create_all()
@@ -61,12 +63,15 @@ app.register_blueprint(request_bp, url_prefix='/request')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
 
-def send_email(to_email, subject, body):
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail as SGMail, Email, To, Content
+
+def send_email_sendgrid(to_email, subject, body):
     from_email = Email("your_verified_sendgrid_email@domain.com")
-    to_email = To(to_email)
+    to_email_obj = To(to_email)
     content = Content("text/plain", body)
-    mail = Mail(from_email, to_email, subject, content)
-    
+    mail = SGMail(from_email, to_email_obj, subject, content)
+    sg = SendGridAPIClient(os.getenv('SENDGRID_API_KEY', 'your_sendgrid_api_key_here'))
     try:
         response = sg.send(mail)
         print(response.status_code)
@@ -75,3 +80,9 @@ def send_email(to_email, subject, body):
         print(f"Error sending email: {e}")
         return False
     
+#@app.before_request
+#def auto_login_from_db():
+#    if 'user_id' not in session:
+#        default_user = User.query.first()  # You can also use filter_by(email='test@example.com').first()
+#        if default_user:
+#            session['user_id'] = default_user.id

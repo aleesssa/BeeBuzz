@@ -1,23 +1,34 @@
 {% extends "base.html" %}
 
-{%block content%}
-    <body>
+{% block title %}Request - BeeBuzz{% endblock %}
+
+{% block content %}
+    <head>
+        <link rel="stylesheet" href="/css/request.css">
+    </head>
+
+    <body> 
+        <div class ="box">
         <h1>Buzz buzz~ what can we get for you?</h1>
-        <form>
+
+        <form method="POST" action="{{ url_for('request_bp.handle_request')}}">
+
         <label>What do you need?</label><br>
-        <input type="text"><br><br>
+        <input type="text" name="need" required="required"><br><br>
         <label>Offered payment</label><br>
-        <input type="text" placeholder="e.g.RM 5.00"><br><br>
+        <input type="text" name="payment" placeholder="e.g.RM 5.00" required="required"><br><br>
         <label>Time</label><br>
-        <input type="text"><br><br>
+        <input type="text" name="time" placeholder="Need it by..." required="required"><br><br>
         <label>Pickup location</label><br>
-        <input type="text"><br><br>
+        <input type="text" name="pickup" required="required"><br><br>
         <label>Drop-off location</label><br>
-        <input type="text"><br><br>
+        <input type="text" name="dropoff" required="required"><br><br>
         <label>Notes</label><br>
-        <input type="text"><br><br>
-        <input type="submit" value="POST REQUEST">
+        <input type="text" name="notes"><br><br>
+    
+        <input type="submit" value="POST REQUEST" class="submit_button">
         </form>
+        </div>
     </body>
-</html>
+
 {% endblock %}

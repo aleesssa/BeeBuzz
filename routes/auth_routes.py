@@ -1,10 +1,10 @@
 import os, re, random, string, datetime
 from flask import Blueprint, request, render_template, redirect, url_for, flash, session, jsonify, current_app
-from extensions import db, mail
+from extensions import db, mail, login_manager
 from models.user import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from flask_login import login_required, current_user, login_user, logout_user
+from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
 from models.request import Request
@@ -38,6 +38,9 @@ def login():
 
     return render_template('login.html')
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 # ---------- Logout ----------
 
@@ -106,8 +109,10 @@ def profile():
 
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('auth.profile'))
+    
+    user_requests = Request.query.filter_by(client_id=current_user.id).order_by(Request.created_at.desc()).all()
 
-    return render_template('profile.html')
+    return render_template('profile.html', user_history=user_requests, active_page='profile')
 
 
 # ---------- Profile Picture Upload ----------
@@ -141,16 +146,6 @@ def toggle_role():
     current_user.role = 'runner' if role == 'runner' else 'shopper'
     db.session.commit()
     return redirect(url_for('auth.profile'))
-
-#----------History Request ----------
-@auth_bp.route('/history-profile', methods=['GET'])
-def history():
-    items_name = Request.query.filter_by(user_id=current_user.id).all()
-    time = Request.query.filter_by(user_id=current_user.id).all()
-    status = Request.query.filter_by(user_id=current_user.id).all()
-    created_at = Request.query.filter_by(user_id=current_user.id).all()
-
-    return render_template('profile.html', request=request)
 
 # ---------- Password Reset ----------
 
@@ -242,7 +237,7 @@ def reset_password():
 
 @auth_bp.route('/home')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', active_page='home')
 
 @auth_bp.route("/test-email")
 def test_email():

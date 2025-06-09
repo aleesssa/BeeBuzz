@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="/css/request.css">
+</head>
+
+<body>
+    <div class="box">
+    <h1>Edit Your Request</h1>
+
+        <form method="POST" action="{{ url_for('request_bp.update_request', request_id=request.id) }}">
+            
+            <input type="hidden" name="_method" value="PUT">
+
+            <label>What do you need?</label><br>
+            <input type="text" name="need" value="{{ request.item_name }}" required><br><br>
+            <label>Offered payment</label><br>
+            <input type="text" name="payment" value="{{ request.price_offer }}" required><br><br>
+            <label>Time</label><br>
+            <input type="text" name="time" value="{{ request.time }}" required><br><br>
+            <label>Pickup location</label><br>
+            <input type="text" name="pickup" value="{{ request.pickup_location }}" required><br><br>
+            <label>Drop-off location</label><br>
+            <input type="text" name="dropoff" value="{{ request.dropoff_location }}" required><br><br>
+            <label>Notes</label><br>
+            <input type="text" name="notes" value="{{ request.notes }}"><br><br>
+            <input type="submit" value="UPDATE REQUEST" class="submit_button">
+            
+        </form>
+    </div>
+</body>
+{% endblock %}

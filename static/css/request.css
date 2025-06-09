@@ -193,6 +193,7 @@ h2{
     color: #53361C;
 }
 
+<<<<<<< HEAD
 .filter_row{
     display: flex;
     flex-wrap: wrap;
@@ -230,3 +231,5 @@ select:focus {
     font-weight: bold;
     width: 150px;
 }
+=======
+>>>>>>> auth

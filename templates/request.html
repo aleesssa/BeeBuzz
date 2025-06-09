@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
+<<<<<<< HEAD
 {%block content%}
+=======
+{% block title %}Request - BeeBuzz{% endblock %}
+
+{% block content %}
+>>>>>>> auth
     <head>
         <link rel="stylesheet" href="/css/request.css">
     </head>
@@ -14,7 +20,11 @@
         <label>What do you need?</label><br>
         <input type="text" name="need" required="required"><br><br>
         <label>Offered payment</label><br>
+<<<<<<< HEAD
         <input type="text" name="payment" step="0.01" min="0" placeholder="e.g. 5.00" required="required"><br><br>
+=======
+        <input type="text" name="payment" placeholder="e.g.RM 5.00" required="required"><br><br>
+>>>>>>> auth
         <label>Time</label><br>
         <input type="text" name="time" placeholder="Need it by..." required="required"><br><br>
         <label>Pickup location</label><br>

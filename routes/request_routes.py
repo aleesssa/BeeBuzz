@@ -1,7 +1,15 @@
 from flask import Blueprint, request, render_template, url_for, redirect, session
+<<<<<<< HEAD
 from extensions import db
 from models.request import Request
 from datetime import datetime
+=======
+from flask_login import current_user, login_required
+from extensions import db
+from models.request import Request
+from datetime import datetime
+from models.user import User
+>>>>>>> auth
 
 request_bp = Blueprint('request_bp', __name__) # Equivalent to app = Flask(__name__)
 
@@ -10,6 +18,7 @@ def request_job():
      return render_template ("request.html")
 
 @request_bp.route('/req', methods=['GET','POST'])
+<<<<<<< HEAD
 def handle_request():
     price_offer = float(request.form.get("payment"))
 
@@ -17,11 +26,28 @@ def handle_request():
        new_request = Request(
             item_name=request.form.get("need"),
             price_offer=price_offer,
+=======
+@login_required
+def handle_request():
+    if request.method == 'POST':
+        client_id = current_user.id
+        item_name = request.form.get('item_name')
+        pickup_location = request.form.get('pickup_location')
+        dropoff_location = request.form.get('dropoff_location')
+        price_offer = request.form.get('price_offer')
+        time = request.form.get('time')
+        notes = request.form.get('notes')
+
+        new_request = Request(
+            item_name=request.form.get("need"),
+            price_offer=request.form.get("payment"),
+>>>>>>> auth
             time=request.form.get("time"),
             pickup_location=request.form.get("pickup"),
             dropoff_location=request.form.get("dropoff"),
             notes=request.form.get("notes"),
             created_at=datetime.utcnow(),
+<<<<<<< HEAD
             client_id=session.get('user_id'),
             status='requested'
               )
@@ -29,6 +55,19 @@ def handle_request():
        db.session.add(new_request)
        db.session.commit()
     return render_template("summaryreq.html", data=new_request, request_id=new_request.id)
+=======
+            client_id=current_user.id,
+            runner_id=None,
+            status='requested'
+        )
+        db.session.add(new_request)
+        db.session.commit()
+
+        return redirect(url_for('request_bp.summary_request', request_id=new_request.id))
+
+    return render_template("request.html")
+
+>>>>>>> auth
 
 @request_bp.route('/edit/<int:request_id>')
 def edit_request(request_id):
@@ -86,6 +125,7 @@ def show_jobs():
     accepted_jobs = []
     if runner_id:
         accepted_jobs = Request.query.filter_by(status="accepted", runner_id=runner_id).all()
+<<<<<<< HEAD
 
     available_jobs_query = Request.query.filter_by(status="requested")
 
@@ -116,6 +156,10 @@ def show_jobs():
 
     available_jobs = available_jobs_query.all()
     
+=======
+    
+    available_jobs = Request.query.filter_by(status="requested").all()
+>>>>>>> auth
     return render_template("job.html", jobs=available_jobs, accepted_jobs=accepted_jobs)
 
 @request_bp.route('/jobs/details/<int:request_id>')
@@ -137,4 +181,8 @@ def accept_jobs(request_id):
 @request_bp.route('/login/<int:user_id>')
 def log_in(user_id):
     session['user_id'] = user_id
+<<<<<<< HEAD
     return f'Logged in as {user_id}'
+=======
+    return f'Logged in as {user_id}'
+>>>>>>> auth

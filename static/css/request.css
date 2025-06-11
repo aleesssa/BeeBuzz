@@ -257,3 +257,20 @@ select:focus {
     align-items: center;
     padding: 40px 20px 100px;
 }
+
+.statbox {
+    border: solid #53361C;
+    border-width: 3px;
+    padding: 20px 40px;
+    width: fit-content;
+    background-color: transparent;
+    border-radius: 12px;
+}
+
+.item-image {
+    width: 150px;
+    height: auto;
+    margin: 10px 10px;
+    border-radius: 8px;
+    border: 2px solid #53361C;
+}

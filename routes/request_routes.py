@@ -139,6 +139,19 @@ def track_status(request_id):
     req = Request.query.get_or_404(request_id)
     return render_template("deliverystatus.html", request_data=req)
 
+@request_bp.route('/update_request/<int:request_id>', methods=['POST'])
+def update_delivery(request_id):
+    req = Request.query.get_or_404(request_id)
+
+    new_status = request.form.get('status')
+
+    if new_status:
+        req.status = new_status
+        req.updated_at = datetime.utcnow()
+        db.session.commit()
+    
+    return redirect(url_for('request_bp.track_status', request_id=request_id))
+
 @request_bp.route('/login/<int:user_id>')
 def log_in(user_id):
     session['user_id'] = user_id

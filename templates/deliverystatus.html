@@ -2,12 +2,15 @@
 
 {%block content%}
 <head>
-    <link rel="stylesheet" href="/css/status.css">
+    <link rel="stylesheet" href="/css/request.css">
 </head>
+
 <body>
-     <div class="box2">
-        <h1>Delivery Status</h1>
+    <div class="center_wrapper">
+     <div class="statbox">
+        <h1>Where's My Order?</h1>
         <p class="label2">Item: {{ request_data.item_name }}</p>
+        <p class="label2">Order ID: {{ request_data.id }}</p>
 
          <div class="progress_bar">
             <div class="step {% if request_data.status in ['requested', 'accepted', 'picked up', 'on the way', 'delivered'] %}active{% endif %}">Requested</div>
@@ -17,8 +20,9 @@
             <div class="step {% if request_data.status == 'delivered' %}active{% endif %}">Delivered</div>
         </div>
        
-   {% if current_user.id == request_data.runner_id %}
-        <form method="POST" action="{{ url_for('request_bp.update_status', request_id=request_data.id) }}">
+        <img src="{{ url_for('static', filename='img/buzzbuzz.png') }}" class="item-image">
+
+        <form method="POST" action="{{ url_for('request_bp.update_delivery', request_id=request_data.id) }}">
         <label class="label2">Update Status</label><br>
         <select name="status">
             {% if request_data.status == 'accepted' %}
@@ -31,7 +35,7 @@
         </select>
         <input type="submit" value="Update" class="submit_button">
     </form>
-{% endif %}
+    </div>
     </div>
 </body>
 

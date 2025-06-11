@@ -26,7 +26,7 @@ def chatList():
     .all()
 ]
     
-    return render_template('chatList.html', request_ids = request_ids)
+    return render_template('chatList.html', request_ids = request_ids, active_page='chat')
 
 @chat_bp.route('/<int:request_id>')
 @login_required

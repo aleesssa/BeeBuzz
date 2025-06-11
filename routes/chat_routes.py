@@ -3,6 +3,7 @@ import uuid
 from werkzeug.utils import secure_filename
 from flask import Blueprint, request, render_template, jsonify, session, current_app
 from flask_socketio import SocketIO, emit, join_room
+from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 from extensions import db, socketio
 from models.chat_message import ChatMessage
 from models.user import User
@@ -12,10 +13,9 @@ chat_bp = Blueprint('chat', __name__) # Equivalent to app = Flask(__name__)
 
 # Show list of recent chats
 @chat_bp.route('/')
+@login_required
 def chatList():
-    if session.get('user_id'):
-        user_id = session['user_id']
-        
+    user_id = current_user.id
     request_ids = [
     r[0] for r in db.session.query(ChatMessage.request_id)
     .filter(
@@ -29,24 +29,23 @@ def chatList():
     return render_template('chatList.html', request_ids = request_ids)
 
 @chat_bp.route('/<int:request_id>')
+@login_required
 def chat(request_id):
     client_id = Request.query.filter_by(id = request_id).first().client_id
     runner_id = Request.query.filter_by(id = request_id).first().runner_id
-    if session.get('user_id'):
-        user_id = session['user_id']
-        if (user_id != client_id and user_id != runner_id):
-            return f'Invalid request id\nUserID = {user_id} \n ClientID : {client_id}\nRunnerID : {runner_id}'
-    else:
-        return 'Please log in'
-    
+    user_id = current_user.id
+    if (user_id != client_id and user_id != runner_id):
+        return f'Invalid request id\nUserID = {user_id} \n ClientID : {client_id}\nRunnerID : {runner_id}'
+        
     messages = ChatMessage.query.filter_by(request_id=request_id)
     users = User.query
     # Return list of messages from database
     return render_template('chat.html', messages=messages, users=users, user_id=user_id, active_page='chat', request_id=request_id)
 
 @chat_bp.route('/send', methods=['POST'])
+@login_required
 def send_message():
-    sender_id = session['user_id']
+    sender_id = current_user.id
     sender_name = User.query.filter_by(id=sender_id).first().username
     message = request.form['message']
     request_id = int(request.form['request_id'])
@@ -125,9 +124,3 @@ def save_file(media_file):
     media_file.save(file_path)
     
     return f'/uploads/{filename}'
-
-# Mimick login
-@chat_bp.route('/simulate_login/<int:user_id>')
-def simulate_login(user_id):
-    session['user_id'] = user_id
-    return f'Logged in as user {user_id}'

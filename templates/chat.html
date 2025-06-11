@@ -1,11 +1,8 @@
 {% extends 'base.html' %}
 
-{% block style %}
+{% block content %}
 <link rel="stylesheet" href="/css/chatmessage.css">
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-{% endblock %}
-
-{% block content %}
 <h1>Chatbox</h1>
 
 <div class="chatbox">
@@ -43,7 +40,7 @@
 
 <script>
     const socket = io()
-    const user_id = {{ session['user_id'] }}
+    const user_id = {{ current_user.id }}
     const requestID = {{ request_id }}
     const form = document.getElementById('chat_form')
     const input = document.getElementById('chat_input') // Needed to track Enter key presses

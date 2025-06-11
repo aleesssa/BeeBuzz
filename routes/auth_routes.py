@@ -245,7 +245,7 @@ def test_email():
         msg = Message(
             subject="Flask-Mail Test",
             sender=current_app.config['MAIL_USERNAME'],
-            recipients=["your_receiver_email@example.com"],  # Replace this
+            recipients=["your_receiver_email@example.com"],
             body="This is a test email sent from Flask-Mail."
         )
         mail.send(msg)

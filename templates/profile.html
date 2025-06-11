@@ -4,6 +4,8 @@
 
 {% block content %}
 <link rel="stylesheet" href="/css/profile.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 <div class="space">
 
@@ -68,6 +70,20 @@
                             <p class="datetime">{{ req.created_at.strftime('%b %d, %I:%M %p') }}</p>
                             <p class="status {{ req.status|lower }}">{{ req.status }}</p>
                             <p class="runner">Runner: {{ req.runner_name }}</p>
+
+                            {% if req.status == 'Completed' %}
+                                <div class="star-rating" data-request-id="{{ req.id }}">
+                                    {% for i in range(1, 6) %}
+                                        <span class="fa fa-star" data-score="{{ i }}"></span>
+                                    {% endfor %}
+                                </div>
+                                <p>Avg. rating: <span class="avg-rating">
+                                   {{ req.average_rating or '—' }}
+                                </span></p>
+                            {% endif %}
+                            <a href="{{ url_for('request_bp.summary_request', request_id=req.id) }}">
+                                <button type="button" class="view-button">View</button>
+                            </a>
                         </div>
                     {% endfor %}
                 </div>
@@ -88,6 +104,42 @@
             editBtn.style.display = "none";
             submitBtn.style.display = "inline-block";
         });
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.star-rating').forEach(el => {
+                const reqId = el.dataset.requestId;
+                let selectedScore = +el.dataset.userScore || 0;
+                const stars = el.querySelectorAll('.fa-star');
+                const label = el.nextElementSibling;
+
+                const setStars = score => {
+                    stars.forEach(s => {
+                        s.classList.toggle('selected', +s.dataset.score <= score);
+                        s.classList.toggle('hover', +s.dataset.score <= score);
+                    });
+                    if (label) label.textContent = score || '—';
+                 };
+
+                 setStars(selectedScore);
+                 stars.forEach(star => {
+                    star.addEventListener('mouseover', () => setStars(star.dataset.score));
+                    star.addEventListener('mouseout', () => setStars(selectedScore));
+                    star.addEventListener('click', () => {
+                        selectedScore = +star.dataset.score;
+                        setStars(selectedScore);
+                        fetch('{{ url_for("request_bp.rate_request") }}', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({request_id: reqId, score: selectedScore})
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.average !== undefined) label.textContent = data.average.toFixed(1);
+                        });
+                    });
+                });
+            });
+        });
+
     </script>
 
 </div>

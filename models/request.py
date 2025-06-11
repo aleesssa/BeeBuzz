@@ -13,3 +13,5 @@ class Request(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     client_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     runner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    ratings = db.relationship('Rating', back_populates='request', cascade='all, delete-orphan')
+    

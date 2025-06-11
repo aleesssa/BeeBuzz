@@ -265,9 +265,25 @@ hr {
     font-weight: bold;
     font-size: 0.85rem;
     border: 2px solid #3e2c00;
-    transition: background 0.2s;
 }
 
 .details-btn:hover {
     background: #ffd54f;
 }
+
+.view-button {
+  padding: 0.5em 1em;
+  background-color: #5d3d00;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.view-button:hover {
+  background-color: #3e2c00;
+}
+
+.star-rating .fa-star { cursor: pointer; color: #ccc; }
+.star-rating .fa-star.hover,
+.star-rating .fa-star.selected { color: gold; }

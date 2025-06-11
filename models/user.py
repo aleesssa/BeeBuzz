@@ -19,5 +19,4 @@ class User(db.Model, UserMixin):
     reset_code_expiry = db.Column(db.DateTime, nullable=True)
 =======
     reset_code_expiry = db.Column(db.DateTime, nullable=True)
-    
->>>>>>> auth
+    requests = db.relationship('Request', foreign_keys='Request.client_id', backref='client', lazy=True)

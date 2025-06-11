@@ -15,6 +15,7 @@
      <div class="accepted_scroll_wrapper">
      <div class="accepted_scroll">
       {% for job in accepted_jobs %}
+      <a href="{{ url_for('request_bp.track_status', request_id=job.id) }}" class="job_link">
       <div class="job_card2">
          <div class="job_info">
             <h3>{{ job.client_id }}</h3>
@@ -28,6 +29,7 @@
             <p class="status_label">ACCEPTED</p>
         </div>
     </div>
+    </a>
     {% endfor %}
 </div>
  </div>

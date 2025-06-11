@@ -12,4 +12,4 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(20), default='shopper')
     reset_code = db.Column(db.String(6), nullable=True)
     reset_code_expiry = db.Column(db.DateTime, nullable=True)
-    
+    requests = db.relationship('Request', foreign_keys='Request.client_id', backref='client', lazy=True)

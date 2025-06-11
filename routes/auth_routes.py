@@ -1,29 +1,16 @@
 import os, re, random, string, datetime
 from flask import Blueprint, request, render_template, redirect, url_for, flash, session, jsonify, current_app
-<<<<<<< HEAD
-from extensions import db, mail
-from models.user import User
-from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
-from flask_login import login_required, current_user, login_user, logout_user
-=======
 from extensions import db, mail, login_manager
 from models.user import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
->>>>>>> auth
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
 from models.request import Request
 
-<<<<<<< HEAD
-auth_bp = Blueprint('auth', __name__)
-
-=======
 
 auth_bp = Blueprint('auth', __name__)
->>>>>>> auth
 
 # ---------- Home ----------
 
@@ -44,23 +31,16 @@ def login():
         if user and check_password_hash(user.password_hash, password):
             login_user(user)
             flash('Logged in successfully!', 'success')
-<<<<<<< HEAD
-            return redirect(url_for('auth.profile'))
-=======
             return redirect(url_for('auth.home'))
->>>>>>> auth
         else:
             flash('Invalid username/email or password.', 'danger')
             return redirect(url_for('auth.login'))
 
     return render_template('login.html')
 
-<<<<<<< HEAD
-=======
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
->>>>>>> auth
 
 # ---------- Logout ----------
 
@@ -129,15 +109,10 @@ def profile():
 
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('auth.profile'))
-<<<<<<< HEAD
-
-    return render_template('profile.html')
-=======
     
     user_requests = Request.query.filter_by(client_id=current_user.id).order_by(Request.created_at.desc()).all()
 
     return render_template('profile.html', user_history=user_requests, active_page='profile')
->>>>>>> auth
 
 
 # ---------- Profile Picture Upload ----------
@@ -172,19 +147,6 @@ def toggle_role():
     db.session.commit()
     return redirect(url_for('auth.profile'))
 
-<<<<<<< HEAD
-#----------History Request ----------
-@auth_bp.route('/history-profile', methods=['GET'])
-def history():
-    items_name = Request.query.filter_by(user_id=current_user.id).all()
-    time = Request.query.filter_by(user_id=current_user.id).all()
-    status = Request.query.filter_by(user_id=current_user.id).all()
-    created_at = Request.query.filter_by(user_id=current_user.id).all()
-
-    return render_template('profile.html', request=request)
-
-=======
->>>>>>> auth
 # ---------- Password Reset ----------
 
 def generate_reset_token(email):
@@ -218,9 +180,6 @@ def send_reset_code():
     user.reset_code_expiry = expiry_time
     db.session.commit()
 
-<<<<<<< HEAD
-    # Display code directly (easy testing/dev)
-=======
     subject = "Your Password Reset Code"
     body = f"Hello {user.username},\n\nYour password reset code is: {reset_code}\nIt will expire in 10 minutes.\n\nIf you didn't request this, please ignore this email."
 
@@ -229,7 +188,6 @@ def send_reset_code():
     else:
         flash("Failed to send reset code email. Please try again.", "danger")
 
->>>>>>> auth
     flash(f"Your reset code is: {reset_code}", "info")
 
     return render_template("verify_code.html", email=email)
@@ -279,10 +237,6 @@ def reset_password():
 
 @auth_bp.route('/home')
 def home():
-<<<<<<< HEAD
-    return render_template('home.html')
-
-=======
     return render_template('home.html', active_page='home')
 
 @auth_bp.route("/test-email")
@@ -298,4 +252,3 @@ def test_email():
         return "✅ Email sent successfully!"
     except Exception as e:
         return f"❌ Failed to send email: {e}"
->>>>>>> auth

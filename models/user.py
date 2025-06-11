@@ -11,8 +11,5 @@ class User(db.Model, UserMixin):
     profile_pic = db.Column(db.String(120), nullable=False, default='default.jpg')
     role = db.Column(db.String(20), default='shopper')
     reset_code = db.Column(db.String(6), nullable=True)
-<<<<<<< HEAD
-    reset_code_expiry = db.Column(db.DateTime, nullable=True)
-=======
     reset_code_expiry = db.Column(db.DateTime, nullable=True)
     requests = db.relationship('Request', foreign_keys='Request.client_id', backref='client', lazy=True)

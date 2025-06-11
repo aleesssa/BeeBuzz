@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from flask import Flask, session
 from flask_socketio import SocketIO
 from extensions import db, socketio
@@ -8,7 +7,7 @@ app = Flask(__name__, template_folder='templates', static_folder='static', stati
 app.config['SECRET_KEY'] = 'Beebuzz'
 
 # Connect to SQLite database
-=======
+
 import os
 from dotenv import load_dotenv
 from flask import Flask

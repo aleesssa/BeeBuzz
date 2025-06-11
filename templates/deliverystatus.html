@@ -16,6 +16,22 @@
             <div class="step {% if request_data.status in ['on the way', 'delivered'] %}active{% endif %}">On the Way</div>
             <div class="step {% if request_data.status == 'delivered' %}active{% endif %}">Delivered</div>
         </div>
+       
+   {% if current_user.id == request_data.runner_id %}
+        <form method="POST" action="{{ url_for('request_bp.update_status', request_id=request_data.id) }}">
+        <label class="label2">Update Status</label><br>
+        <select name="status">
+            {% if request_data.status == 'accepted' %}
+                <option value="picked up">Picked Up</option>
+            {% elif request_data.status == 'picked up' %}
+                <option value="on the way">On the Way</option>
+            {% elif request_data.status == 'on the way' %}
+                <option value="delivered">Delivered</option>
+            {% endif %}
+        </select>
+        <input type="submit" value="Update" class="submit_button">
+    </form>
+{% endif %}
     </div>
 </body>
 

@@ -1,16 +1,16 @@
 import os, re, random, string, datetime
 from flask import Blueprint, request, render_template, redirect, url_for, flash, session, jsonify, current_app
-from extensions import db, mail
+from extensions import db, mail, login_manager
 from models.user import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from flask_login import login_required, current_user, login_user, logout_user
+from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
 from models.request import Request
 
-auth_bp = Blueprint('auth', __name__)
 
+auth_bp = Blueprint('auth', __name__)
 
 # ---------- Home ----------
 
@@ -31,13 +31,16 @@ def login():
         if user and check_password_hash(user.password_hash, password):
             login_user(user)
             flash('Logged in successfully!', 'success')
-            return redirect(url_for('auth.profile'))
+            return redirect(url_for('auth.home'))
         else:
             flash('Invalid username/email or password.', 'danger')
             return redirect(url_for('auth.login'))
 
     return render_template('login.html')
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 # ---------- Logout ----------
 
@@ -106,8 +109,10 @@ def profile():
 
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('auth.profile'))
+    
+    user_requests = Request.query.filter_by(client_id=current_user.id).order_by(Request.created_at.desc()).all()
 
-    return render_template('profile.html')
+    return render_template('profile.html', user_history=user_requests, active_page='profile')
 
 
 # ---------- Profile Picture Upload ----------
@@ -142,16 +147,6 @@ def toggle_role():
     db.session.commit()
     return redirect(url_for('auth.profile'))
 
-#----------History Request ----------
-@auth_bp.route('/history-profile', methods=['GET'])
-def history():
-    items_name = Request.query.filter_by(user_id=current_user.id).all()
-    time = Request.query.filter_by(user_id=current_user.id).all()
-    status = Request.query.filter_by(user_id=current_user.id).all()
-    created_at = Request.query.filter_by(user_id=current_user.id).all()
-
-    return render_template('profile.html', request=request)
-
 # ---------- Password Reset ----------
 
 def generate_reset_token(email):
@@ -185,7 +180,14 @@ def send_reset_code():
     user.reset_code_expiry = expiry_time
     db.session.commit()
 
-    # Display code directly (easy testing/dev)
+    subject = "Your Password Reset Code"
+    body = f"Hello {user.username},\n\nYour password reset code is: {reset_code}\nIt will expire in 10 minutes.\n\nIf you didn't request this, please ignore this email."
+
+    if current_app.send_email(email, subject, body):
+        flash("Reset code sent to your email.", "success")
+    else:
+        flash("Failed to send reset code email. Please try again.", "danger")
+
     flash(f"Your reset code is: {reset_code}", "info")
 
     return render_template("verify_code.html", email=email)
@@ -235,5 +237,18 @@ def reset_password():
 
 @auth_bp.route('/home')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', active_page='home')
 
+@auth_bp.route("/test-email")
+def test_email():
+    try:
+        msg = Message(
+            subject="Flask-Mail Test",
+            sender=current_app.config['MAIL_USERNAME'],
+            recipients=["your_receiver_email@example.com"],
+            body="This is a test email sent from Flask-Mail."
+        )
+        mail.send(msg)
+        return "✅ Email sent successfully!"
+    except Exception as e:
+        return f"❌ Failed to send email: {e}"

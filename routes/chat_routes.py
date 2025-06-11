@@ -42,7 +42,7 @@ def chat(request_id):
     messages = ChatMessage.query.filter_by(request_id=request_id)
     users = User.query
     # Return list of messages from database
-    return render_template('chat.html', messages=messages, users=users, user_id=user_id, request_id=request_id)
+    return render_template('chat.html', messages=messages, users=users, user_id=user_id, active_page='chat', request_id=request_id)
 
 @chat_bp.route('/send', methods=['POST'])
 def send_message():

@@ -20,7 +20,7 @@ def chat():
     messages = ChatMessage.query.all()
     users = User.query
     # Return list of messages from database
-    return render_template('chat.html', messages=messages, users=users, user_id=user_id)
+    return render_template('chat.html', messages=messages, users=users, user_id=user_id, active_page='chat')
 
 
 # /chat_list --> shows lists of recent messages

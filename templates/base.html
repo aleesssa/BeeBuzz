@@ -7,77 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/navbar.css">
-    {% block style %}{% endblock %}
-=======
->>>>>>> auth
     <title>{% block title %}BeeBuzz{% endblock %}</title>
 </head>
 
 <body>
     <div class="navbar">
-<<<<<<< HEAD
-            <ul class="top-nav">
-                <div class="nac-left">
-                   <li class="nav-logo">
-                       <img src="/img/LogoWB.png" class="logo" alt="BeeBuzz Logo">
-                   </li>
-                </div>
-                <div class="nav-right">
-                    <li class="nav-item">
-                        <a href="#" class="nav-icon active">
-                            <svg class="nav-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor">
-                              <path d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"/>
-                            </svg>
-                            <span class="nav-label">Home</span>
-                        </a>                          
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-icon">
-                            <svg class="nav-img" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="800px" height="800px" viewBox="0 0 24 24">
-                              <path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/>
-                            </svg>
-                            <span class="nav-label">Store</span>
-                        </a>
-                   </li>
-                   <li class="nav-item">
-                    <a href="#" class="nav-icon">
-                        <svg class="nav-img" width="800px" height="800px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M11 3V4L15.3436 8.77793C15.766 9.24255 16 9.85471 16 10.4826C16 11.8633 14.8807 13 13.5 13C12.1193 13 11 11.8807 11 10.5V9.68629C11 9.79109 10.9979 9.89568 10.9939 10H5.00615C5.00206 9.89568 5 9.79109 5 9.68629V10.5C5 11.8807 3.88071 13 2.5 13C1.11929 13 0 11.8633 0 10.4826C0 9.85471 0.234044 9.24255 0.65643 8.77793L5 4V3C5 1.34315 6.34315 0 8 0C9.65685 0 11 1.34315 11 3ZM5 8H11V6H5V8Z" fill="currentColor"/>
-                            <path d="M8.65685 15.3431C9.59779 14.4022 10.2801 13.251 10.6581 12H5.34187C5.71987 13.251 6.40221 14.4022 7.34315 15.3431L8 16L8.65685 15.3431Z" fill="currentColor"/>
-                        </svg>
-                        <span class="nav-label">Jobs</span>
-                    </a>
-                    <li class="nav-item">
-                        <a href="#" class="nav-icon">
-                            <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path opacity="0.15" d="M3.00003 11.5C2.99659 12.8199 3.30496 14.1219 3.90003 15.3C4.6056 16.7118 5.69028 17.8992 7.03258 18.7293C8.37488 19.5594 9.92179 19.9994 11.5 20C12.8199 20.0035 14.1219 19.6951 15.3 19.1L21 21L19.1 15.3C19.6951 14.1219 20.0035 12.8199 20 11.5C19.9994 9.92179 19.5594 8.37488 18.7293 7.03258C17.8992 5.69028 16.7118 4.6056 15.3 3.90003C14.1219 3.30496 12.8199 2.99659 11.5 3.00003H11C8.91568 3.11502 6.94699 3.99479 5.47089 5.47089C3.99479 6.94699 3.11502 8.91568 3.00003 11V11.5Z" fill="currentColor"/>
-                              <path d="M21 21L15.3 19.1C15.3 19.1 14.0847 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3C16.1944 3 20 6.80558 20 11.5C20 14 19.1 15.3 19.1 15.3L21 21Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <span class="nav-label">Messages</span>
-                        </a>
-                    <li class="nav-item">
-                        <a href="#" class="nav-icon">
-                            <svg class="nav-img" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15 8.5C15 10.433 13.433 12 11.5 12C9.567 12 8 10.433 8 8.5C8 6.567 9.567 5 11.5 5C13.433 5 15 6.567 15 8.5Z" fill="currentColor"/>
-                                <path d="M17.6305 20H5.94623C5.54449 20 5.31716 19.559 5.56788 19.2451C6.68379 17.8479 9.29072 15 12 15C14.7275 15 17.0627 17.8864 18.0272 19.2731C18.2474 19.5897 18.0161 20 17.6305 20Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            <span class="nav-label">Profile</span>
-                        </a>
-                   </li>
-                   <li class="nav-item">
-                        <a href="#" class="nav-icon">
-                           <svg class="nav-img" width="800px" height="800px" viewBox="0 0 12 12" enable-background="new 0 0 12 12" id="Слой_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon fill="currentColor" points="9,2 9,0 1,0 1,12 9,12 9,10 8,10 8,11 2,11 2,1 8,1 8,2 "/><polygon fill="currentColor" points="8.2929688,3.2929688 7.5859375,4 9.0859375,5.5 5,5.5 5,6.5 9.0859375,6.5 7.5859375,8   8.2929688,8.7070313 11,6 "/></svg>
-                           <span class="nav-label">Logout</span>
-                        </a>
-                    </li>
-                </div>
-            </ul>              
-        </div>
-    {% block content %}{% endblock %}
-=======
         <ul class="top-nav">
             <div class="nav-left">
                 <li class="nav-logo">
@@ -102,7 +36,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-icon">
+                    <a href="{{ url_for('request_bp.show_jobs')}}" class="nav-icon">
                         <svg class="nav-img" width="800px" height="800px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" clip-rule="evenodd" d="M11 3V4L15.3436 8.77793C15.766 9.24255 16 9.85471 16 10.4826C16 11.8633 14.8807 13 13.5 13C12.1193 13 11 11.8807 11 10.5V9.68629C11 9.79109 10.9979 9.89568 10.9939 10H5.00615C5.00206 9.89568 5 9.79109 5 9.68629V10.5C5 11.8807 3.88071 13 2.5 13C1.11929 13 0 11.8633 0 10.4826C0 9.85471 0.234044 9.24255 0.65643 8.77793L5 4V3C5 1.34315 6.34315 0 8 0C9.65685 0 11 1.34315 11 3ZM5 8H11V6H5V8Z" fill="currentColor"/>
                           <path d="M8.65685 15.3431C9.59779 14.4022 10.2801 13.251 10.6581 12H5.34187C5.71987 13.251 6.40221 14.4022 7.34315 15.3431L8 16L8.65685 15.3431Z" fill="currentColor"/>
@@ -143,6 +77,5 @@
 
     {% block content %}
     {% endblock %}
->>>>>>> auth
 </body>
 </html>

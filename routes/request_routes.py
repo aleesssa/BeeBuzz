@@ -53,7 +53,7 @@ def edit_request(request_id):
 def update_request(request_id):
     req = Request.query.get_or_404(request_id)
     
-    if req.client_id != session.get('user_id'):
+    if req.client_id != current_user.id:
       return "Unauthorized", 403 
 
     if request.form.get('_method') == 'PUT':
@@ -102,7 +102,7 @@ def summary_request(request_id):
 @request_bp.route('/cancelled/<int:request_id>', methods=['POST'])
 def cancel_request(request_id):
     req = Request.query.get_or_404(request_id)
-    if req.client_id != session.get('user_id'):
+    if req.client_id != current_user.id:
         return "Unauthorized", 403
 
     req.status = "cancelled"
@@ -113,7 +113,7 @@ def cancel_request(request_id):
 
 @request_bp.route('/jobs')
 def show_jobs():
-    runner_id = session.get('user_id')
+    runner_id = current_user.id
 
     accepted_jobs = []
     if runner_id:
@@ -133,7 +133,7 @@ def accept_jobs(request_id):
 
     if req.status == "requested":
        req.status = "accepted"
-       req.runner_id = session.get('user_id')
+       req.runner_id = current_user.id
     db.session.commit()
 
     return redirect(url_for('request_bp.show_jobs'))
@@ -156,10 +156,6 @@ def update_delivery(request_id):
     
     return redirect(url_for('request_bp.track_status', request_id=request_id))
 
-@request_bp.route('/login/<int:user_id>')
-def log_in(user_id):
-    session['user_id'] = user_id
-    return f'Logged in as {user_id}'
 
 @request_bp.route('/history')
 @login_required

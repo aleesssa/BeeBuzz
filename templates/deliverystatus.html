@@ -24,6 +24,7 @@
        
         <img src="{{ url_for('static', filename='img/buzzbuzz.png') }}" class="item-image">
 
+    {% if current_user.role == 'runner' %}
         <form method="POST" action="{{ url_for('request_bp.update_delivery', request_id=request_data.id) }}">
         <label class="label2">Update Status</label><br>
         <select name="status">
@@ -37,6 +38,8 @@
         </select>
         <input type="submit" value="Update" class="submit_button">
     </form>
+    {% endif %}
+    
     </div>
     </div>
 </body>

@@ -190,6 +190,7 @@ h2{
     color: #53361C;
 }
 
+<<<<<<< HEAD
 .filter_row{
     display: flex;
     flex-wrap: wrap;
@@ -274,3 +275,5 @@ select:focus {
     border-radius: 8px;
     border: 2px solid #53361C;
 }
+=======
+>>>>>>> main

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Home - BeeBuzz{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="/css/home.css">
+<div class="space">
+<div class="container">
+    <div class="row">
+        <div class="column bs">
+            <p>Don’t move. We’ll bring it to you. Just tell us what you need!</p>
+            <a href="{{ url_for('request_bp.handle_request') }}"><button class="btn">Post a request</button></a>
+        </div>
+        <div class="column">
+            <img src="/img/beebox.png" alt="Beebox">
+        </div>    
+    </div>
+</div>   
+
+<h1>How it works</h1> 
+<div class="mycontainer">
+    <div>
+        <img src="/img/req.png" alt="request">
+        <h2>Post a request</h2>
+        <p class="req">Add what you need, location & some reward</p>
+    </div>
+     
+    <div>
+        <img src="/img/runner.png" alt="runner">
+        <h2>Get a runner</h2>
+        <p class="req">Our BeeRunners will pick it up</p>
+    </div>
+    <div>
+        <img src="/img/phone.png" alt="phone">
+        <h2>Track and receive</h2>
+        <p class="req">Chill while we buzz it to you</p>
+    </div>
+</div>
+</div>
+{% endblock %}

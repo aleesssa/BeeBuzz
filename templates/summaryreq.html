@@ -3,6 +3,12 @@
 {%block content%}
     <head>
         <link rel="stylesheet" href="/css/request.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+        .star-rating .fa-star { cursor: pointer; color: #ccc; }
+        .star-rating .fa-star.hover,
+        .star-rating .fa-star.selected { color: gold; }
+        </style>
     </head>
 
     <body>
@@ -13,7 +19,11 @@
         <p>{{ data.item_name }}</p>
 
         <div class="label">Offered payment</div>
+<<<<<<< HEAD
         <p>RM {{ "%.2f"|format(data.price_offer|float) }}</p>
+=======
+        <p>{{ data.price_offer }}</p>
+>>>>>>> auth
 
         <div class="label">Time</div>
         <p>{{ data.time }}</p>
@@ -43,11 +53,17 @@
         </form>
         <form method="POST" action="{{ url_for('request_bp.cancel_request', request_id=request_id) }}">
          <input type="submit" value="CANCEL REQUEST" class="cancel_button">
+          {% if data.status != 'completed' %}
+  <form method="POST" action="{{ url_for('request_bp.complete_request', request_id=request_id) }}">
+    <button type="submit" class="submit_button">COMPLETE</button>
+  </form>
+{% else %}
+  <p><strong>Status:</strong> Completed!</p>
+{% endif %}
         </form>
 
         <a class="vdetails_button" href="{{ url_for('request_bp.track_status', request_id=data.id) }}">TRACK STATUS</a>
         </div>
-
         </div>
         </div>
 

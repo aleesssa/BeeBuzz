@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for request_id in request_ids %}
+    <div class="chat">
+        <a href="{{ url_for('chat.chat', request_id=request_id) }}">Request {{request_id}}</a>
+    </div>
+{% endfor %}
+
+{% endblock %}

@@ -12,12 +12,14 @@
         <p class="label2">Item: {{ request_data.item_name }}</p>
         <p class="label2">Order ID: {{ request_data.id }}</p>
 
+         <div class="right">
          <div class="progress_bar">
             <div class="step {% if request_data.status in ['requested', 'accepted', 'picked up', 'on the way', 'delivered'] %}active{% endif %}">Requested</div>
             <div class="step {% if request_data.status in ['accepted', 'picked up', 'on the way', 'delivered'] %}active{% endif %}">Accepted</div>
             <div class="step {% if request_data.status in ['picked up', 'on the way', 'delivered'] %}active{% endif %}">Picked Up</div>
             <div class="step {% if request_data.status in ['on the way', 'delivered'] %}active{% endif %}">On the Way</div>
             <div class="step {% if request_data.status == 'delivered' %}active{% endif %}">Delivered</div>
+        </div>
         </div>
        
         <img src="{{ url_for('static', filename='img/buzzbuzz.png') }}" class="item-image">

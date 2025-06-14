@@ -71,7 +71,7 @@ def create_app():
         current_request = None
 
         if current_user.is_authenticated:
-            latest_req = Request.query.filter_by(client_id=current_user.id)\
+            current_request = Request.query.filter_by(client_id=current_user.id)\
                 .filter(Request.status != 'completed')\
                 .order_by(Request.created_at.desc())\
                 .first()

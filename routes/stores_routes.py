@@ -13,13 +13,13 @@ def stores():
     
     update_store_status(stores) # Update store status based on current time
     
-    return render_template('stores.html', stores=stores)
+    return render_template('stores.html', stores=stores, active_page='stores')
 
 
 @stores_bp.route('/add', methods = ['GET', 'POST'])
 def add_store():
     if request.method == "GET":
-        return render_template('store_add.html')
+        return render_template('store_add.html', active_page='stores')
 
     if request.method == "POST":
         # Store's name

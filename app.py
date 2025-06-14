@@ -7,6 +7,7 @@ from flask_socketio import SocketIO
 
 from extensions import db, migrate, socketio
 from models.user import User
+from models.store import Store
 from routes.chat_routes import chat_bp
 from routes.auth_routes import auth_bp
 from routes.request_routes import request_bp

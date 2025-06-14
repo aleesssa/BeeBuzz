@@ -8,6 +8,7 @@ from extensions import db, socketio
 from models.chat_message import ChatMessage
 from models.user import User
 from models.request import Request
+from sqlalchemy import desc, func
 from utils.system_utils import system_update
 
 chat_bp = Blueprint('chat', __name__) # Equivalent to app = Flask(__name__)
@@ -25,31 +26,77 @@ def chatList():
     )
     .distinct()
     .all()
-]
+    ]
     
-    return render_template('chatList.html', request_ids = request_ids, active_page='chat')
+    # Get the most recent message per request involving this user
+    subquery = (
+        db.session.query(
+            ChatMessage.request_id,
+            func.max(ChatMessage.timestamp).label("latest_time")
+        )
+        .filter((ChatMessage.sender_id == user_id) | (ChatMessage.recipient_id == user_id))
+        .group_by(ChatMessage.request_id)
+        .subquery()
+    )
+
+    # Join with ChatMessage to get the full message row
+    recent_chats = (
+        db.session.query(ChatMessage)
+        .join(subquery, (ChatMessage.request_id == subquery.c.request_id) & (ChatMessage.timestamp == subquery.c.latest_time))
+        .order_by(ChatMessage.timestamp.desc())
+        .all()
+    )
+
+    chat_list = []
+    for msg in recent_chats:
+        request = Request.query.get(msg.request_id)
+
+        # Figure out who is "the other user"
+        if request.client_id == user_id:
+            other_user = User.query.get(request.runner_id)
+        else:
+            other_user = User.query.get(request.client_id)
+
+        chat_list.append({
+            'request_id': msg.request_id,
+            'last_message': msg.message,
+            'timestamp': msg.timestamp,
+            'other_user': {
+                'id': other_user.id,
+                'name': other_user.username,
+                'profile_pic': other_user.profile_pic
+            }
+        })
+        
+
+    return render_template('chatList.html', chats=chat_list, active_page='chat' )
 
 # View specific chat
 @chat_bp.route('/<int:request_id>')
 @login_required
 def chat(request_id):
+    user_id = current_user.id
     client_id = Request.query.filter_by(id = request_id).first().client_id
     runner_id = Request.query.filter_by(id = request_id).first().runner_id
     system_id = User.query.filter_by(email='system@beebuzz.app').first().id
-    user_id = current_user.id
+    recipient_id = client_id if user_id != client_id else runner_id
+    recipient = User.query.filter_by(id=recipient_id).first()
     
     if (user_id != client_id and user_id != runner_id):
         return f'Invalid request id\nUserID = {user_id} \n ClientID : {client_id}\nRunnerID : {runner_id}'
         
     messages = ChatMessage.query.filter_by(request_id=request_id)
     users = User.query
+    user_dict = {user.id: user.profile_pic for user in users.all()} # for JS usage
+    
     # Return list of messages from database
-    return render_template('chat.html', messages=messages, users=users, user_id=user_id, active_page='chat', request_id=request_id, system_id=system_id)
+    return render_template('chat.html', messages=messages, users=users, user_id=user_id, recipient=recipient, active_page='chat', request_id=request_id, system_id=system_id, user_dict=user_dict)
 
 # Send message
 @chat_bp.route('/send', methods=['POST'])
 @login_required
 def send_message():
+    system_update('hello', 1)
     sender_id = current_user.id
     sender_name = User.query.filter_by(id=sender_id).first().username
     message = request.form['message']

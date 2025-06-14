@@ -1,22 +1,13 @@
-from flask import Flask, render_template
-from flask_socketio import SocketIO
-from extensions import db, socketio
-
-app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
-
-app.config['SECRET_KEY'] = 'Beebuzz'
-
-# Connect to SQLite database
-
 import os
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, render_template
 from flask_login import LoginManager
 from flask_mail import Mail, Message
 from flask_socketio import SocketIO
 
 from extensions import db, migrate, socketio
 from models.user import User
+from models.store import Store
 from routes.chat_routes import chat_bp
 from routes.auth_routes import auth_bp
 from routes.request_routes import request_bp
@@ -93,15 +84,36 @@ def create_app():
             app.logger.error(f"Failed to send email: {e}")
             return False
 
+
+
     app.send_email = send_email
+    # Add system as a user in database
+    def add_system():
+        # Check if system user already exists 
+        existing_system = User.query.filter_by(email="system@beebuzz.app").first()
+
+        if not existing_system:
+            system_user = User(
+                username="BeeBuzz System",
+                email="system@beebuzz.app",
+                password_hash="system",  # won't ever log in
+                role=False
+            )
+            db.session.add(system_user)
+            db.session.commit()
+            print("System user created.")
+        else:
+            print("System user already exists.")
 
     # One-time startup logic
     with app.app_context():
         db.create_all()
+        add_system()
 
     return app
 
 app = create_app()
+
 
 @app.route('/')
 def index():
@@ -125,6 +137,9 @@ def send_email_via_sendgrid(to_email, subject, body):
     except Exception as e:
         app.logger.error(f"SendGrid error: {e}")
         return False
+
+
+        
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', debug=True)

@@ -64,15 +64,22 @@ def create_app():
     @app.context_processor
     def inject_current_request():
         from flask_login import current_user
+        from flask import url_for
         from models.request import Request
 
+        order_link = url_for('request_bp.request_job')
+        current_request = None
+
         if current_user.is_authenticated:
-            latest_req = Request.query.filter_by(client_id=current_user.id)\
+            current_request = Request.query.filter_by(client_id=current_user.id)\
                 .filter(Request.status != 'completed')\
                 .order_by(Request.created_at.desc())\
                 .first()
-            return dict(current_request=latest_req)
-        return dict(current_request=None)
+            
+            if current_request:
+                order_link = url_for('request_bp.track_status', request_id=current_request.id)
+
+        return dict(current_request=current_request, order_link=order_link)
 
     # Email utility
     def send_email(to_email, subject, body):

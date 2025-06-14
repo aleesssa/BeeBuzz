@@ -42,7 +42,7 @@ def handle_request():
         db.session.commit()
 
         return redirect(url_for('request_bp.summary_request', request_id=new_request.id))
-
+    
     return render_template("request.html")
 
 # Edit Request

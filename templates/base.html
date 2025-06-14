@@ -45,7 +45,7 @@
                         <span class="nav-label">Jobs</span>
                     </a>
                   {% else %}
-                    <a href="{{ url_for('request_bp.track_status', request_id=current_request.id) }}" class="nav-icon {% if active_page == 'track_status' %}active{% endif %}">
+                    <a href="{{ order_link }}" class="nav-icon {% if active_page == 'track_status' %}active{% endif %}">
                         <svg class="nav-img" width="800px" height="800px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" clip-rule="evenodd" d="M11 3V4L15.3436 8.77793C15.766 9.24255 16 9.85471 16 10.4826C16 11.8633 14.8807 13 13.5 13C12.1193 13 11 11.8807 11 10.5V9.68629C11 9.79109 10.9979 9.89568 10.9939 10H5.00615C5.00206 9.89568 5 9.79109 5 9.68629V10.5C5 11.8807 3.88071 13 2.5 13C1.11929 13 0 11.8633 0 10.4826C0 9.85471 0.234044 9.24255 0.65643 8.77793L5 4V3C5 1.34315 6.34315 0 8 0C9.65685 0 11 1.34315 11 3ZM5 8H11V6H5V8Z" fill="currentColor"/>
                           <path d="M8.65685 15.3431C9.59779 14.4022 10.2801 13.251 10.6581 12H5.34187C5.71987 13.251 6.40221 14.4022 7.34315 15.3431L8 16L8.65685 15.3431Z" fill="currentColor"/>
@@ -55,7 +55,7 @@
                   {% endif %}
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url_for('chat.chatList') }}" class="nav-icon">
+                    <a href="{{ url_for('chat.chatList') }} {% if active_page == 'chat' %}active{% endif %}" class="nav-icon">
                         <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path opacity="0.15" d="M3.00003 11.5C2.99659 12.8199 3.30496 14.1219 3.90003 15.3C4.6056 16.7118 5.69028 17.8992 7.03258 18.7293C8.37488 19.5594 9.92179 19.9994 11.5 20C12.8199 20.0035 14.1219 19.6951 15.3 19.1L21 21L19.1 15.3C19.6951 14.1219 20.0035 12.8199 20 11.5C19.9994 9.92179 19.5594 8.37488 18.7293 7.03258C17.8992 5.69028 16.7118 4.6056 15.3 3.90003C14.1219 3.30496 12.8199 2.99659 11.5 3.00003H11C8.91568 3.11502 6.94699 3.99479 5.47089 5.47089C3.99479 6.94699 3.11502 8.91568 3.00003 11V11.5Z" fill="currentColor"/>
                           <path d="M21 21L15.3 19.1C15.3 19.1 14.0847 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3C16.1944 3 20 6.80558 20 11.5C20 14 19.1 15.3 19.1 15.3L21 21Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

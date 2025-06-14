@@ -76,6 +76,7 @@ def chatList():
 @login_required
 def chat(request_id):
     user_id = current_user.id
+    user_role = User.query.filter_by(id=user_id).first().role
     client_id = Request.query.filter_by(id = request_id).first().client_id
     runner_id = Request.query.filter_by(id = request_id).first().runner_id
     system_id = User.query.filter_by(email='system@beebuzz.app').first().id
@@ -90,13 +91,12 @@ def chat(request_id):
     user_dict = {user.id: user.profile_pic for user in users.all()} # for JS usage
     
     # Return list of messages from database
-    return render_template('chat.html', messages=messages, users=users, user_id=user_id, recipient=recipient, active_page='chat', request_id=request_id, system_id=system_id, user_dict=user_dict)
+    return render_template('chat.html', messages=messages, users=users, user_id=user_id, user_role=user_role, recipient=recipient, active_page='chat', request_id=request_id, system_id=system_id, user_dict=user_dict)
 
 # Send message
 @chat_bp.route('/send', methods=['POST'])
 @login_required
 def send_message():
-    system_update('hello', 1)
     sender_id = current_user.id
     sender_name = User.query.filter_by(id=sender_id).first().username
     message = request.form['message']

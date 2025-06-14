@@ -20,8 +20,8 @@
         {% for message in messages %}
             <!-- Get sender's name and message -->
 
-            <div class="message  {% if message.sender_id == user_id %}me{% elif message.sender_id == system_id %}system{% else %}them{% endif %}">
-                {% if message.sender_id != user_id %}
+            <div class="message  {% if message.sender_id == user_id %}me{% elif message.sender_id == system_id %}system{% if user_role == 'runner' %} runner{% endif %}{% else %}them{% endif %}">
+                {% if message.sender_id != user_id and not (message.sender_id == system_id and user_role == 'runner'  )%}
                 <img src="/profile_pics/{{recipient.profile_pic}}" width="60px" height="60px">
                 {% endif %}
 
@@ -44,7 +44,7 @@
           <div class="dot"></div>
         </div>
     </div>
-    <!-- <div id="typing" class="hide">user is typing..</div> -->
+    
     <form id="chat_form" enctype="multipart/form-data">
         <input type="text" name="message" id="chat_input" placeholder="Send a text">
         <input type="file" name="media" id="media">

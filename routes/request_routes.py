@@ -12,6 +12,7 @@ request_bp = Blueprint('request_bp', __name__) # Equivalent to app = Flask(__nam
 def request_job():
      return render_template ("request.html")
 
+# Post Request 
 @request_bp.route('/req', methods=['GET','POST'])
 @login_required
 def handle_request():
@@ -43,7 +44,7 @@ def handle_request():
 
     return render_template("request.html")
 
-
+# Edit Request
 @request_bp.route('/edit/<int:request_id>')
 def edit_request(request_id):
     req = Request.query.get_or_404(request_id)
@@ -72,7 +73,6 @@ def update_request(request_id):
 
        req.updated_at = datetime.utcnow()
         
-    
     db.session.commit()
     return redirect(url_for('request_bp.summary_request', request_id=req.id))
 
@@ -98,7 +98,6 @@ def summary_request(request_id):
         user_rating=req.user_rating
     )
 
-
 @request_bp.route('/cancelled/<int:request_id>', methods=['POST'])
 def cancel_request(request_id):
     req = Request.query.get_or_404(request_id)
@@ -111,6 +110,7 @@ def cancel_request(request_id):
 
     return "Your order has been cancelled."
 
+# Show List of Jobs
 @request_bp.route('/jobs')
 def show_jobs():
     runner_id = current_user.id
@@ -127,6 +127,7 @@ def view_details(request_id):
     req = Request.query.get_or_404(request_id)
     return render_template("request_details.html", job_request=req)
 
+# Accept Job
 @request_bp.route('/jobs/accept/<int:request_id>', methods=['POST'])
 def accept_jobs(request_id):
     req = Request.query.get_or_404(request_id)
@@ -138,6 +139,7 @@ def accept_jobs(request_id):
 
     return redirect(url_for('request_bp.show_jobs'))
 
+# Track/Update Status Order
 @request_bp.route('/track/<int:request_id>')
 def track_status(request_id):
     req = Request.query.get_or_404(request_id)

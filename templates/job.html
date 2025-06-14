@@ -26,11 +26,21 @@
         <div class="right">
             <p class="price">RM {{ "%.2f"|format(job.price_offer|float) }}</p>
             <p class="status_label">ACCEPTED</p>
+            <div class ="button_row">
+                <a href="{{ url_for('request_bp.track_status', request_id=job.id) }}" class="job_link">
+                    <button class="submit_button">Track Order</button>
+                </a>
+
+                <a href="{{ url_for('chat.chat', request_id=job.id) }}">
+                     <button class="cbutton">Chat Customer</button>
+                </a>
+            </div>
         </div>
     </div>
+    </a>
     {% endfor %}
 </div>
- </div>
+</div>
 {% else %}
 <p>You have no accepted jobs yet.</p>
 {% endif %}

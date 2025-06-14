@@ -60,6 +60,20 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(request_bp, url_prefix='/request')
 
+    # Current Request
+    @app.context_processor
+    def inject_current_request():
+        from flask_login import current_user
+        from models.request import Request
+
+        if current_user.is_authenticated:
+            latest_req = Request.query.filter_by(client_id=current_user.id)\
+                .filter(Request.status != 'completed')\
+                .order_by(Request.created_at.desc())\
+                .first()
+            return dict(current_request=latest_req)
+        return dict(current_request=None)
+
     # Email utility
     def send_email(to_email, subject, body):
         msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[to_email])

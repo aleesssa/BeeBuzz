@@ -8,6 +8,7 @@ from extensions import db, socketio
 from models.chat_message import ChatMessage
 from models.user import User
 from models.request import Request
+from utils.system_utils import system_update
 
 chat_bp = Blueprint('chat', __name__) # Equivalent to app = Flask(__name__)
 
@@ -28,20 +29,24 @@ def chatList():
     
     return render_template('chatList.html', request_ids = request_ids, active_page='chat')
 
+# View specific chat
 @chat_bp.route('/<int:request_id>')
 @login_required
 def chat(request_id):
     client_id = Request.query.filter_by(id = request_id).first().client_id
     runner_id = Request.query.filter_by(id = request_id).first().runner_id
+    system_id = User.query.filter_by(email='system@beebuzz.app').first().id
     user_id = current_user.id
+    
     if (user_id != client_id and user_id != runner_id):
         return f'Invalid request id\nUserID = {user_id} \n ClientID : {client_id}\nRunnerID : {runner_id}'
         
     messages = ChatMessage.query.filter_by(request_id=request_id)
     users = User.query
     # Return list of messages from database
-    return render_template('chat.html', messages=messages, users=users, user_id=user_id, active_page='chat', request_id=request_id)
+    return render_template('chat.html', messages=messages, users=users, user_id=user_id, active_page='chat', request_id=request_id, system_id=system_id)
 
+# Send message
 @chat_bp.route('/send', methods=['POST'])
 @login_required
 def send_message():
@@ -49,6 +54,7 @@ def send_message():
     sender_name = User.query.filter_by(id=sender_id).first().username
     message = request.form['message']
     request_id = int(request.form['request_id'])
+    
     
     media_file = request.files['media']
     media_url = save_file(media_file)
@@ -68,6 +74,7 @@ def send_message():
     db.session.commit()
     
     
+    
     return jsonify({ 
                     'sender_id': sender_id,
                     'sender_name' : sender_name,
@@ -76,7 +83,8 @@ def send_message():
                     'media_url' : media_url
                     })
     
-    
+
+# SocketIO for real-time texting
 @socketio.on('join_room')    
 def handle_join_room(data):
     room = data['request_id']
@@ -107,7 +115,7 @@ def seen_message(data):
 def is_typing(data):
     emit('is_typing_backend', data, room=data['request_id'])        
 
-
+# Save file sent through chat
 def save_file(media_file):
     # Check if media_file exists
     if not media_file:

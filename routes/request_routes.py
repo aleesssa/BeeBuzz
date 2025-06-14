@@ -5,6 +5,7 @@ from models.request import Request
 from datetime import datetime
 from models.user import User
 from models.rating import Rating
+from utils.system_utils import system_update
 
 request_bp = Blueprint('request_bp', __name__) # Equivalent to app = Flask(__name__)
 

@@ -10,7 +10,7 @@
         {% for message in messages %}
             <!-- Get sender's name and message -->
            
-            <div class="message  {% if message.sender_id == user_id %}me{% else %}them{% endif %}">
+            <div class="message  {% if message.sender_id == user_id %}me{% elif message.sender_id == system_id %}system{% else %}them{% endif %}">
                 {% if message.media_url %} 
                     {% if message.media_url.split('.')[1] in 'mp4' %} <video src="{{message.media_url}}" width="350px" controls> {% endif %}
                     {% if message.media_url.split('.')[1] in 'jpg jpeg gif png' %} <img src="{{ message.media_url }}" id="media" width="200px"> {% endif %}
@@ -103,7 +103,11 @@
                     });
                 }   
             }
-            div.classList.add('them');
+            if(data.sender_id == {{ system_id }}){
+                div.classList.add('system');
+            }else{
+                div.classList.add('them');
+            }
         }else{
             div.classList.add('me');
         }

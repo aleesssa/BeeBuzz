@@ -38,6 +38,11 @@
     align-self: flex-start;
 }
 
+.system{
+    background-color: #af9d60;
+    align-self: flex-start;
+}
+
 
 #chat_form{
     display: flex;

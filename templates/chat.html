@@ -1,28 +1,50 @@
 {% extends 'base.html' %}
 
-{% block style %}
+{% block content %}
 <link rel="stylesheet" href="/css/chatmessage.css">
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-{% endblock %}
 
-{% block content %}
-<h1>Chatbox</h1>
-
+<header>
+    <a href="{{ url_for('chat.chatList') }}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+        </svg>
+    </a>
+    <img src="/profile_pics/{{recipient.profile_pic}}" width="60px" height="60px">
+    <h1>{{recipient.username}}</h1>
+</header>
+<hr>
 <div class="chatbox">
+    
     <div id="messages" style="list-style: none;">
         {% for message in messages %}
             <!-- Get sender's name and message -->
-           
-            <div class="message  {% if message.sender_id == user_id %}me{% else %}them{% endif %}">
-                {% if message.media_url %} 
-                    {% if message.media_url.split('.')[1] in 'mp4' %} <video src="{{message.media_url}}" width="350px" controls> {% endif %}
-                    {% if message.media_url.split('.')[1] in 'jpg jpeg gif png' %} <img src="{{ message.media_url }}" id="media" width="200px"> {% endif %}
+
+            <div class="message  {% if message.sender_id == user_id %}me{% elif message.sender_id == system_id %}system{% if user_role == 'runner' %} runner{% endif %}{% else %}them{% endif %}">
+                {% if message.sender_id != user_id and not (message.sender_id == system_id and user_role == 'runner'  )%}
+                <img src="/profile_pics/{{recipient.profile_pic}}" width="60px" height="60px">
                 {% endif %}
-                <div class="text">{{ users.filter_by(id=message.sender_id).first().username }} : {{ message.message }}</div>
+
+                <div class="content  {% if message.sender_id == user_id %}me{% elif message.sender_id == system_id %}system{% else %}them{% endif %}">
+                    {% if message.media_url %} 
+                        {% if message.media_url.split('.')[1] in 'mp4' %} <video src="{{message.media_url}}" width="350px" controls> {% endif %}
+                        {% if message.media_url.split('.')[1] in 'jpg jpeg gif png' %} <img src="{{ message.media_url }}" id="media" width="200px"> {% endif %}
+                    {% endif %}
+                    <div class="text">{{ users.filter_by(id=message.sender_id).first().username }} : {{ message.message }}</div>
+                </div>
+                <!-- <div id="seen" class="{% if not(message.is_seen) %}hide{% endif %}">seen</div> -->
             </div> 
 
         {% endfor %}
+    </div>
+    <div id="typing" class="chat-bubble hide">
+        <div class="typing">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
         </div>
+    </div>
+    
     <form id="chat_form" enctype="multipart/form-data">
         <input type="text" name="message" id="chat_input" placeholder="Send a text">
         <input type="file" name="media" id="media">
@@ -34,29 +56,125 @@
 
 <script>
     const socket = io()
-    const user_id = {{ session['user_id'] }}
+    const user_id = {{ current_user.id }}
+    const userProfiles = {{ user_dict | tojson }}
+    const requestID = {{ request_id }}
     const form = document.getElementById('chat_form')
     const input = document.getElementById('chat_input') // Needed to track Enter key presses
     const submitButton = document.getElementById('submit')
-
-    // Listen to receive_message event by server
-    socket.on("receive_message", function(data) {
-        console.log('hello')
-      const div = document.createElement("div");
-      div.className = "message";
-      
-      // check who's the sender
-      if (data.sender_id != user_id){
-        div.classList.add('them');
-      }else{
-        div.classList.add('me');
-      }
+    const typing = document.getElementById('typing')
+    const seen = document.getElementById('seen')
+    const seenDiv = document.createElement('div');
 
 
-      div.innerText = data.sender_name + ": " + data.message;
-      document.getElementById("messages").appendChild(div);
+    
+    window.scrollTo(0, document.body.scrollHeight); // Scroll to bottom of page
+
+    let read = false;
+
+    // Notification
+    Notification.requestPermission().then((result) => {
+        console.log(result);
     });
 
+    // Join room for requestID
+    socket.emit("join_room", {
+        request_id: requestID
+    });
+
+    // Read receipt
+    window.addEventListener('focus', ()=>{
+        console.log('focused')
+        console.log(read)
+        if (!read){
+            socket.emit('seen_message', {
+                'user_id' : user_id,
+                'request_id' : requestID
+            })
+            read = true
+        }
+    })
+
+
+    // Listen for user_seen_message event from server
+    socket.on('user_seen_message', (data)=>{
+        console.log('seen')
+        if (data.user_id !== user_id){
+            seenDiv.classList.remove('hide')
+        }
+        read = false
+    })
+
+    // Listen to receive_message event by server
+    socket.on("receive_message", (data) => {
+        console.log('hello')
+        const messageDiv = document.createElement("div");
+        const contentDiv = document.createElement('div');
+        const profilePic = document.createElement('img');
+        messageDiv.className = "message";
+        contentDiv.className = 'content';
+        seenDiv.className = 'hide';
+        seenDiv.id = 'seen';
+        
+
+        // check who's the sender
+        if (data.sender_id != user_id){            
+            // Send notification 
+            if (Notification.permission === "granted") {
+                if (document.visibilityState != "visible"){
+                    new Notification(`${data.sender_name} sent you a message`, {
+                    body: data.message,
+                    icon: "/static/logo.png"
+                    });
+                }   
+            }
+
+            // Put profile picture next to message
+            profilePic.src = '/profile_pics/' + userProfiles[data.sender_id]
+            profilePic.width = 60
+            profilePic.height = 60
+
+            messageDiv.appendChild(profilePic)
+            messageDiv.appendChild(contentDiv);
+        
+            // Add class
+            if(data.sender_id == {{ system_id }}){
+                messageDiv.classList.add('system');
+                contentDiv.classList.add('system');
+            }else{
+                messageDiv.classList.add('them');
+                contentDiv.classList.add('them');
+            }
+        }else{
+            messageDiv.appendChild(contentDiv);
+            messageDiv.classList.add('me');
+            contentDiv.classList.add('me');
+        }
+
+
+      contentDiv.innerText = data.sender_name + " : " + data.message;
+      seenDiv.innerText = 'seen'
+
+      messageDiv.appendChild(seenDiv)
+      document.getElementById("messages").appendChild(messageDiv);
+    });
+
+    // Shows typing indicator when the other user is typing
+    socket.on('is_typing_backend', (data)=>{
+        if (data.user_id != user_id){
+            typing.classList.remove('hide')
+        }    
+        // Clear any previous timeout to restart the countdown
+        clearTimeout(window.typingIndicatorTimeout);
+
+        // Start a new timeout to hide after 1.5s
+        window.typingIndicatorTimeout = setTimeout(() => {
+            typing.classList.add('hide')
+        }, 1500);
+    })
+
+
+    let typing_timeout;
     // Click submit button when user presses enter
     input.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
@@ -64,17 +182,31 @@
             event.preventDefault();
             // Trigger sendButton with a click
             submitButton.click();
+            return;
         }
+        if (typing_timeout){
+            return;
+        
+        }
+        socket.emit('is_typing_frontend', {'user_id' : user_id, 'request_id':requestID})
+
+        typing_timeout = setTimeout(()=>{
+            typing_timeout = null
+        }, 1000)
+
     }); 
 
 
     // send post request through fetch when form is submitted 
     submitButton.addEventListener('click', (e) => {
+        console.log('hello')
         e.preventDefault();
         const formData = new FormData(form); 
+        formData.append('request_id', requestID)
 
         const message = formData.get('message')?.trim() // get text input value
         const media = formData.get('media')
+
 
         // Send a POST request via fetch
         if(!(message === "") || (media.size > 0)){ // make sure text input is not empty or file is uploaded
@@ -84,6 +216,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data)
                     socket.emit('send_message', data)
                 }
                     
@@ -97,8 +230,7 @@
 
     })  
 
-    
-        
+  
 
 
 

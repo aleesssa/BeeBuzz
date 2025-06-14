@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="/css/request.css">
+</head>
+
+<body>
+    <div class="center_wrapper">
+    <div class="box2">
+    <div class="req_details">
+
+     <h1>REQUEST DETAILS</h1>
+
+     <div class="label2">ITEM</div>
+     <p>{{ job_request.item_name }}</p>
+
+     <div class="label2">NOTES</div>
+     <p>{{ job_request.notes }}</p>
+
+     <div class="label2">TIME</div>
+     <p>{{ job_request.time }}</p>
+
+     <div class="label2">PICKUP</div>
+     <p>{{ job_request.pickup_location }}</p>
+
+     <div class="label2">DROP OFF</div>
+     <p>{{ job_request.dropoff_location }}</p>
+
+     <div class="label2">PRICE OFFERED</div>
+     <p>{{ "%.2f"|format(job_request.price_offer|float) }}</p>
+
+      <form method="POST" action="{{ url_for('request_bp.accept_jobs', request_id=job_request.id) }}">
+        <input type="submit" value="ACCEPT JOB" class="submit_button">
+      </form>
+
+    </div>
+    </div>
+    </div>
+</body>
+
+{% endblock %}

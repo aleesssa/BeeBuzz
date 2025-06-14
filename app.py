@@ -1,4 +1,4 @@
-from flask import Flask, session
+from flask import Flask, render_template
 from flask_socketio import SocketIO
 from extensions import db, socketio
 
@@ -98,7 +98,7 @@ app = create_app()
 
 @app.route('/')
 def index():
-    return 'Main page'
+    return render_template('index.html')
 
 def send_email_via_sendgrid(to_email, subject, body):
     from sendgrid import SendGridAPIClient

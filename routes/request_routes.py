@@ -137,6 +137,7 @@ def accept_jobs(request_id):
        req.status = "accepted"
        req.runner_id = current_user.id
     db.session.commit()
+    system_update('Rider has accepted your request!', request_id=request_id)
 
     return redirect(url_for('request_bp.show_jobs'))
 

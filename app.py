@@ -49,7 +49,7 @@ def create_app():
 
     # Register blueprints
     app.register_blueprint(chat_bp, url_prefix='/chat')
-app.register_blueprint(stores_bp, url_prefix='/stores')
+    app.register_blueprint(stores_bp, url_prefix='/stores')
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(request_bp, url_prefix='/request')
 

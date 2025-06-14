@@ -9,6 +9,7 @@ from extensions import db, migrate, socketio
 from models.user import User
 from models.store import Store
 from routes.chat_routes import chat_bp
+from routes.stores_routes import stores_bp
 from routes.auth_routes import auth_bp
 from routes.request_routes import request_bp
 
@@ -48,6 +49,7 @@ def create_app():
 
     # Register blueprints
     app.register_blueprint(chat_bp, url_prefix='/chat')
+app.register_blueprint(stores_bp, url_prefix='/stores')
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(request_bp, url_prefix='/request')
 

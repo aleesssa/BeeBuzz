@@ -5,6 +5,7 @@ from models.request import Request
 from datetime import datetime
 from models.user import User
 from models.rating import Rating
+from utils.system_utils import system_update
 
 request_bp = Blueprint('request_bp', __name__) # Equivalent to app = Flask(__name__)
 
@@ -12,6 +13,7 @@ request_bp = Blueprint('request_bp', __name__) # Equivalent to app = Flask(__nam
 def request_job():
      return render_template ("request.html")
 
+# Post Request 
 @request_bp.route('/req', methods=['GET','POST'])
 @login_required
 def handle_request():
@@ -40,10 +42,10 @@ def handle_request():
         db.session.commit()
 
         return redirect(url_for('request_bp.summary_request', request_id=new_request.id))
-
+    
     return render_template("request.html")
 
-
+# Edit Request
 @request_bp.route('/edit/<int:request_id>')
 def edit_request(request_id):
     req = Request.query.get_or_404(request_id)
@@ -53,7 +55,7 @@ def edit_request(request_id):
 def update_request(request_id):
     req = Request.query.get_or_404(request_id)
     
-    if req.client_id != session.get('user_id'):
+    if req.client_id != current_user.id:
       return "Unauthorized", 403 
 
     if request.form.get('_method') == 'PUT':
@@ -72,7 +74,6 @@ def update_request(request_id):
 
        req.updated_at = datetime.utcnow()
         
-    
     db.session.commit()
     return redirect(url_for('request_bp.summary_request', request_id=req.id))
 
@@ -98,11 +99,10 @@ def summary_request(request_id):
         user_rating=req.user_rating
     )
 
-
 @request_bp.route('/cancelled/<int:request_id>', methods=['POST'])
 def cancel_request(request_id):
     req = Request.query.get_or_404(request_id)
-    if req.client_id != session.get('user_id'):
+    if req.client_id != current_user.id:
         return "Unauthorized", 403
 
     req.status = "cancelled"
@@ -111,9 +111,10 @@ def cancel_request(request_id):
 
     return "Your order has been cancelled."
 
+# Show List of Jobs
 @request_bp.route('/jobs')
 def show_jobs():
-    runner_id = session.get('user_id')
+    runner_id = current_user.id
 
     accepted_jobs = []
     if runner_id:
@@ -127,21 +128,38 @@ def view_details(request_id):
     req = Request.query.get_or_404(request_id)
     return render_template("request_details.html", job_request=req)
 
+# Accept Job
 @request_bp.route('/jobs/accept/<int:request_id>', methods=['POST'])
 def accept_jobs(request_id):
     req = Request.query.get_or_404(request_id)
 
     if req.status == "requested":
        req.status = "accepted"
-       req.runner_id = session.get('user_id')
+       req.runner_id = current_user.id
     db.session.commit()
+    system_update('Rider has accepted your request!', request_id=request_id)
 
     return redirect(url_for('request_bp.show_jobs'))
 
-@request_bp.route('/login/<int:user_id>')
-def log_in(user_id):
-    session['user_id'] = user_id
-    return f'Logged in as {user_id}'
+# Track/Update Status Order
+@request_bp.route('/track/<int:request_id>')
+def track_status(request_id):
+    req = Request.query.get_or_404(request_id)
+    return render_template("deliverystatus.html", request_data=req)
+
+@request_bp.route('/update_request/<int:request_id>', methods=['POST'])
+def update_delivery(request_id):
+    req = Request.query.get_or_404(request_id)
+
+    new_status = request.form.get('status')
+
+    if new_status:
+        req.status = new_status
+        req.updated_at = datetime.utcnow()
+        db.session.commit()
+    
+    return redirect(url_for('request_bp.track_status', request_id=request_id))
+
 
 @request_bp.route('/history')
 @login_required

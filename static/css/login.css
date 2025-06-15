@@ -4,7 +4,7 @@
     margin-right: -8px;
     margin-bottom: -8px;
     padding-left: 90px;
-    padding-bottom: 180px;
+    padding-bottom: 210px;
 }
 
 .row {
@@ -13,12 +13,11 @@
 
 .bs {
     background-color: #5d3d00;
-    margin-left: -300px;
 }
 
 img {
     margin-top: 200px;
-    margin-left: -30%;
+    margin-left: 20%;
 }
 
 h1 {
@@ -28,7 +27,7 @@ h1 {
     font-style: normal;
     font-size: 50px;
     text-transform: uppercase;
-    margin-left: 32%;
+    margin-left: 20%;
     margin-bottom: 20px;
 
 }
@@ -105,7 +104,7 @@ label {
     color: #5d3d00;
     font-weight: bold;
     text-decoration: underline;
-    margin-left: 3%;
+    margin-left: -34%;
 }
 
 .flash-container {
@@ -140,188 +139,3 @@ label {
     border: 1px solid #ffeeba;
 }
 
-@media (max-width: 768px) {
-    .row {
-        flex-direction: column;
-        height: auto;
-    }
-
-    .column {
-        width: 100%;
-        margin: 0;              
-        padding: 20px;         
-        text-align: center;
-    }
-
-    img {
-        margin-right: 0;
-        margin-top: 0;
-        width: 80%;
-        height: auto;
-    }
-
-    form {
-        width: 90%;
-        max-width: 400px;
-        margin: 0 auto;
-    }
-
-    .flash-container {
-        margin: 0 auto 20px;
-        text-align: center;
-    }
-
-    h1 {
-        font-size: 32px;
-    }
-}
-
-@media screen and (max-width: 1024px) {
-    .row {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .column {
-        flex: 100%;
-        margin: 0;
-        padding-left: 30px;
-        padding-right: 30px;
-        padding-bottom: 100px;
-    }
-
-    img {
-        margin-top: 100px;
-        margin-right: 0;
-        width: 80%;
-        height: auto;
-    }
-
-    h1 {
-        font-size: 36px;
-        margin-left: 0;
-        text-align: center;
-    }
-
-    form {
-        margin-left: 10%;
-        margin-right: 10%;
-        margin-top: 10%;
-        width: 80%;
-    }
-
-    input, .check {
-        width: 100%;
-    }
-
-    input[type=submit] {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .flash-container {
-        margin-left: 0;
-    }
-
-    .signup-link {
-        margin-left: 0;
-        text-align: center;
-        display: block;
-    }
-
-    .remember-section {
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    .flash {
-        width: 90%;
-        font-size: 15px;
-    }
-}
-
-@media screen and (min-width: 1280px) {
-    .row {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: row;
-    }
-
-    .column {
-        flex: 50%;
-        margin-top: -12px;
-        margin-right: -12px;
-        margin-bottom: -12px;
-        padding-left: 120px;
-        padding-bottom: 200px;
-    }
-
-    img {
-        margin-top: 180px;
-        margin-right: 450px;
-        max-width: 100%;
-        height: auto;
-    }
-
-    h1 {
-        font-size: 60px;
-        margin-left: 35%;
-        margin-bottom: 30px;
-    }
-
-    form {
-        margin-left: 25%;
-        margin-top: 15%;
-        width: 50%;
-    }
-
-    input, .check {
-        width: 70%;
-    }
-
-    input[type=submit] {
-        width: 120px;
-        margin-left: 25%;
-    }
-
-    .flash-container {
-        margin-left: -30%;
-    }
-
-    .signup-link {
-        margin-left: 5%;
-    }
-}
-
-@media screen and (max-width: 1600px) {
-    img {
-        width: 400px;
-        height: auto;
-        margin-left: -25%;
-        margin-top: 30%;
-    }
-
-    .bs {
-        margin-left: -500px;
-        margin-right: -200px;
-        margin-bottom: -85px;
-    }  
-    
-    .signup-link {
-        margin-left: -101%;
-        text-align: center;
-        display: block;
-    }
-
-    form {
-        margin-left: 20%;
-        margin-right: 10%;
-        margin-top: 30%;
-        width: 80%;
-    }
-
-    h1 {
-        margin-left: 20%;
-    }
-}

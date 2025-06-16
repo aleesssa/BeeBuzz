@@ -74,21 +74,6 @@ def create_app():
 
         return dict(current_request=current_request, order_link=order_link)
 
-    # Email utility
-    def send_email(to_email, subject, body):
-        msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[to_email])
-        msg.body = body
-        try:
-            mail.send(msg)
-            app.logger.info(f"Email sent to {to_email}")
-            return True
-        except Exception as e:
-            app.logger.error(f"Failed to send email: {e}")
-            return False
-
-
-
-    app.send_email = send_email
     # Add system as a user in database
     def add_system():
         # Check if system user already exists 
@@ -115,31 +100,6 @@ def create_app():
     return app
 
 app = create_app()
-
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-def send_email_via_sendgrid(to_email, subject, body):
-    from sendgrid import SendGridAPIClient
-    from sendgrid.helpers.mail import Mail as SGMail, Email, To, Content
-
-    sg_msg = SGMail(
-        from_email=Email(os.getenv('SENDGRID_FROM')),
-        to_emails=To(to_email),
-        subject=subject,
-        plain_text_content=Content("text/plain", body)
-    )
-    try:
-        sg = SendGridAPIClient(os.getenv('SENDGRID_API_KEY'))
-        response = sg.send(sg_msg)
-        app.logger.info(f"SendGrid status {response.status_code}")
-        return True
-    except Exception as e:
-        app.logger.error(f"SendGrid error: {e}")
-        return False
-
 
         
 

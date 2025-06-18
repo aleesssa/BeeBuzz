@@ -58,8 +58,10 @@
 <script>
     const socket = io({
         transports: ["polling"],  //  fallback if WebSocket is blocked
-        upgrade: false            //  disables WebSocket attempts, ensures polling works
+        upgrade: false,            //  disables WebSocket attempts, ensures polling works
+        withCredentials: true
         });
+        
     const user_id = {{ current_user.id }}
     const userProfiles = {{ user_dict | tojson }}
     const requestID = {{ request_id }}

@@ -10,7 +10,7 @@
             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
         </svg>
     </a>
-    <img src="/profile_pics/{{recipient.profile_pic}}" width="60px" height="60px">
+    <img src="/profile_pics/{{recipient.profile_pic}}" width="60px" height="60px" class="profile">
     <h1>{{recipient.username}}</h1>
 </header>
 <hr>
@@ -22,7 +22,7 @@
 
             <div class="message  {% if message.sender_id == user_id %}me{% elif message.sender_id == system_id %}system{% if user_role == 'runner' %} runner{% endif %}{% else %}them{% endif %}">
                 {% if message.sender_id != user_id and not (message.sender_id == system_id and user_role == 'runner'  )%}
-                <img src="/profile_pics/{{recipient.profile_pic}}" width="60px" height="60px">
+                <img src="/profile_pics/{{recipient.profile_pic}}" width="60px" height="60px" class="profile">
                 {% endif %}
 
                 <div class="content  {% if message.sender_id == user_id %}me{% elif message.sender_id == system_id %}system{% else %}them{% endif %}">
@@ -133,8 +133,10 @@
         const messageDiv = document.createElement("div");
         const contentDiv = document.createElement('div');
         const profilePic = document.createElement('img');
+
         messageDiv.className = "message";
         contentDiv.className = 'content';
+        profilePic.className = 'profile';
         seenDiv.className = 'hide';
         seenDiv.id = 'seen';
         

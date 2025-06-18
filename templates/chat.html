@@ -232,10 +232,11 @@
 
         const message = formData.get('message')?.trim() // get text input value
         const media = formData.get('media')
+        const camera = formData.get('camera')
 
 
         // Send a POST request via fetch
-        if(!(message === "") || (media.size > 0)){ // make sure text input is not empty or file is uploaded
+        if(!(message === "") || (media.size > 0) || (camera.size > 0)){ // make sure text input is not empty or file is uploaded
             fetch('{{ url_for("chat.send_message") }}', {
                 method: 'POST',
                 body: formData

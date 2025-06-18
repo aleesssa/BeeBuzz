@@ -1,3 +1,6 @@
+import eventlet
+eventlet.monkey_patch()
+
 import os
 from dotenv import load_dotenv
 from flask import Flask, render_template
@@ -12,6 +15,7 @@ from routes.chat_routes import chat_bp
 from routes.stores_routes import stores_bp
 from routes.auth_routes import auth_bp
 from routes.request_routes import request_bp
+
 
 load_dotenv()
 

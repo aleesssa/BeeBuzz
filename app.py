@@ -1,3 +1,6 @@
+import eventlet
+eventlet.monkey_patch()
+
 import os
 from dotenv import load_dotenv
 from flask import Flask, render_template
@@ -12,6 +15,7 @@ from routes.chat_routes import chat_bp
 from routes.stores_routes import stores_bp
 from routes.auth_routes import auth_bp
 from routes.request_routes import request_bp
+
 
 load_dotenv()
 
@@ -74,6 +78,7 @@ def create_app():
 
         return dict(current_request=current_request, order_link=order_link)
 
+
     # Add system as a user in database
     def add_system():
         # Check if system user already exists 
@@ -100,6 +105,11 @@ def create_app():
     return app
 
 app = create_app()
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
         
 

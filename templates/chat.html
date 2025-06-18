@@ -3,44 +3,88 @@
 {% block content %}
 <link rel="stylesheet" href="/css/chatmessage.css">
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-<h1>Chatbox</h1>
 
+<header>
+    <a href="{{ url_for('chat.chatList') }}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+        </svg>
+    </a>
+    <img src="/profile_pics/{{recipient.profile_pic}}" width="60px" height="60px">
+    <h1>{{recipient.username}}</h1>
+</header>
+<hr>
 <div class="chatbox">
+    
     <div id="messages" style="list-style: none;">
         {% for message in messages %}
             <!-- Get sender's name and message -->
-           
-            <div class="message  {% if message.sender_id == user_id %}me{% else %}them{% endif %}">
-                {% if message.media_url %} 
-                    {% if message.media_url.split('.')[1] in 'mp4' %} <video src="{{message.media_url}}" width="350px" controls> {% endif %}
-                    {% if message.media_url.split('.')[1] in 'jpg jpeg gif png' %} <img src="{{ message.media_url }}" id="media" width="200px"> {% endif %}
+
+            <div class="message  {% if message.sender_id == user_id %}me{% elif message.sender_id == system_id %}system{% if user_role == 'runner' %} runner{% endif %}{% else %}them{% endif %}">
+                {% if message.sender_id != user_id and not (message.sender_id == system_id and user_role == 'runner'  )%}
+                <img src="/profile_pics/{{recipient.profile_pic}}" width="60px" height="60px">
                 {% endif %}
-                <div class="text">{{ users.filter_by(id=message.sender_id).first().username }} : {{ message.message }}</div>
+
+                <div class="content  {% if message.sender_id == user_id %}me{% elif message.sender_id == system_id %}system{% else %}them{% endif %}">
+                    {% if message.media_url %} 
+                        {% if message.media_url.split('.')[1] in 'mp4' %} <video src="{{message.media_url}}" width="350px" controls> {% endif %}
+                        {% if message.media_url.split('.')[1] in 'jpg jpeg gif png' %} <img src="{{ message.media_url }}" id="media" width="200px"> {% endif %}
+                    {% endif %}
+                    <div class="text">{{ users.filter_by(id=message.sender_id).first().username }} : {{ message.message }}</div>
+                </div>
                 <!-- <div id="seen" class="{% if not(message.is_seen) %}hide{% endif %}">seen</div> -->
             </div> 
 
         {% endfor %}
     </div>
     <div id="typing" class="chat-bubble hide">
+        <!-- <img src="/profile_pics/{{recipient.profile_pic}}" width="60px" height="60px"> -->
         <div class="typing">
           <div class="dot"></div>
           <div class="dot"></div>
           <div class="dot"></div>
         </div>
     </div>
-    <!-- <div id="typing" class="hide">user is typing..</div> -->
+    
     <form id="chat_form" enctype="multipart/form-data">
         <input type="text" name="message" id="chat_input" placeholder="Send a text">
-        <input type="file" name="media" id="media">
-        <button id="submit"><img src="/img/send.png" alt="send" width="20em"></button>
+        
+        <label for="camera">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
+                <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0"/>
+            </svg>
+        </label>
+        <input type="file" id="camera" name="camera" capture="environment" accept="image/*" />
+
+        <label for="media-upload" class="custom-media">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+            <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+            </svg>
+        </label>
+        <input type="file" name="media" id="media-upload">
+        <span id="file-name-display">No file selected</span>
+
+        <button id="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+            <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+            </svg>
+        </button>
     </form>  
 </div>
 
 
 
 <script>
-    const socket = io()
+    const socket = io({
+        transports: ["polling"],  //  fallback if WebSocket is blocked
+        upgrade: false,            //  disables WebSocket attempts, ensures polling works
+        withCredentials: true
+        });
+        
     const user_id = {{ current_user.id }}
+    const userProfiles = {{ user_dict | tojson }}
     const requestID = {{ request_id }}
     const form = document.getElementById('chat_form')
     const input = document.getElementById('chat_input') // Needed to track Enter key presses
@@ -48,6 +92,10 @@
     const typing = document.getElementById('typing')
     const seen = document.getElementById('seen')
     const seenDiv = document.createElement('div');
+
+
+    
+    window.scrollTo(0, document.body.scrollHeight); // Scroll to bottom of page
 
     let read = false;
 
@@ -87,11 +135,15 @@
     // Listen to receive_message event by server
     socket.on("receive_message", (data) => {
         console.log('hello')
-        const div = document.createElement("div");
-        div.className = "message";
-        seenDiv.className = 'hide'
-        seenDiv.id = 'seen'
+        const messageDiv = document.createElement("div");
+        const contentDiv = document.createElement('div');
+        const profilePic = document.createElement('img');
+        messageDiv.className = "message";
+        contentDiv.className = 'content';
+        seenDiv.className = 'hide';
+        seenDiv.id = 'seen';
         
+
         // check who's the sender
         if (data.sender_id != user_id){            
             // Send notification 
@@ -103,17 +155,35 @@
                     });
                 }   
             }
-            div.classList.add('them');
+
+            // Put profile picture next to message
+            profilePic.src = '/profile_pics/' + userProfiles[data.sender_id]
+            profilePic.width = 60
+            profilePic.height = 60
+
+            messageDiv.appendChild(profilePic)
+            messageDiv.appendChild(contentDiv);
+        
+            // Add class
+            if(data.sender_id == {{ system_id }}){
+                messageDiv.classList.add('system');
+                contentDiv.classList.add('system');
+            }else{
+                messageDiv.classList.add('them');
+                contentDiv.classList.add('them');
+            }
         }else{
-            div.classList.add('me');
+            messageDiv.appendChild(contentDiv);
+            messageDiv.classList.add('me');
+            contentDiv.classList.add('me');
         }
 
 
-      div.innerText = data.sender_name + " : " + data.message;
+      contentDiv.innerText = data.sender_name + " : " + data.message;
       seenDiv.innerText = 'seen'
 
-      div.appendChild(seenDiv)
-      document.getElementById("messages").appendChild(div);
+      messageDiv.appendChild(seenDiv)
+      document.getElementById("messages").appendChild(messageDiv);
     });
 
     // Shows typing indicator when the other user is typing
@@ -156,7 +226,6 @@
 
     // send post request through fetch when form is submitted 
     submitButton.addEventListener('click', (e) => {
-        console.log('hello')
         e.preventDefault();
         const formData = new FormData(form); 
         formData.append('request_id', requestID)
@@ -187,9 +256,11 @@
 
     })  
 
-    
-        
-
+    // Add file name to chat input
+    document.getElementById('media-upload').addEventListener('change', function () {
+    const fileName = this.files[0] ? this.files[0].name : "No file selected";
+    document.getElementById('file-name-display').textContent = fileName;
+    });
 
 
 </script>

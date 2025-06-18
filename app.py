@@ -1,25 +1,21 @@
-from flask import Flask, render_template
-from flask_socketio import SocketIO
-from extensions import db, socketio
-
-app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
-
-app.config['SECRET_KEY'] = 'Beebuzz'
-
-# Connect to SQLite database
+import eventlet
+eventlet.monkey_patch()
 
 import os
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, render_template
 from flask_login import LoginManager
 from flask_mail import Mail, Message
 from flask_socketio import SocketIO
 
 from extensions import db, migrate, socketio
 from models.user import User
+from models.store import Store
 from routes.chat_routes import chat_bp
+from routes.stores_routes import stores_bp
 from routes.auth_routes import auth_bp
 from routes.request_routes import request_bp
+
 
 load_dotenv()
 
@@ -57,6 +53,7 @@ def create_app():
 
     # Register blueprints
     app.register_blueprint(chat_bp, url_prefix='/chat')
+    app.register_blueprint(stores_bp, url_prefix='/stores')
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(request_bp, url_prefix='/request')
 
@@ -81,50 +78,40 @@ def create_app():
 
         return dict(current_request=current_request, order_link=order_link)
 
-    # Email utility
-    def send_email(to_email, subject, body):
-        msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[to_email])
-        msg.body = body
-        try:
-            mail.send(msg)
-            app.logger.info(f"Email sent to {to_email}")
-            return True
-        except Exception as e:
-            app.logger.error(f"Failed to send email: {e}")
-            return False
 
-    app.send_email = send_email
+    # Add system as a user in database
+    def add_system():
+        # Check if system user already exists 
+        existing_system = User.query.filter_by(email="system@beebuzz.app").first()
+
+        if not existing_system:
+            system_user = User(
+                username="BeeBuzz System",
+                email="system@beebuzz.app",
+                password_hash="system",  # won't ever log in
+                role=False
+            )
+            db.session.add(system_user)
+            db.session.commit()
+            print("System user created.")
+        else:
+            print("System user already exists.")
 
     # One-time startup logic
     with app.app_context():
         db.create_all()
+        add_system()
 
     return app
 
 app = create_app()
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-def send_email_via_sendgrid(to_email, subject, body):
-    from sendgrid import SendGridAPIClient
-    from sendgrid.helpers.mail import Mail as SGMail, Email, To, Content
-
-    sg_msg = SGMail(
-        from_email=Email(os.getenv('SENDGRID_FROM')),
-        to_emails=To(to_email),
-        subject=subject,
-        plain_text_content=Content("text/plain", body)
-    )
-    try:
-        sg = SendGridAPIClient(os.getenv('SENDGRID_API_KEY'))
-        response = sg.send(sg_msg)
-        app.logger.info(f"SendGrid status {response.status_code}")
-        return True
-    except Exception as e:
-        app.logger.error(f"SendGrid error: {e}")
-        return False
+        
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', debug=True)

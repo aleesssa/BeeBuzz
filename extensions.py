@@ -7,6 +7,6 @@ from flask_socketio import SocketIO
 # Initialize db and socketio in another file to overcome circular error
 db = SQLAlchemy()
 migrate = Migrate()
-socketio = SocketIO()
+socketio = SocketIO(async_mode='eventlet')
 mail = Mail()
 login_manager = LoginManager()

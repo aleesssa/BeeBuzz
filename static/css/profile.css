@@ -159,7 +159,7 @@ hr {
 
   .role-toggle-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 1rem 0;
   }
   

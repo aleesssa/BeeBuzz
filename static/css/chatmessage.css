@@ -47,6 +47,13 @@ header{
 
 }
 
+.download{
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  background-color: #ddc577;
+}
+
 .me{
   align-self: flex-end;
 }

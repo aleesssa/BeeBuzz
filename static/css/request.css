@@ -187,7 +187,6 @@ h2{
 .page_override {
     display: block !important;
     height: auto !important;
-    padding: 10px;
     overflow-x: hidden;
     overflow-y: auto;
     color: #53361C;

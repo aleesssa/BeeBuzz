@@ -16,6 +16,7 @@ from routes.stores_routes import stores_bp
 from routes.auth_routes import auth_bp
 from routes.request_routes import request_bp
 
+from flask_cors import CORS
 
 load_dotenv()
 
@@ -36,6 +37,8 @@ def create_app():
         'MAIL_USERNAME': os.getenv('MAIL_USERNAME'),
         'MAIL_PASSWORD': os.getenv('MAIL_PASSWORD'),
     })
+
+    CORS(app, supports_credentials=True)
 
     # Initialize extensions
     db.init_app(app)

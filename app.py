@@ -13,6 +13,9 @@ from routes.stores_routes import stores_bp
 from routes.auth_routes import auth_bp
 from routes.request_routes import request_bp
 
+import eventlet
+eventlet.monkey_patch()
+
 load_dotenv()
 
 def create_app():

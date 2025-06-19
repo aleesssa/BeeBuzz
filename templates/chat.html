@@ -200,7 +200,7 @@
 
     let typing_timeout;
     // Click submit button when user presses enter
-    input.addEventListener("keypress", (event) => {
+    input.addEventListener("input", (event) => {
         if (event.key === "Enter") {
             // Cancel the default action, if needed
             event.preventDefault();

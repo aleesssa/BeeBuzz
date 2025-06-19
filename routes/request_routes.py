@@ -181,25 +181,6 @@ def history():
     return render_template('history.html', user_history=user_history)
 
 
-@request_bp.route('/rate', methods=['POST'])
-@login_required
-def rate_request():
-    data = request.get_json()
-    req = Request.query.get_or_404(data['request_id'])
-    score = int(data['score'])
-    if not 1 <= score <= 5:
-        return jsonify(error='Invalid score'), 400
-
-    rating = Rating.query.filter_by(user_id=current_user.id, request_id=req.id).first()
-    if rating:
-        rating.score = score
-    else:
-        rating = Rating(score=score, user=current_user, request=req)
-        db.session.add(rating)
-    db.session.commit()
-
-    avg = db.session.query(db.func.avg(Rating.score)).filter_by(request_id=req.id).scalar() or 0
-    return jsonify(average=round(avg, 2))
 
 @request_bp.route('/complete/<int:request_id>', methods=['POST'])
 @login_required

@@ -145,9 +145,10 @@ def accept_jobs(request_id):
 # Track/Update Status Order
 @request_bp.route('/track/<int:request_id>')
 def track_status(request_id):
+    user_role = User.query.filter_by(id=current_user.id).first().role
     active_ids = [r.id for r in Request.query.filter_by(runner_id=current_user.id, status='on the way').all()]
     req = Request.query.get_or_404(request_id)
-    return render_template("deliverystatus.html", request_data=req, active_ids=active_ids)
+    return render_template("deliverystatus.html", request_data=req, request_id=request_id, active_ids=active_ids, user_role=user_role)
 
 @request_bp.route('/update_request/<int:request_id>', methods=['POST'])
 def update_delivery(request_id):

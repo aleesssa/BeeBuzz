@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, jsonify, session, current_app, redirect, url_for
 from extensions import db
 from models.store import Store
-from datetime import datetime, time
+from datetime import datetime, timedelta
 
 
 stores_bp = Blueprint('stores', __name__) # Equivalent to app = Flask(__name__)
@@ -49,9 +49,9 @@ def add_store():
         
 # Check if store is open or close
 def is_open(time_open, time_close):
-    now = datetime.now().time()
+    now = (datetime.utcnow() + timedelta(hours=8)).time()
     # now = time(23, 30)
-    return time_open <= now < time_close
+    return time_open <= now < time_close    
 
 # Update store status
 def update_store_status(stores):

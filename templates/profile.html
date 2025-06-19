@@ -126,7 +126,7 @@
                     star.addEventListener('click', () => {
                         selectedScore = +star.dataset.score;
                         setStars(selectedScore);
-                        fetch('{{ url_for("request_bp.rate_request") }}', {
+                        fetch('{{ url_for("request_bp.history") }}', {
                             method: 'POST',
                             headers: {'Content-Type': 'application/json'},
                             body: JSON.stringify({request_id: reqId, score: selectedScore})

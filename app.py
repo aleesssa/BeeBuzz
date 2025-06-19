@@ -16,6 +16,7 @@ from routes.stores_routes import stores_bp
 from routes.auth_routes import auth_bp
 from routes.request_routes import request_bp
 
+from datetime import time
 
 load_dotenv()
 
@@ -97,10 +98,62 @@ def create_app():
         else:
             print("System user already exists.")
 
+
+    # Store seeding
+    def seed_store():
+        if Store.query.count() == 0:
+            stores = [
+                Store(
+                    name='7E',
+                    is_open=0,
+                    time_open=time(0, 0),
+                    time_close=time(23, 59)
+                ),
+                Store(
+                    name='Haji Tapah',
+                    is_open=0,
+                    time_open=time(9, 0),
+                    time_close=time(17, 00)
+                ),
+                Store(
+                    name='BookShop',
+                    is_open=0,
+                    time_open=time(8, 0),
+                    time_close=time(19, 00)
+                ),
+                Store(
+                    name='Dapo Sahang',
+                    is_open=0,
+                    time_open=time(11, 0),
+                    time_close=time(23, 00)
+                ),
+                Store(
+                    name='Deen',
+                    is_open=0,
+                    time_open=time(11, 0),
+                    time_close=time(23, 00)
+                ),
+                Store(
+                    name='Bakery',
+                    is_open=0,
+                    time_open=time(11, 0),
+                    time_close=time(23, 00)
+                ),
+                Store(
+                    name='FOM Cafe',
+                    is_open=0,
+                    time_open=time(11, 0),
+                    time_close=time(23, 00)
+                )
+            ]
+            db.session.bulk_save_objects(stores)
+            db.session.commit()
+                
     # One-time startup logic
     with app.app_context():
         db.create_all()
         add_system()
+        seed_store()
 
     return app
 

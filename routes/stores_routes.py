@@ -51,7 +51,7 @@ def add_store():
 def is_open(time_open, time_close):
     now = datetime.utcnow() + timedelta(hours=8)
     # now = time(23, 30)
-    return time_open <= now < time_close
+    return time_open <= now < time_close    
 
 # Update store status
 def update_store_status(stores):

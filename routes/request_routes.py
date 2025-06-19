@@ -202,7 +202,7 @@ def complete_request(request_id):
 
 @socketio.on("join_tracking")
 def handle_join_tracking(data):
-    join_room(data["request_id"])
+    join_room(str(data["request_id"]))
 
 
 @socketio.on("runner_location")
@@ -213,4 +213,4 @@ def handle_runner_location(data):
             "user_id": data["user_id"],
             "lat": data["lat"],
             "lng": data["lng"]
-        }, room=request_id)
+        }, room=str(request_id))

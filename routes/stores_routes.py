@@ -49,7 +49,7 @@ def add_store():
         
 # Check if store is open or close
 def is_open(time_open, time_close):
-    now = datetime.utcnow() + timedelta(hours=8)
+    now = (datetime.utcnow() + timedelta(hours=8)).time()
     # now = time(23, 30)
     return time_open <= now < time_close    
 

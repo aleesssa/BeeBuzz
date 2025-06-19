@@ -114,6 +114,7 @@ def cancel_request(request_id):
 # Show List of Jobs
 @request_bp.route('/jobs')
 def show_jobs():
+    active_ids = [r.id for r in Request.query.filter_by(runner_id=current_user.id, status='on the way').all()]
     runner_id = current_user.id
 
     accepted_jobs = []
@@ -121,7 +122,7 @@ def show_jobs():
         accepted_jobs = Request.query.filter_by(status="accepted", runner_id=runner_id).all()
     
     available_jobs = Request.query.filter_by(status="requested").all()
-    return render_template("job.html", jobs=available_jobs, accepted_jobs=accepted_jobs)
+    return render_template("job.html", jobs=available_jobs, accepted_jobs=accepted_jobs, active_ids=active_ids)
 
 @request_bp.route('/jobs/details/<int:request_id>')
 def view_details(request_id):
@@ -144,8 +145,9 @@ def accept_jobs(request_id):
 # Track/Update Status Order
 @request_bp.route('/track/<int:request_id>')
 def track_status(request_id):
+    active_ids = [r.id for r in Request.query.filter_by(runner_id=current_user.id, status='on the way').all()]
     req = Request.query.get_or_404(request_id)
-    return render_template("deliverystatus.html", request_data=req)
+    return render_template("deliverystatus.html", request_data=req, active_ids=active_ids)
 
 @request_bp.route('/update_request/<int:request_id>', methods=['POST'])
 def update_delivery(request_id):

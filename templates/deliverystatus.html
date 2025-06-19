@@ -3,6 +3,9 @@
 {%block content%}
 <head>
     <link rel="stylesheet" href="/css/request.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </head>
 
 <body>
@@ -21,8 +24,12 @@
             <div class="step {% if request_data.status == 'delivered' %}active{% endif %}">Delivered</div>
         </div>
         </div>
-       
-        <img src="{{ url_for('static', filename='img/buzzbuzz.png') }}" class="item-image">
+
+        {% if request_data.status == 'on the way' and current_user.role == 'shopper' %}
+        <div id="map" style="height: 300px; width: 100%; border-radius: 10px; margin-top: 20px;">
+        {% else %}
+       <img src="{{ url_for('static', filename='img/buzzbuzz.png') }}" class="item-image">
+        {% endif %}
 
     {% if current_user.role == 'runner' %}
         <form method="POST" action="{{ url_for('request_bp.update_delivery', request_id=request_data.id) }}">
@@ -42,6 +49,79 @@
     
     </div>
     </div>
+
+    
+    <script>
+        const socket = io();
+        const request_id = {{ request_data.id }};
+        const user_role = '{{ user_role }}'
+
+        socket.emit("join_tracking", { request_id: request_id });
+
+        // Receive location
+        socket.on("update_runner_location", (data) => {
+            console.log(data.request_id)
+            console.log(request_id)
+            if (data.request_id == request_id) {
+                console.log("Runner's location:", data.lat, data.lng);
+                // Update map marker here
+                updateMapMarker(data.lat, data.lng);
+            }
+        });
+
+        if (user_role == 'shopper'){
+            // Setting up Map and Marker
+            let map = L.map('map').setView([2.924, 101.641], 17);  // MMU-ish coordinates
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Create a marker for the runner (but don't place it yet)
+            let runnerMarker = null;
+
+            // Called when socket receives location
+            function updateMapMarker(lat, lng) {
+            if (!runnerMarker) {
+                // First time: create marker
+                runnerMarker = L.marker([lat, lng]).addTo(map).bindPopup("Runner");
+            } else {
+                // Update marker location
+                runnerMarker.setLatLng([lat, lng]);
+            }
+
+            // Optional: center map on runner
+            map.setView([lat, lng]);
+            }
+        }
+
+
+        // Share location
+        if(user_role == 'runner'){
+            const user_id = {{current_user.id}}
+            const activeRequests = {{ active_ids | tojson }};  
+
+            navigator.geolocation.watchPosition(
+            (pos) => {
+                console.log('location shared')
+                socket.emit("runner_location", {
+                user_id:user_id,
+                activeRequests:activeRequests,
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude
+                });
+            },
+            (err) => {
+                console.error("Geolocation error:", err);
+            },
+            {
+                enableHighAccuracy: true,
+                maximumAge: 0,
+                timeout: 10000
+            }
+            );
+        }
+    </script>
 </body>
 
 {% endblock %}

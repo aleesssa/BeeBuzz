@@ -106,44 +106,44 @@ def create_app():
                 Store(
                     name='7E',
                     is_open=0,
-                    open_time=time(0, 0),
-                    close_time=time(23, 59)
+                    time_open=time(0, 0),
+                    time_close=time(23, 59)
                 ),
                 Store(
                     name='Haji Tapah',
                     is_open=0,
-                    open_time=time(9, 0),
-                    close_time=time(17, 00)
+                    time_open=time(9, 0),
+                    time_close=time(17, 00)
                 ),
                 Store(
                     name='BookShop',
                     is_open=0,
-                    open_time=time(8, 0),
-                    close_time=time(19, 00)
+                    time_open=time(8, 0),
+                    time_close=time(19, 00)
                 ),
                 Store(
                     name='Dapo Sahang',
                     is_open=0,
-                    open_time=time(11, 0),
-                    close_time=time(23, 00)
+                    time_open=time(11, 0),
+                    time_close=time(23, 00)
                 ),
                 Store(
                     name='Deen',
                     is_open=0,
-                    open_time=time(11, 0),
-                    close_time=time(23, 00)
+                    time_open=time(11, 0),
+                    time_close=time(23, 00)
                 ),
                 Store(
                     name='Bakery',
                     is_open=0,
-                    open_time=time(11, 0),
-                    close_time=time(23, 00)
+                    time_open=time(11, 0),
+                    time_close=time(23, 00)
                 ),
                 Store(
                     name='FOM Cafe',
                     is_open=0,
-                    open_time=time(11, 0),
-                    close_time=time(23, 00)
+                    time_open=time(11, 0),
+                    time_close=time(23, 00)
                 )
             ]
             db.session.bulk_save_objects(stores)

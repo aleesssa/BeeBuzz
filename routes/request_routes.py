@@ -1,6 +1,7 @@
 from flask import Blueprint, flash, jsonify, request, render_template, url_for, redirect, session
 from flask_login import current_user, login_required
-from extensions import db
+from flask_socketio import SocketIO, emit, join_room
+from extensions import db, socketio
 from models.request import Request
 from datetime import datetime
 from models.user import User
@@ -198,3 +199,18 @@ def complete_request(request_id):
     
     flash('Request marked as completed!', 'success')
     return redirect(url_for('request_bp.summary_request', request_id=request_id))
+
+@socketio.on("join_tracking")
+def handle_join_tracking(data):
+    join_room(data["request_id"])
+
+
+@socketio.on("runner_location")
+def handle_runner_location(data): 
+    for request_id in data["activeRequests"]:
+        emit("update_runner_location", {
+            "request_id": request_id,
+            "user_id": data["user_id"],
+            "lat": data["lat"],
+            "lng": data["lng"]
+        }, room=request_id)

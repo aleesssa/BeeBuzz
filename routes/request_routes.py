@@ -1,10 +1,12 @@
 from flask import Blueprint, flash, jsonify, request, render_template, url_for, redirect, session
 from flask_login import current_user, login_required
-from extensions import db
+from flask_socketio import SocketIO, emit, join_room
+from extensions import db, socketio
 from models.request import Request
 from datetime import datetime
 from models.user import User
 from models.rating import Rating
+from sqlalchemy import and_, or_
 from utils.system_utils import system_update
 
 request_bp = Blueprint('request_bp', __name__) # Equivalent to app = Flask(__name__)
@@ -114,14 +116,23 @@ def cancel_request(request_id):
 # Show List of Jobs
 @request_bp.route('/jobs')
 def show_jobs():
+    active_ids = [r.id for r in Request.query.filter_by(runner_id=current_user.id, status='on the way').all()]
     runner_id = current_user.id
 
     accepted_jobs = []
     if runner_id:
-        accepted_jobs = Request.query.filter_by(status="accepted", runner_id=runner_id).all()
+        accepted_jobs = Request.query.filter(
+            and_(
+                Request.runner_id == runner_id,
+                or_(
+                    Request.status == "accepted",
+                    Request.status == "picked up",
+                    Request.status == "on the way")
+                )
+                ).all()
     
     available_jobs = Request.query.filter_by(status="requested").all()
-    return render_template("job.html", jobs=available_jobs, accepted_jobs=accepted_jobs)
+    return render_template("job.html", jobs=available_jobs, accepted_jobs=accepted_jobs, active_ids=active_ids)
 
 @request_bp.route('/jobs/details/<int:request_id>')
 def view_details(request_id):
@@ -144,8 +155,10 @@ def accept_jobs(request_id):
 # Track/Update Status Order
 @request_bp.route('/track/<int:request_id>')
 def track_status(request_id):
+    user_role = User.query.filter_by(id=current_user.id).first().role
+    active_ids = [r.id for r in Request.query.filter_by(runner_id=current_user.id, status='on the way').all()]
     req = Request.query.get_or_404(request_id)
-    return render_template("deliverystatus.html", request_data=req)
+    return render_template("deliverystatus.html", request_data=req, request_id=request_id, active_ids=active_ids, user_role=user_role)
 
 @request_bp.route('/update_request/<int:request_id>', methods=['POST'])
 def update_delivery(request_id):
@@ -195,3 +208,18 @@ def complete_request(request_id):
     
     flash('Request marked as completed!', 'success')
     return redirect(url_for('request_bp.summary_request', request_id=request_id))
+
+@socketio.on("join_tracking")
+def handle_join_tracking(data):
+    join_room(str(data["request_id"]))
+
+
+@socketio.on("runner_location")
+def handle_runner_location(data): 
+    for request_id in data["activeRequests"]:
+        emit("update_runner_location", {
+            "request_id": request_id,
+            "user_id": data["user_id"],
+            "lat": data["lat"],
+            "lng": data["lng"]
+        }, room=str(request_id))

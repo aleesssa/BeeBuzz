@@ -109,5 +109,30 @@
         </div>
         </div>
 
+    <script>
+        const socket = io();
+        const user_id = {{current_user.id}}
+        const activeRequests = {{ active_ids | tojson }};  
+
+        navigator.geolocation.watchPosition(
+        (pos) => {
+            console.log('location shared')
+            socket.emit("runner_location", {
+            user_id:user_id,
+            activeRequests:activeRequests,
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+            });
+        },
+        (err) => {
+            console.error("Geolocation error:", err);
+        },
+        {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 10000
+        }
+        );
+    </script>
 </body>
 {% endblock %}

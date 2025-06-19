@@ -1,3 +1,6 @@
+import eventlet
+eventlet.monkey_patch()
+
 import os
 from dotenv import load_dotenv
 from flask import Flask, render_template
@@ -12,6 +15,8 @@ from routes.chat_routes import chat_bp
 from routes.stores_routes import stores_bp
 from routes.auth_routes import auth_bp
 from routes.request_routes import request_bp
+
+from datetime import time
 
 load_dotenv()
 
@@ -74,21 +79,7 @@ def create_app():
 
         return dict(current_request=current_request, order_link=order_link)
 
-    # Email utility
-    def send_email(to_email, subject, body):
-        msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[to_email])
-        msg.body = body
-        try:
-            mail.send(msg)
-            app.logger.info(f"Email sent to {to_email}")
-            return True
-        except Exception as e:
-            app.logger.error(f"Failed to send email: {e}")
-            return False
 
-
-
-    app.send_email = send_email
     # Add system as a user in database
     def add_system():
         # Check if system user already exists 
@@ -107,10 +98,62 @@ def create_app():
         else:
             print("System user already exists.")
 
+
+    # Store seeding
+    def seed_store():
+        if Store.query.count() == 0:
+            stores = [
+                Store(
+                    name='7E',
+                    status='Open',
+                    open_time=time(0, 0),
+                    close_time=time(23, 59)
+                ),
+                Store(
+                    name='Haji Tapah',
+                    status='Open',
+                    open_time=time(9, 0),
+                    close_time=time(17, 00)
+                ),
+                Store(
+                    name='BookShop',
+                    status='Open',
+                    open_time=time(8, 0),
+                    close_time=time(19, 00)
+                ),
+                Store(
+                    name='Dapo Sahang',
+                    status='Open',
+                    open_time=time(11, 0),
+                    close_time=time(23, 00)
+                ),
+                Store(
+                    name='Deen',
+                    status='Open',
+                    open_time=time(11, 0),
+                    close_time=time(23, 00)
+                ),
+                Store(
+                    name='Bakery',
+                    status='Open',
+                    open_time=time(11, 0),
+                    close_time=time(23, 00)
+                ),
+                Store(
+                    name='FOM Cafe',
+                    status='Open',
+                    open_time=time(11, 0),
+                    close_time=time(23, 00)
+                )
+            ]
+            db.session.bulk_save_objects(stores)
+            db.session.commit()
+                
     # One-time startup logic
     with app.app_context():
         db.create_all()
         add_system()
+        seed_store()
 
     return app
 
@@ -120,26 +163,6 @@ app = create_app()
 @app.route('/')
 def index():
     return render_template('index.html')
-
-def send_email_via_sendgrid(to_email, subject, body):
-    from sendgrid import SendGridAPIClient
-    from sendgrid.helpers.mail import Mail as SGMail, Email, To, Content
-
-    sg_msg = SGMail(
-        from_email=Email(os.getenv('SENDGRID_FROM')),
-        to_emails=To(to_email),
-        subject=subject,
-        plain_text_content=Content("text/plain", body)
-    )
-    try:
-        sg = SendGridAPIClient(os.getenv('SENDGRID_API_KEY'))
-        response = sg.send(sg_msg)
-        app.logger.info(f"SendGrid status {response.status_code}")
-        return True
-    except Exception as e:
-        app.logger.error(f"SendGrid error: {e}")
-        return False
-
 
         
 

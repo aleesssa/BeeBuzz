@@ -105,43 +105,43 @@ def create_app():
             stores = [
                 Store(
                     name='7E',
-                    status='Open',
+                    is_open=0,
                     open_time=time(0, 0),
                     close_time=time(23, 59)
                 ),
                 Store(
                     name='Haji Tapah',
-                    status='Open',
+                    is_open=0,
                     open_time=time(9, 0),
                     close_time=time(17, 00)
                 ),
                 Store(
                     name='BookShop',
-                    status='Open',
+                    is_open=0,
                     open_time=time(8, 0),
                     close_time=time(19, 00)
                 ),
                 Store(
                     name='Dapo Sahang',
-                    status='Open',
+                    is_open=0,
                     open_time=time(11, 0),
                     close_time=time(23, 00)
                 ),
                 Store(
                     name='Deen',
-                    status='Open',
+                    is_open=0,
                     open_time=time(11, 0),
                     close_time=time(23, 00)
                 ),
                 Store(
                     name='Bakery',
-                    status='Open',
+                    is_open=0,
                     open_time=time(11, 0),
                     close_time=time(23, 00)
                 ),
                 Store(
                     name='FOM Cafe',
-                    status='Open',
+                    is_open=0,
                     open_time=time(11, 0),
                     close_time=time(23, 00)
                 )

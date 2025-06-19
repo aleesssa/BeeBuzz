@@ -6,6 +6,7 @@ from models.request import Request
 from datetime import datetime
 from models.user import User
 from models.rating import Rating
+from sqlalchemy import and_, or_
 from utils.system_utils import system_update
 
 request_bp = Blueprint('request_bp', __name__) # Equivalent to app = Flask(__name__)
@@ -120,7 +121,15 @@ def show_jobs():
 
     accepted_jobs = []
     if runner_id:
-        accepted_jobs = Request.query.filter_by(status="accepted", runner_id=runner_id).all()
+        accepted_jobs = Request.query.filter(
+            and_(
+                Request.runner_id == runner_id,
+                or_(
+                    Request.status == "accepted",
+                    Request.status == "picked up",
+                    Request.status == "on the way")
+                )
+                ).all()
     
     available_jobs = Request.query.filter_by(status="requested").all()
     return render_template("job.html", jobs=available_jobs, accepted_jobs=accepted_jobs, active_ids=active_ids)
